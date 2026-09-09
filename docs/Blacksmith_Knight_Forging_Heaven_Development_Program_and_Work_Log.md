@@ -1315,69 +1315,50 @@ Create a small storage interface:
 
 Start with common entities, not every future field.
 
-Initial conceptual entities:
-
-```text
-Source
-YouTubeChannel
-ContentItem
-Material
-Guide
-Project
-Product
-WorkshopTip
-Rule
-```
-
 ## 08.01 Common Content Envelope
 
-Implement common fields such as:
+- [x] Created [`backend/app/models/enums.py`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) (`ContentType`, `ContentStatus`, `DifficultyLevel`, `SourceType`, `SourceStatus`).
+- [x] Created [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) with polymorphic `ContentEnvelope`.
 
-```text
-id
-type
-title
-description
-category
-tags
-image/source metadata
-published_at
-created_at
-updated_at
-status
-```
+**Status:** ✅ COMPLETE
 
 ## 08.02 Source Entity
 
-Include source identity and lifecycle status.
+- [x] Created `SourceEntity` with identity and lifecycle status in [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py).
+
+**Status:** ✅ COMPLETE
 
 ## 08.03 YouTube Channel Entity
 
-Implement only fields required for channel management first.
+- [x] Created `YouTubeChannelEntity` with `youtube_channel_id`, `handle`, and `video_count` in [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py).
+
+**Status:** ✅ COMPLETE
 
 ## 08.04 Content Entity
 
-Create one minimal content record.
+- [x] Created specialized content models: `MaterialMetadata`, `VideoMetadata`, `ProjectMetadata`.
+
+**Status:** ✅ COMPLETE
 
 ## 08.05 Validation
 
-Reject invalid data.
+- [x] Pydantic models enforcing title length, auto-slug formatting, and metallurgical percentages.
+
+**Status:** ✅ COMPLETE
 
 ## 08.06 Deduplication Keys
 
-Define deterministic keys before ingestion is built.
+- [x] Implemented deterministic deduplication key generator in [`backend/app/models/deduplication.py`](file:///C:/Doron/UpTheIrons/backend/app/models/deduplication.py).
 
-Examples:
-
-```text
-YouTube → video ID
-RSS → canonical URL / content fingerprint
-Products → source + product ID
-```
+**Status:** ✅ COMPLETE
 
 ## 08.07 Data Migration/Seeding Strategy
 
-Document how local test data is created.
+- [x] Created baseline fixtures for steels (1084, 1095, 5160) and projects (S-Hook) with `seed_initial_data()` in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py).
+- [x] Created matching TypeScript interfaces in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts).
+
+**Status:** ✅ COMPLETE
+
 
 ---
 
@@ -1459,6 +1440,8 @@ CONFIGURED
 ```
 
 **Critical rule:** AI must not create new source records autonomously.
+
+**Status:** ✅ COMPLETE
 
 ---
 
@@ -2710,6 +2693,59 @@ Milestone 08 — Core Domain/Data Model (`08.01 Common Content Envelope`)
 
 ---
 
+### WORK-008 — Milestone 08 Core Domain / Data Model Complete
+
+**Date:** 2026-09-09  
+**Milestone:** 08 — Core Domain / Data Model  
+**Status:** ✅ COMPLETE
+
+#### Objective
+Define the typed domain entities, polymorphic content envelope, source entities, schema validation, deterministic deduplication key engine, and local seeding fixtures.
+
+#### Implementation
+- Created [`backend/app/models/enums.py`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) (`ContentType`, `ContentStatus`, `DifficultyLevel`, `SourceType`, `SourceStatus`).
+- Created [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py) with `SourceProvenance`, `SourceEntity`, and `YouTubeChannelEntity`.
+- Created [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) with `ContentEnvelope` and specialized metadata models (`MaterialMetadata`, `HeatTreatmentRecipe`, `VideoMetadata`, `ProjectMetadata`).
+- Created [`backend/app/models/deduplication.py`](file:///C:/Doron/UpTheIrons/backend/app/models/deduplication.py) with deterministic key hashing (`video:youtube:{id}`, `material:{slug}`, `{type}:url:{hash}`, `{type}:title:{hash}`).
+- Created [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py) with baseline fixtures for 1084, 1095, 5160 steels and Level 1 projects.
+- Created synchronized TypeScript types in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts).
+- Created test suite in [`tests/backend/test_models.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_models.py).
+
+#### Tests & Results
+- Ran `pytest tests/backend`: 18 passed in 0.62s.
+- Ran `npm run build`: compiled in 772ms with exit code 0.
+
+#### Next Step
+Milestone 09 — Source Management Framework (`09.01 Source Registry Model & CRUD API`)
+
+---
+
+### WORK-009 — Milestone 09 Source Management Framework Complete
+
+**Date:** 2026-09-09  
+**Milestone:** 09 — Source Management Framework  
+**Status:** ✅ COMPLETE
+
+#### Objective
+Build the controlled source registry before collectors: REST CRUD endpoints, strict URL validation, source test probe, repository persistence, and Source Registry frontend user interface.
+
+#### Implementation
+- Created [`backend/app/api/v1/sources.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/sources.py) with full REST CRUD: `POST /api/sources`, `GET /api/sources`, `GET /api/sources/{id}`, `PATCH /api/sources/{id}`, `DELETE /api/sources/{id}`, and `POST /api/sources/{id}/test`.
+- Integrated with `FirestoreRepository("sources")` for local emulator storage.
+- Created [`tests/backend/test_sources_api.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_sources_api.py) testing creation, invalid URL rejection, filtering by type/status, toggle activation/deactivation, and deletion.
+- Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with `fetchSources`, `createSource`, `updateSource`, `deleteSource`, `testSourceConnection`, and `SourceItem` interface.
+- Created [`frontend/app/sources/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/sources/page.tsx) with category filter tabs, source creation modal, connection test trigger, enable/disable toggle, and delete confirmation.
+- Linked `/sources` in [`Navbar.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Navbar.tsx) and [`Footer.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Footer.tsx).
+
+#### Tests & Results
+- Ran `pytest tests/backend`: 23 passed in 0.75s.
+- Ran `npm run build`: 12 static pages compiled in 1163ms with exit code 0.
+
+#### Next Step
+Milestone 10 — YouTube Channel Management (`10.01 Channel API Model & Ingestion Guardrails`)
+
+---
+
 # 45. Current Task Board
 
 At any point, this section should show the immediate development frontier.
@@ -2723,18 +2759,21 @@ MILESTONE 04 — Backend Foundation        ✅
 MILESTONE 05 — Frontend Foundation       ✅
 MILESTONE 06 — Frontend ↔ Backend        ✅
 MILESTONE 07 — Firebase Data Layer       ✅
+MILESTONE 08 — Domain / Data Model       ✅
+MILESTONE 09 — Source Management         ✅
 
-MILESTONE 08 — Domain / Data Model       ⬜  ← NEXT
-08.01 Common Content Envelope            ⬜
-08.02 Source Entity                      ⬜
-08.03 YouTube Channel Entity             ⬜
-08.04 Content Entity                     ⬜
-08.05 Schema Validation                  ⬜
-08.06 Deduplication Keys                 ⬜
-08.07 Seeding Strategy                   ⬜
+MILESTONE 10 — YouTube Channels          ⬜  ← NEXT
+10.01 Channel API Model                  ⬜
+10.02 Create Channel Endpoint            ⬜
+10.03 List Channels                      ⬜
+10.04 Get Channel                        ⬜
+10.05 Update Channel                     ⬜
+10.06 Channel Search / Resolve Helper    ⬜
+10.07 Channel Manager UI                 ⬜
 ```
 
 When work starts, update this board first.
+
 
 
 

@@ -58,6 +58,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/sources" className="hover:text-[#FF5722] transition-colors">
+                  Source Registry
+                </Link>
+              </li>
+              <li>
                 <Link href="/tools" className="hover:text-[#FF5722] transition-colors">
                   Tools &amp; Anvils
                 </Link>

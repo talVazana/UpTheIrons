@@ -108,3 +108,76 @@ export async function checkBackendHealth(): Promise<{
     return { ok: false, error: errorMsg };
   }
 }
+
+export interface SourceItem {
+  id: string;
+  name: string;
+  type: "youtube_channel" | "rss_feed" | "product_api" | "manual";
+  platform: string;
+  url: string;
+  enabled: boolean;
+  priority: number;
+  categories: string[];
+  status: "configured" | "healthy" | "warning" | "failed" | "disabled";
+  last_synced_at?: string | null;
+  last_error?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateSourceInput {
+  name: string;
+  type: string;
+  platform: string;
+  url: string;
+  priority?: number;
+  categories?: string[];
+  enabled?: boolean;
+}
+
+export async function fetchSources(params?: {
+  type?: string;
+  enabled?: boolean;
+}): Promise<SourceItem[]> {
+  const query = new URLSearchParams();
+  if (params?.type) query.set("type", params.type);
+  if (params?.enabled !== undefined) query.set("enabled", String(params.enabled));
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<SourceItem[]>(`/api/sources${qs}`, { cache: "no-store" });
+}
+
+export async function createSource(input: CreateSourceInput): Promise<SourceItem> {
+  return fetchApi<SourceItem>("/api/sources", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function updateSource(
+  id: string,
+  input: Partial<CreateSourceInput> & { status?: string }
+): Promise<SourceItem> {
+  return fetchApi<SourceItem>(`/api/sources/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteSource(id: string): Promise<boolean> {
+  await fetchApi<{ deleted: boolean }>(`/api/sources/${id}`, {
+    method: "DELETE",
+  });
+  return true;
+}
+
+export async function testSourceConnection(id: string): Promise<{
+  source_id: string;
+  reachable: boolean;
+  status: string;
+  details: string;
+}> {
+  return fetchApi(`/api/sources/${id}/test`, {
+    method: "POST",
+  });
+}
+
