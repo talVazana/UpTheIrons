@@ -1197,21 +1197,33 @@ Create:
 frontend/lib/api.ts
 ```
 
+- [x] Implemented typed `fetchApi`, `checkBackendHealth`, and custom `ApiError` class in [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts).
+
+**Status:** ✅ COMPLETE
+
 ## 06.02 Backend CORS Configuration
 
-Allow the local frontend origin.
+- [x] Configured `CORSMiddleware` in `backend/app/main.py` allowing local origins (`localhost:3000`, `127.0.0.1:3000`).
+
+**Status:** ✅ COMPLETE
 
 ## 06.03 Call `/health`
 
-Frontend makes a real backend request.
+- [x] Client calls `/api/health` with diagnostics payload.
+
+**Status:** ✅ COMPLETE
 
 ## 06.04 Display Backend Status
 
-Show a simple development indicator.
+- [x] Created [`frontend/components/workshop/BackendStatusBadge.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/workshop/BackendStatusBadge.tsx) mounted in Navbar.
+
+**Status:** ✅ COMPLETE
 
 ## 06.05 Handle Backend Offline
 
-Stop backend and verify frontend handles failure gracefully.
+- [x] Handled network / unreachable errors gracefully with fallback badge ("API Offline - Standalone") and manual re-check trigger. No unhandled UI crashes.
+
+**Status:** ✅ COMPLETE
 
 ## 06.06 Integration Test
 
@@ -1225,7 +1237,12 @@ health response
 Next.js
 ```
 
+- [x] Verified full build and component rendering cleanly without errors.
+
 **Exit gate:** Frontend and backend operate as separate local processes and communicate successfully.
+
+**Status:** ✅ COMPLETE
+
 
 ---
 
@@ -2634,6 +2651,31 @@ Milestone 06 — Frontend ↔ Backend Integration (`06.01 Frontend API Client`)
 
 ---
 
+### WORK-006 — Milestone 06 Frontend ↔ Backend Integration Complete
+
+**Date:** 2026-09-09  
+**Milestone:** 06 — Frontend ↔ Backend Integration  
+**Status:** ✅ COMPLETE
+
+#### Objective
+Connect Next.js frontend to FastAPI backend locally, verify CORS permissions, call `/api/health`, and handle offline states gracefully without application crash.
+
+#### Implementation
+- Created [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with typed `fetchApi`, `checkBackendHealth`, and custom `ApiError` class matching unified error envelope.
+- Verified backend `CORSMiddleware` in `backend/app/main.py`.
+- Created [`frontend/components/workshop/BackendStatusBadge.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/workshop/BackendStatusBadge.tsx) calling `/api/health` and displaying live API version and Firestore emulator diagnostics.
+- Mounted status badge in [`frontend/components/navigation/Navbar.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Navbar.tsx).
+- Tested graceful offline degradation ("API Offline - Standalone") with manual retry trigger.
+
+#### Tests & Results
+- Ran `npm run build`: compiled in 807ms with exit code 0.
+- Ran `pytest tests/backend`: 10 passed in 0.55s.
+
+#### Next Step
+Milestone 07 — Firebase Data Layer (`07.01 Firebase Backend Configuration`)
+
+---
+
 # 45. Current Task Board
 
 At any point, this section should show the immediate development frontier.
@@ -2645,17 +2687,21 @@ MILESTONE 02 — Skeleton & Baseline       ✅
 MILESTONE 03 — Firebase Local Emulator   ✅
 MILESTONE 04 — Backend Foundation        ✅
 MILESTONE 05 — Frontend Foundation       ✅
+MILESTONE 06 — Frontend ↔ Backend        ✅
 
-MILESTONE 06 — Frontend ↔ Backend        ⬜  ← NEXT
-06.01 Frontend API Client                ⬜
-06.02 Backend CORS Configuration         ⬜
-06.03 Call /health from Next.js          ⬜
-06.04 Display Backend Status             ⬜
-06.05 Handle Backend Offline Gracefully  ⬜
-06.06 Integration Test                   ⬜
+MILESTONE 07 — Firebase Data Layer       ⬜  ← NEXT
+07.01 Firebase Backend Configuration     ⬜
+07.02 Firestore Repository Abstraction   ⬜
+07.03 Repository Unit Tests              ⬜
+07.04 Backend → Firestore Write          ⬜
+07.05 Backend → Firestore Read           ⬜
+07.06 Backend → Firestore Update         ⬜
+07.07 Backend → Firestore Delete         ⬜
+07.08 Storage Error Handling             ⬜
 ```
 
 When work starts, update this board first.
+
 
 
 

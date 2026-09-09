@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { BackendStatusBadge } from "@/components/workshop/BackendStatusBadge";
+
 
 interface NavItem {
   name: string;
@@ -46,30 +48,34 @@ export function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
-          {navItems.map((item) => {
-            const isActive =
-              item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722] ${
-                  isActive
-                    ? "bg-neutral-800 text-[#FF5722] font-semibold border-b-2 border-[#FF5722]"
-                    : "text-neutral-300 hover:bg-neutral-850 hover:text-white"
-                }`}
-                aria-current={isActive ? "page" : undefined}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Desktop Navigation & Status */}
+        <div className="hidden lg:flex items-center gap-4">
+          <nav className="flex items-center gap-1" aria-label="Main Navigation">
+            {navItems.map((item) => {
+              const isActive =
+                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722] ${
+                    isActive
+                      ? "bg-neutral-800 text-[#FF5722] font-semibold border-b-2 border-[#FF5722]"
+                      : "text-neutral-300 hover:bg-neutral-850 hover:text-white"
+                  }`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+          </nav>
+          <BackendStatusBadge />
+        </div>
 
-        {/* Mobile menu toggle */}
-        <div className="flex lg:hidden">
+        {/* Mobile menu toggle and status */}
+        <div className="flex lg:hidden items-center gap-2">
+          <BackendStatusBadge />
           <button
             type="button"
             className="inline-flex items-center justify-center rounded-md p-2 text-neutral-400 hover:bg-neutral-800 hover:text-white focus-visible:ring-2 focus-visible:ring-[#FF5722]"
