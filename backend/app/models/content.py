@@ -81,3 +81,19 @@ class ProjectMetadata(BaseModel):
     skills_learned: List[str] = Field(default_factory=list)
     steps: List[str] = Field(default_factory=list)
     safety_warnings: List[str] = Field(default_factory=list)
+
+
+class ProductMetadata(BaseModel):
+    """Domain model for workshop gear and tools with transparent pricing & evaluation."""
+
+    sku: str
+    platform: str
+    price: float = Field(ge=0.0)
+    currency: str = Field(default="USD", max_length=3)
+    price_updated_at: datetime = Field(default_factory=utc_now)
+    purchase_url: str
+    pros: List[str] = Field(default_factory=list)
+    cons: List[str] = Field(default_factory=list)
+    beginner_suitable: bool = True
+    alternatives: List[str] = Field(default_factory=list)
+    affiliate: bool = False

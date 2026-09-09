@@ -406,6 +406,35 @@ Implemented the controlled RSS and Atom ingestion pipeline, article normalizatio
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
   - Recorded **DEC-015** (Unified Admin Settings Portal) and scheduled task **22.08** in the master work log.
 
+---
+
+## Milestone 13 — Product / Shop Source Framework
+
+Implemented the controlled product source integration, honest tool evaluation model, dynamic price tracking without record duplication, anti-commercial-bias ranking, and frontend tools guide:
+
+- **13.01 - 13.03 Product Source Model & Vendor Registry**:
+  - Created `ProductSourceEntity` in [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py) (`type=SourceType.PRODUCT_API`, `catalog_url`, `vendor_name`, `item_count`).
+  - Created `ProductMetadata` in [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) with specs, pros, cons, beginner suitability, alternatives, and affiliate disclosure.
+  - Created [`backend/app/api/v1/products.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/products.py) (`POST /api/v1/products/sources`, `GET`, `PATCH`, `DELETE`).
+- **13.04 - 13.06 Product Normalizer & Dynamic Price Tracking**:
+  - Created [`backend/app/services/product_client.py`](file:///C:/Doron/UpTheIrons/backend/app/services/product_client.py) with verified tool catalog fixtures (cast steel anvils, dual-burner propane forges, 2x72 belt grinders, wolf jaw tongs).
+  - Created [`backend/app/services/product_ingestion.py`](file:///C:/Doron/UpTheIrons/backend/app/services/product_ingestion.py):
+    - `normalize_product_item()` produces `ContentEnvelope` (`type=ContentType.PRODUCT`).
+    - Deterministic deduplication key: `compute_deduplication_key(ContentType.PRODUCT, external_id=sku, canonical_url=purchase_url)`.
+    - Detects price changes dynamically: updates price and `price_updated_at` without creating duplicate records.
+- **13.07 & 13.08 Frontend Tools & Equipment Guide**:
+  - Rebuilt [`frontend/app/tools/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/tools/page.tsx) with:
+    - Transparent tool evaluation cards with price badges, pros/cons checklist, and alternatives.
+    - Category pills ("All Gear", "Anvils", "Forges", "Belt Grinders", "Tongs").
+    - "Beginner Friendly" filter checkbox and max budget filter.
+    - "Sync Catalogs" trigger.
+  - Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with typed client methods for products.
+- **13.09 Commercial Bias Check**:
+  - Sorting is strictly algorithmic (by price ascending, then title). Affiliate partnership status never boosts ranking or priority.
+- **13.10 Milestone Quality Gate**:
+  - Backend test suite: 53 passed in 2.29s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+
 
 
 

@@ -1740,38 +1740,68 @@ Add
 
 ## 13.01 Product Source Model
 
-## 13.02 Approved Source Registry
+- [x] Defined `ProductSourceEntity` in [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py) (`type=SourceType.PRODUCT_API`, `catalog_url`, `vendor_name`, `item_count`)
+- [x] Defined `ProductMetadata` in [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) (`sku`, `platform`, `price`, `currency`, `price_updated_at`, `pros`, `cons`, `beginner_suitable`, `alternatives`, `affiliate`)
 
-## 13.03 Source Enable / Disable
+**Status:** ✅ COMPLETE
+
+## 13.02 Approved Source Registry & 13.03 Source Enable / Disable
+
+- [x] Created `POST /api/v1/products/sources`: Registers approved vendor source, validates URL, prevents duplicate registrations
+- [x] Created `GET`, `PATCH`, and `DELETE` endpoints in [`backend/app/api/v1/products.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/products.py)
+- [x] Disabled sources are excluded from synchronization
+
+**Status:** ✅ COMPLETE
 
 ## 13.04 Product Normalization
 
-## 13.05 Product Deduplication
+- [x] `normalize_product_item()` in [`backend/app/services/product_ingestion.py`](file:///C:/Doron/UpTheIrons/backend/app/services/product_ingestion.py)
+- [x] Maps raw catalog payload into `ContentEnvelope` (`type=ContentType.PRODUCT`)
+- [x] Formulates transparent specs: pros, cons, beginner suitability, and alternatives
 
-## 13.06 Dynamic Price Metadata
+**Status:** ✅ COMPLETE
 
-Store:
+## 13.05 Product Deduplication & 13.06 Dynamic Price Metadata
 
-```text
-price
-currency
-timestamp
-source
-```
+- [x] Canonical deduplication key: `compute_deduplication_key(ContentType.PRODUCT, external_id=sku, canonical_url=purchase_url)`
+- [x] Pre-write check against Firestore `content` collection (`prod_{platform}_{sku}`)
+- [x] Dynamic Price Detection: If price changes on re-sync, updates price and `price_updated_at` without duplicating the record
+- [x] If price is unchanged, skips write and increments `duplicates` counter
 
-## 13.07 Product Card
+**Status:** ✅ COMPLETE
 
-Display commercial information transparently.
+## 13.07 Product Card (Frontend)
+
+- [x] Created curated tools & gear guide in [`frontend/app/tools/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/tools/page.tsx)
+- [x] Displays tool specs, pros/cons checklist, beginner suitability badge, price with timestamp, and transparent vendor links
+
+**Status:** ✅ COMPLETE
 
 ## 13.08 Relevance Filtering
 
-Use deterministic category/rule filtering first.
+- [x] Category & tag pills ("All Gear", "Anvils", "Forges", "Belt Grinders", "Tongs")
+- [x] "Beginner Friendly" filter checkbox and maximum budget filter
+
+**Status:** ✅ COMPLETE
 
 ## 13.09 Commercial Bias Check
 
-Verify that affiliate/commercial metadata does not determine technical ranking by itself.
+- [x] Verified ranking integrity: sorting is strictly alphabetical or by price ascending
+- [x] Commercial affiliate links never boost ranking or priority over non-affiliate tools
+
+**Status:** ✅ COMPLETE
 
 ## 13.10 Product Sync Test
+
+- [x] Created [`tests/backend/test_product_ingestion.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_product_ingestion.py)
+- [x] 53 passing backend tests in 2.29s
+- [x] Frontend build compiled cleanly (`npm run build`, exit code 0)
+
+**Status:** ✅ COMPLETE
+
+**Exit gate:** Product sources ingest only from approved vendors, track dynamic prices without record duplication, enforce zero commercial bias, and display honest tool evaluations.
+
+**Status:** ✅ COMPLETE
 
 ---
 

@@ -57,3 +57,13 @@ class RSSFeedEntity(SourceEntity):
     site_url: Optional[str] = None
     feed_format: str = "rss"
     article_count: int = 0
+
+
+class ProductSourceEntity(SourceEntity):
+    """Approved vendor or product catalog source entity."""
+
+    type: SourceType = SourceType.PRODUCT_API
+    platform: str = "product_api"
+    catalog_url: str = Field(min_length=5)
+    vendor_name: Optional[str] = None
+    item_count: int = 0
