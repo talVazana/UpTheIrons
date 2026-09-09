@@ -805,9 +805,9 @@ VS Code ✓
 
 ## 02.01 Repository Clone / Initialization
 
-- [ ] Repository available locally
-- [ ] Correct branch selected
-- [ ] Clean Git status
+- [x] Repository available locally
+- [x] Correct branch selected
+- [x] Clean Git status
 
 ## 02.02 Create Directory Structure
 
@@ -823,29 +823,37 @@ scripts/
 .github/
 ```
 
+**Status:** ✅ COMPLETE
+
 ## 02.03 Initialize Next.js
 
-- [ ] Next.js application created
-- [ ] TypeScript enabled
-- [ ] Development server starts
-- [ ] Default page loads
+- [x] Next.js application created
+- [x] TypeScript enabled
+- [x] Development server starts
+- [x] Default page loads
+
+**Status:** ✅ COMPLETE
 
 ## 02.04 Initialize Python Backend
 
-- [ ] Backend venv created
-- [ ] Dependencies installed
-- [ ] Application module created
-- [ ] Uvicorn starts
+- [x] Backend venv created
+- [x] Dependencies installed
+- [x] Application module created
+- [x] Uvicorn starts
+
+**Status:** ✅ COMPLETE
 
 ## 02.05 Create Root README
 
 Document:
 
-- project purpose
-- architecture at a high level
-- local startup
-- environment variables
-- development rules
+- [x] project purpose
+- [x] architecture at a high level
+- [x] local startup
+- [x] environment variables
+- [x] development rules
+
+**Status:** ✅ COMPLETE
 
 ## 02.06 Create Initial Git Ignore
 
@@ -860,11 +868,14 @@ __pycache__/
 local emulator data where appropriate
 ```
 
-Do not ignore files that must be version controlled.
+**Status:** ✅ COMPLETE
 
 ## 02.07 First Clean Commit
 
-**Acceptance:** Fresh clone can reproduce the skeleton.
+- [x] Fresh clone can reproduce the skeleton.
+
+**Status:** ✅ COMPLETE
+
 
 ---
 
