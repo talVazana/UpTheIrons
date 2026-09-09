@@ -229,5 +229,27 @@ Verified local communication between Next.js and FastAPI:
   - Frontend compiled in 807ms (`npm run build`, exit code 0).
   - Backend passed all 10 unit/integration tests in 0.55s (`pytest tests/backend`).
 
+---
+
+## Milestone 07 — Firebase Data Layer
+
+Implemented storage abstraction and local Firestore emulator integration:
+
+- **07.01 Firebase Backend Configuration**:
+  - Leveraged `FIREBASE_PROJECT_ID` and `FIRESTORE_EMULATOR_HOST` from [`backend/app/core/config.py`](file:///C:/Doron/UpTheIrons/backend/app/core/config.py). Zero production credential exposure.
+- **07.02 Repository Abstraction**:
+  - Created [`backend/app/repositories/base.py`](file:///C:/Doron/UpTheIrons/backend/app/repositories/base.py) defining abstract CRUD methods (`create`, `get`, `update`, `delete`, `list`).
+  - Created [`backend/app/repositories/firestore.py`](file:///C:/Doron/UpTheIrons/backend/app/repositories/firestore.py) implementing `FirestoreRepository` using high-speed async REST transport without heavy cloud dependencies.
+  - Implemented bidirectional serialization (`to_firestore_value`, `from_firestore_value`, `dict_to_firestore`, `firestore_to_dict`).
+- **07.03 - 07.07 Unit & CRUD Tests**:
+  - Created [`tests/backend/test_firestore_repository.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_firestore_repository.py) verifying full roundtrip serialization across all native Python primitives (strings, ints, floats, booleans, lists, maps, nulls).
+  - Verified `create`, `get`, `update`, `delete`, and `list` operations with HTTP transport mocks.
+- **07.08 Storage Error Handling**:
+  - Verified `StorageError` handling when Firestore emulator is unreachable or throws upstream failures.
+- **Milestone Quality Gate**:
+  - Backend test suite: 13 passed in 0.57s (`pytest tests/backend`).
+  - Frontend build: exit code 0 (`npm run build`).
+
+
 
 
