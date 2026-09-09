@@ -181,3 +181,33 @@ Implemented the structured FastAPI service foundation according to specification
   - Created [`tests/backend/test_health.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_health.py), [`tests/backend/test_errors.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_errors.py), [`tests/backend/test_config.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_config.py), and [`tests/backend/test_logging.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_logging.py).
   - 10 passing tests in 0.55s via `pytest`.
 
+---
+
+## Milestone 05 — Frontend Foundation
+
+Implemented the Next.js application shell, navigation framework, theme tokens, and accessible responsive layout:
+
+- **05.01 & 05.02 Next.js Shell & Global Forge Theme**:
+  - Updated [`frontend/app/globals.css`](file:///C:/Doron/UpTheIrons/frontend/app/globals.css) with Master Spec forge palette variables (`--bg-primary: #121212`, `--bg-surface: #1a1a1a`, `--accent-forge: #FF5722`, etc.), accessible `:focus-visible` styling, and reduced-motion media query.
+- **05.03 Typography & Semantic HTML**:
+  - Readable system typography stack, semantic headings, and high-contrast color ratios across all viewports.
+- **05.04 & 05.05 Navigation Shell & Primary Route Placeholders**:
+  - Created [`frontend/components/navigation/Navbar.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Navbar.tsx): sticky navigation with forge branding, desktop item indicators, and mobile drawer with accessible ARIA states.
+  - Created [`frontend/components/navigation/Footer.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Footer.tsx): four-column responsive footer with craft ethos, quick navigation, and local architecture status.
+  - Implemented 8 primary section page shells:
+    - [`frontend/app/materials/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/materials/page.tsx)
+    - [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx)
+    - [`frontend/app/guides/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/guides/page.tsx)
+    - [`frontend/app/projects/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/projects/page.tsx)
+    - [`frontend/app/workshop/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/workshop/page.tsx)
+    - [`frontend/app/tools/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/tools/page.tsx)
+    - [`frontend/app/rules/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/rules/page.tsx)
+    - [`frontend/app/search/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/search/page.tsx)
+  - Updated [`frontend/app/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/page.tsx) with hero section, Bento pillars, and Apprentice Rule banner.
+- **05.06 Accessibility Baseline**:
+  - Added skip-to-content accessible landmark (`#main-content`) in [`frontend/app/layout.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/layout.tsx).
+  - Keyboard navigation and high-contrast focus rings on interactive elements.
+- **05.08 Quality Gate**:
+  - Ran `npm run build` in `frontend/`: compiled successfully in 1238ms; all 11 static pages generated with exit code 0.
+
+
