@@ -210,4 +210,24 @@ Implemented the Next.js application shell, navigation framework, theme tokens, a
 - **05.08 Quality Gate**:
   - Ran `npm run build` in `frontend/`: compiled successfully in 1238ms; all 11 static pages generated with exit code 0.
 
+---
+
+## Milestone 06 — Frontend ↔ Backend Integration
+
+Verified local communication between Next.js and FastAPI:
+
+- **06.01 Frontend API Client**:
+  - Created [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) exporting `fetchApi`, `checkBackendHealth`, and custom `ApiError` class parsing structured JSON error envelopes. Configured `BACKEND_URL` from `NEXT_PUBLIC_BACKEND_URL` with `http://localhost:8000` fallback.
+- **06.02 Backend CORS Configuration**:
+  - Verified backend `CORSMiddleware` in `backend/app/main.py` explicitly allows local origins (`http://localhost:3000`, `http://127.0.0.1:3000`).
+- **06.03 & 06.04 Live Backend Status & Health Call**:
+  - Created [`frontend/components/workshop/BackendStatusBadge.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/workshop/BackendStatusBadge.tsx) calling `/api/health` and displaying live API version and Firestore connection diagnostics.
+  - Mounted badge directly in [`frontend/components/navigation/Navbar.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Navbar.tsx).
+- **06.05 Graceful Offline Handling**:
+  - Verified that when the backend is offline or unreachable, the frontend gracefully degrades to "API Offline (Standalone)" with a refresh trigger without throwing unhandled exceptions or breaking the UI.
+- **06.06 Quality Gate & Build Verification**:
+  - Frontend compiled in 807ms (`npm run build`, exit code 0).
+  - Backend passed all 10 unit/integration tests in 0.55s (`pytest tests/backend`).
+
+
 
