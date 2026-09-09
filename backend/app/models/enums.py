@@ -42,3 +42,14 @@ class SourceStatus(str, Enum):
     WARNING = "warning"
     FAILED = "failed"
     DISABLED = "disabled"
+
+
+class TrustLabel(str, Enum):
+    FACT = "fact"
+    SOURCE_BACKED = "source_backed_recommendation"
+    CRAFT_PRACTICE = "craft_practice"
+    PERSONAL_EXPERIENCE = "personal_experience"
+    HISTORICAL_INTERPRETATION = "historical_interpretation"
+    AI_SUMMARY = "ai_summary"
+    OPINION = "opinion"
+

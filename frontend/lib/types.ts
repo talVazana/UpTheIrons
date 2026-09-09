@@ -16,8 +16,21 @@ export type ContentStatus =
   | "draft"
   | "published"
   | "featured"
+  | "pinned"
+  | "verified"
   | "needs_review"
-  | "archived";
+  | "archived"
+  | "hidden";
+
+export type TrustLabel =
+  | "fact"
+  | "source_backed_recommendation"
+  | "craft_practice"
+  | "personal_experience"
+  | "historical_interpretation"
+  | "ai_summary"
+  | "opinion";
+
 
 export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
 
@@ -93,3 +106,41 @@ export interface ProjectMetadata {
   steps: string[];
   safety_warnings: string[];
 }
+
+export interface SourceReference {
+  title: string;
+  author?: string | null;
+  publication?: string | null;
+  year?: number | null;
+  url?: string | null;
+  trust_label?: TrustLabel | null;
+  citation_key?: string | null;
+}
+
+export interface SafetyPrecaution {
+  level: "critical" | "warning" | "caution" | "mandatory_ppe" | string;
+  hazard: string;
+  mitigation: string;
+  ppe: string[];
+}
+
+export interface RelatedContentLink {
+  content_id: string;
+  title: string;
+  type: ContentType;
+  slug: string;
+  relationship: string;
+}
+
+export interface GuideMetadata {
+  reading_time_minutes: number;
+  trust_label: TrustLabel;
+  author: string;
+  version: string;
+  content_markdown: string;
+  source_references: SourceReference[];
+  safety_precautions: SafetyPrecaution[];
+  related_content: RelatedContentLink[];
+  table_of_contents?: Array<{ id: string; title: string }>;
+}
+

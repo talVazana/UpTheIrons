@@ -2,6 +2,8 @@
  * API client for Blacksmith Knight backend.
  */
 
+import type { ContentEnvelope, GuideMetadata, TrustLabel } from "./types";
+
 export const BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
@@ -835,5 +837,61 @@ export async function applyEditorialOverride(
     body: JSON.stringify(payload),
   });
 }
+
+export interface GuideItem extends ContentEnvelope<GuideMetadata> {}
+
+export interface GuideListResponse {
+  guides: GuideItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export async function fetchGuides(params?: {
+  category?: string;
+  difficulty?: string;
+  tag?: string;
+  trust_label?: string;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<GuideListResponse> {
+  const query = new URLSearchParams();
+  if (params?.category && params.category !== "all") query.append("category", params.category);
+  if (params?.difficulty && params.difficulty !== "all") query.append("difficulty", params.difficulty);
+  if (params?.tag) query.append("tag", params.tag);
+  if (params?.trust_label && params.trust_label !== "all") query.append("trust_label", params.trust_label);
+  if (params?.q) query.append("q", params.q);
+  if (params?.limit) query.append("limit", params.limit.toString());
+  if (params?.offset) query.append("offset", params.offset.toString());
+
+  const qs = query.toString();
+  return fetchApi<GuideListResponse>(`/api/v1/guides${qs ? `?${qs}` : ""}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchGuideBySlug(slugOrId: string): Promise<GuideItem> {
+  return fetchApi<GuideItem>(`/api/v1/guides/${encodeURIComponent(slugOrId)}`, {
+    cache: "no-store",
+  });
+}
+
+export async function createGuide(payload: {
+  title: string;
+  slug?: string;
+  summary: string;
+  category?: string;
+  tags?: string[];
+  difficulty?: string;
+  status?: string;
+  metadata: GuideMetadata;
+}): Promise<GuideItem> {
+  return fetchApi<GuideItem>("/api/v1/guides", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 
 

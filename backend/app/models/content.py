@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, field_validator
-from app.models.enums import ContentType, ContentStatus, DifficultyLevel
+from app.models.enums import ContentType, ContentStatus, DifficultyLevel, TrustLabel
 from app.models.source import SourceProvenance
 
 
@@ -97,3 +97,49 @@ class ProductMetadata(BaseModel):
     beginner_suitable: bool = True
     alternatives: List[str] = Field(default_factory=list)
     affiliate: bool = False
+
+
+class SourceReference(BaseModel):
+    """Academic, historical, or guild citation backing guide claims."""
+
+    title: str = Field(min_length=2, max_length=300)
+    author: Optional[str] = None
+    publication: Optional[str] = None
+    year: Optional[int] = None
+    url: Optional[str] = None
+    trust_label: Optional[TrustLabel] = None
+    citation_key: Optional[str] = None
+
+
+class SafetyPrecaution(BaseModel):
+    """Mandatory safety warning or critical craft hazard protocol."""
+
+    level: str = Field(default="warning", description="critical, warning, caution, mandatory_ppe")
+    hazard: str = Field(min_length=3, max_length=200)
+    mitigation: str = Field(min_length=5, max_length=1000)
+    ppe: List[str] = Field(default_factory=list)
+
+
+class RelatedContentLink(BaseModel):
+    """Bidirectional reference linking guides to materials, projects, videos, and tools."""
+
+    content_id: str
+    title: str
+    type: ContentType
+    slug: str
+    relationship: str = Field(default="related", description="requires_material, related_technique, recommended_video, prerequisite_project")
+
+
+class GuideMetadata(BaseModel):
+    """Domain model for in-depth editorial craft guides with technical trust classifications."""
+
+    reading_time_minutes: int = Field(default=5, ge=1)
+    trust_label: TrustLabel = TrustLabel.CRAFT_PRACTICE
+    author: str = Field(default="Blacksmith Knight Guild", min_length=2, max_length=100)
+    version: str = Field(default="1.0", max_length=20)
+    content_markdown: str = Field(min_length=10)
+    source_references: List[SourceReference] = Field(default_factory=list)
+    safety_precautions: List[SafetyPrecaution] = Field(default_factory=list)
+    related_content: List[RelatedContentLink] = Field(default_factory=list)
+    table_of_contents: List[Dict[str, str]] = Field(default_factory=list)
+

@@ -498,6 +498,44 @@ Implemented the comprehensive rules, safety standards, and editorial configurati
   - Backend test suite: 77 passed in 2.74s (`pytest tests/backend`).
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
 
+---
+
+## Milestone 16 — Knowledge Library
+
+Implemented the static/editorial knowledge library foundation, Technical Trust Classifications, accessible Markdown renderer with callouts and TOC anchors, structured peer-reviewed source references, high-visibility safety alert components, and an initial master guide:
+
+- **16.01 Guide Domain Model & Technical Trust Labels**:
+  - Created [`TrustLabel`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) enum (`fact`, `source_backed_recommendation`, `craft_practice`, `personal_experience`, `historical_interpretation`, `ai_summary`, `opinion`).
+  - Created [`GuideMetadata`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py), [`SourceReference`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py), [`SafetyPrecaution`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py), and [`RelatedContentLink`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) under `ContentEnvelope`.
+  - Added matching TypeScript interfaces in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts).
+- **16.02 & 16.08 Master Guides REST API**:
+  - Created [`backend/app/api/v1/guides.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/guides.py) providing:
+    - `GET /api/v1/guides`: Filter by craft category, difficulty level, trust label, and free-text search `q` scanning titles, summaries, tags, and full markdown body.
+    - `GET /api/v1/guides/{slug_or_id}`: Retrieves complete guide by slug or ID with full markdown and metadata.
+    - `POST /api/v1/guides`: Creates new guide with strict `RuleValidator` safety and commercial spam verification.
+    - `PATCH /api/v1/guides/{slug_or_id}`: Partial update endpoint re-validating against editorial rules.
+  - Mounted router in [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py).
+- **16.03 Markdown Rendering Engine**:
+  - Created [`frontend/components/guides/MarkdownRenderer.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/guides/MarkdownRenderer.tsx) rendering H1-H3 headers with jump-link slug anchors, GitHub-style alert callouts (`[!NOTE]`, `[!WARNING]`, `[!TIP]`, `[!CAUTION]`), fenced code blocks, numbered and bulleted lists, horizontal dividers, inline code tokens, and citation markers without heavy external libraries.
+- **16.04 Source References Component**:
+  - Created [`frontend/components/guides/SourceReferencesList.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/guides/SourceReferencesList.tsx) displaying structured academic and guild citations with citation keys (e.g. `[Postman1998]`), author attributions, publication dates, trust labels, and direct external references.
+- **16.05 Safety Section Component**:
+  - Created [`frontend/components/guides/SafetySection.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/guides/SafetySection.tsx) presenting high-visibility hazard warning banners with flame/shield icons, ANSI Z87.1 / NRR 28+ PPE checklists, and actionable mitigation procedures.
+- **16.06 Technical Trust Badges**:
+  - Created [`frontend/components/guides/TrustBadge.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/guides/TrustBadge.tsx) visually communicating trust level with craft color tokens and explanatory hover tooltips.
+- **16.07 Related Content Links**:
+  - Created [`frontend/components/guides/RelatedContentSection.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/guides/RelatedContentSection.tsx) linking master guides to metallurgical library entries (`mat-1084`), apprentice projects (`proj-s-hook`), and equipment tutorials.
+- **16.09 Complete Master Guide Seeding**:
+  - Authored and seeded exhaustive master guide: *"The Anvil: Anatomy, Selection, Rebound Testing, and Workshop Mounting"* (`guide-anvil-selection-mounting`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py). Covers London-pattern geometry, cast steel vs cast iron (ASO warning), ball-bearing rebound percentage test, acoustic ring diagnostics, knuckle rule ergonomics, and silicone/chain sound dampening.
+  - Seeded secondary master guide on heat treatment phase transformations (`guide-heat-treatment-fundamentals`).
+- **Frontend Pages**:
+  - Rebuilt [`frontend/app/guides/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/guides/page.tsx) with tabs for "Master Craft Guides" and "Guild Articles & RSS", free-text search input, category filters, difficulty filters, and trust classification selectors.
+  - Created [`frontend/app/guides/[slug]/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/guides/[slug]/page.tsx) as the comprehensive master guide reader with quick navigation table of contents, safety warnings, markdown body, citations, and related content.
+- **Milestone Quality Gate**:
+  - Backend test suite: 85 passed in 2.90s (`pytest tests/backend -v`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm --prefix frontend run build`, exit code 0).
+
+
 
 
 
