@@ -526,4 +526,137 @@ export async function fetchArticle(id: string): Promise<ArticleItem> {
   });
 }
 
+export interface ProductItem {
+  id: string;
+  type: string;
+  title: string;
+  slug: string;
+  summary: string;
+  category: string;
+  tags: string[];
+  difficulty?: string;
+  image_url?: string;
+  source?: {
+    source_type: string;
+    source_id: string;
+    source_name: string;
+    source_url: string;
+  };
+  metadata: {
+    sku: string;
+    platform: string;
+    price: number;
+    currency: string;
+    price_updated_at?: string;
+    purchase_url: string;
+    pros: string[];
+    cons: string[];
+    beginner_suitable: boolean;
+    alternatives: string[];
+    affiliate: boolean;
+  };
+}
+
+export interface ProductListResponse {
+  products: ProductItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface ProductSourceItem {
+  id: string;
+  name: string;
+  type: string;
+  platform: string;
+  url: string;
+  catalog_url: string;
+  vendor_name?: string;
+  enabled: boolean;
+  priority: number;
+  categories: string[];
+  status: "configured" | "healthy" | "warning" | "failed" | "disabled";
+  item_count: number;
+  last_synced_at?: string | null;
+  last_error?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductSyncSummaryItem {
+  source_id: string;
+  vendor_name: string;
+  discovered: number;
+  new_items: number;
+  duplicates: number;
+  price_updates: number;
+  errors: string[];
+  started_at: string;
+  completed_at?: string;
+  status: string;
+}
+
+export async function fetchProducts(params?: {
+  category?: string;
+  tag?: string;
+  beginner_only?: boolean;
+  max_price?: number;
+  limit?: number;
+  offset?: number;
+}): Promise<ProductListResponse> {
+  const query = new URLSearchParams();
+  if (params?.category) query.set("category", params.category);
+  if (params?.tag) query.set("tag", params.tag);
+  if (params?.beginner_only !== undefined) query.set("beginner_only", String(params.beginner_only));
+  if (params?.max_price !== undefined) query.set("max_price", String(params.max_price));
+  if (params?.limit) query.set("limit", String(params.limit));
+  if (params?.offset) query.set("offset", String(params.offset));
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<ProductListResponse>(`/api/v1/products${qs}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchProduct(id: string): Promise<ProductItem> {
+  return fetchApi<ProductItem>(`/api/v1/products/${id}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchProductSources(params?: {
+  enabled?: boolean;
+}): Promise<{ sources: ProductSourceItem[]; total: number }> {
+  const query = new URLSearchParams();
+  if (params?.enabled !== undefined) query.set("enabled", String(params.enabled));
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<{ sources: ProductSourceItem[]; total: number }>(`/api/v1/products/sources${qs}`, {
+    cache: "no-store",
+  });
+}
+
+export async function createProductSource(input: {
+  catalog_url: string;
+  name: string;
+  platform?: string;
+  priority?: number;
+  categories?: string[];
+}): Promise<ProductSourceItem> {
+  return fetchApi<ProductSourceItem>("/api/v1/products/sources", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function syncProductSource(id: string): Promise<ProductSyncSummaryItem> {
+  return fetchApi<ProductSyncSummaryItem>(`/api/v1/products/sources/${id}/sync`, {
+    method: "POST",
+  });
+}
+
+export async function syncAllProductSources(): Promise<ProductSyncSummaryItem[]> {
+  return fetchApi<ProductSyncSummaryItem[]>("/api/v1/products/sync", {
+    method: "POST",
+  });
+}
+
 

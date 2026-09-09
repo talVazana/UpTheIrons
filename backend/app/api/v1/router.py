@@ -6,6 +6,7 @@ from app.api.v1.settings import router as settings_router
 from app.api.v1.videos import router as videos_router
 from app.api.v1.rss import router as rss_router
 from app.api.v1.articles import router as articles_router
+from app.api.v1.products import router as products_router
 
 v1_router = APIRouter()
 v1_router.include_router(health_router)
@@ -15,4 +16,5 @@ v1_router.include_router(settings_router)
 v1_router.include_router(videos_router)
 v1_router.include_router(rss_router)
 v1_router.include_router(articles_router)
+v1_router.include_router(products_router)
 
