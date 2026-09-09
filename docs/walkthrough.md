@@ -244,11 +244,97 @@ Implemented storage abstraction and local Firestore emulator integration:
 - **07.03 - 07.07 Unit & CRUD Tests**:
   - Created [`tests/backend/test_firestore_repository.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_firestore_repository.py) verifying full roundtrip serialization across all native Python primitives (strings, ints, floats, booleans, lists, maps, nulls).
   - Verified `create`, `get`, `update`, `delete`, and `list` operations with HTTP transport mocks.
-- **07.08 Storage Error Handling**:
-  - Verified `StorageError` handling when Firestore emulator is unreachable or throws upstream failures.
 - **Milestone Quality Gate**:
   - Backend test suite: 13 passed in 0.57s (`pytest tests/backend`).
   - Frontend build: exit code 0 (`npm run build`).
+
+---
+
+## Milestone 08 — Core Domain / Data Model
+
+Implemented typed domain entities, validation schemas, deterministic deduplication engine, and local seeding fixtures:
+
+- **08.01 Common Content Envelope**:
+  - Created [`backend/app/models/enums.py`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) defining `ContentType`, `ContentStatus`, `DifficultyLevel`, `SourceType`, `SourceStatus`.
+  - Created [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) with polymorphic `ContentEnvelope` (`id`, `type`, `title`, `slug`, `summary`, `category`, `tags`, `difficulty`, `source`, `status`, `metadata`).
+  - Specialized domain metadata: `MaterialMetadata` with chemical composition & `HeatTreatmentRecipe`, `VideoMetadata`, `ProjectMetadata`.
+- **08.02 & 08.03 Source & YouTube Channel Entities**:
+  - Created [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py) defining `SourceProvenance` tracking origin, `SourceEntity`, and `YouTubeChannelEntity`.
+- **08.05 Schema Validation**:
+  - Pydantic validation enforcing non-empty titles, automatic slug normalization, and metallurgical boundary checks.
+- **08.06 Deterministic Deduplication Engine**:
+  - Created [`backend/app/models/deduplication.py`](file:///C:/Doron/UpTheIrons/backend/app/models/deduplication.py) generating canonical unique keys (`video:youtube:{id}`, `material:{slug}`, `{type}:url:{hash}`, `{type}:title:{hash}`) preventing ingestion duplication.
+- **08.07 Seeding Strategy**:
+  - Created [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py) containing baseline fixtures for high-carbon steels (1084, 1095, 5160) and Level 1 projects (S-Hook) with `seed_initial_data()` loader.
+- **Frontend Synchronization**:
+  - Created matching TypeScript interfaces in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts).
+- **Milestone Quality Gate**:
+  - Backend test suite: 18 passed in 0.62s (`pytest tests/backend`).
+  - Frontend build: exit code 0 (`npm run build`).
+
+---
+
+## Milestone 09 — Source Management Framework
+
+Implemented source management backend endpoints, validation schemas, repository integration, frontend API client, and Source Registry user interface:
+
+- **09.01 - 09.03 Source Management API & Validation**:
+  - Created [`backend/app/api/v1/sources.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/sources.py) providing full REST endpoints:
+    - `POST /api/sources`: Register new source with URL validation, slug derivation, and initial `PENDING`/`ACTIVE` status.
+    - `GET /api/sources`: Query sources with filters (`source_type`, `status`).
+    - `GET /api/sources/{id}`: Fetch individual source by ID.
+    - `PATCH /api/sources/{id}`: Update source configuration or toggle enabled/disabled status.
+    - `DELETE /api/sources/{id}`: Remove source from the registry.
+    - `POST /api/sources/{id}/test`: Health/connection probe verifying network reachability.
+  - Mounted router in [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py).
+- **09.04 & 09.05 Testing & Quality Gate**:
+  - Created [`tests/backend/test_sources_api.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_sources_api.py) covering creation, validation rejection of invalid URLs, type filtering, toggle updates, and deletions.
+  - 23 backend tests passed in 0.75s (`pytest tests/backend`).
+- **09.06 Frontend Source Registry UI**:
+  - Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with `fetchSources`, `createSource`, `updateSource`, `deleteSource`, `testSourceConnection`, and `SourceItem` interface.
+  - Created [`frontend/app/sources/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/sources/page.tsx) with:
+    - Filter tabs (All, YouTube Channels, RSS Feeds, Manual / APIs).
+    - Source status badges (`active`, `pending`, `disabled`, `error`).
+    - Source creation modal with input validation.
+    - Connection testing trigger.
+    - Toggle enable/disable switch and deletion action with UI feedback.
+  - Linked `/sources` in [`Navbar.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Navbar.tsx) and [`Footer.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/navigation/Footer.tsx).
+- **Milestone Quality Gate**:
+  - Frontend production build: all 12 routes compiled cleanly (`npm run build`, exit code 0).
+  - Backend test suite: 23 passed in 0.75s.
+
+---
+
+## Milestone 10 — YouTube Channel Management
+
+Implemented the controlled YouTube channel management registry, identifier resolver, duplicate prevention, ingestion sync triggers, and user interface:
+
+- **10.01 - 10.05 YouTube Channel API & Deduplication**:
+  - Created [`backend/app/api/v1/youtube.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/youtube.py) providing endpoints:
+    - `POST /api/youtube/channels`: Register approved YouTube channel from `@handle`, full URL, or `UC...` ID. Enforces duplicate rejection by deterministic ID.
+    - `GET /api/youtube/channels`: Query approved channels with `enabled`, `status`, and `category` filters.
+    - `GET /api/youtube/channels/{channel_id}`: Fetch single channel.
+    - `PATCH /api/youtube/channels/{channel_id}`: Update enabled toggle, priority, and categories.
+    - `DELETE /api/youtube/channels/{channel_id}`: Remove channel from registry while retaining historical video records in content vault.
+  - Mounted router in [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py).
+- **10.06 & 10.10 Identifier Resolution & Anti-Crawling Enforcement**:
+  - `POST /api/youtube/resolve`: Validates and parses channels from URLs or handles; integrates with YouTube Data API v3 when `YOUTUBE_API_KEY` is present, with deterministic offline fallback for local tests. Strictly rejects autonomous crawling.
+- **10.11 Ingestion Sync Placeholder**:
+  - `POST /api/youtube/channels/{channel_id}/sync`: Validates channel is enabled, marks status as `HEALTHY`, and records `last_synced_at` timestamp. Rejects disabled channels with 400 Bad Request.
+- **10.08 - 10.09 Channel Manager UI**:
+  - Created [`frontend/app/videos/channels/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/channels/page.tsx) with:
+    - Channel cards with avatar/thumbnails, handles, priority badges, category chips, and live status.
+    - Filter tabs ("All Channels", "Enabled", "Disabled") and category selector.
+    - Add Channel Modal with handle/URL input, real-time metadata inspector/preview, and priority selector.
+    - Enable/disable toggle switches, "Sync Now" trigger, and deletion action.
+  - Linked to `/videos/channels` from [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx) and [`frontend/app/sources/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/sources/page.tsx).
+- **Milestone Quality Gate**:
+  - Backend test suite: 31 passed in 1.12s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+  - Live Firestore verification: Registered `@BlackBearForge` on port 8000/8080, verified sync trigger, and verified duplicate rejection.
+
+
+
 
 
 

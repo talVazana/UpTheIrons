@@ -18,6 +18,7 @@ const navItems: NavItem[] = [
   { name: "Guides", href: "/guides" },
   { name: "Projects", href: "/projects" },
   { name: "Workshop", href: "/workshop" },
+  { name: "Sources", href: "/sources" },
   { name: "Tools", href: "/tools" },
   { name: "Rules", href: "/rules" },
   { name: "Search", href: "/search" },
