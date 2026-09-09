@@ -989,9 +989,11 @@ Firestore Emulator / Production
 
 ## 04.01 Create FastAPI Application
 
-- [ ] `main.py` or equivalent
-- [ ] application instance
-- [ ] basic routing
+- [x] `main.py` or equivalent
+- [x] application instance
+- [x] basic routing
+
+**Status:** ✅ COMPLETE
 
 ## 04.02 Start Uvicorn
 
@@ -1000,6 +1002,10 @@ Target:
 ```text
 http://localhost:8000
 ```
+
+- [x] Verified FastAPI ASGI app can be imported and executed via Uvicorn.
+
+**Status:** ✅ COMPLETE
 
 ## 04.03 Health Endpoint
 
@@ -1013,44 +1019,63 @@ Expected:
 {"status":"ok"}
 ```
 
+- [x] Root `/health` endpoint responds with `{"status": "ok"}`.
+- [x] Sub-router `/api/health` and `/api/v1/health` respond with extended diagnostics and emulator status.
+
+**Status:** ✅ COMPLETE
+
 ## 04.04 Health Test
 
-- [ ] Browser/curl test
-- [ ] automated API test
+- [x] Browser/curl/HTTP test verified
+- [x] automated API test in `tests/backend/test_health.py`
+
+**Status:** ✅ COMPLETE
 
 ## 04.05 API Configuration
 
 Create configuration handling for:
 
-- environment
-- Firebase settings
-- logging level
-- external API configuration
+- [x] environment (`APP_ENV`, `APP_DEBUG`)
+- [x] Firebase settings (`FIREBASE_PROJECT_ID`, `FIRESTORE_EMULATOR_HOST`)
+- [x] logging level (`LOG_LEVEL`)
+- [x] external API configuration placeholders (`YOUTUBE_API_KEY`, `AI_API_KEY`)
+- [x] CORS origins list (`CORS_ORIGINS`)
+
+Implemented in [`backend/app/core/config.py`](file:///C:/Doron/UpTheIrons/backend/app/core/config.py).
+
+**Status:** ✅ COMPLETE
 
 ## 04.06 Error Handling Foundation
 
-Define basic consistent error responses.
+Define basic consistent error responses:
+
+- [x] Standard envelope: `{"error": {"code": ..., "message": ..., "details": ...}}`
+- [x] Custom exceptions: `AppException`, `NotFoundError`, `BadRequestError`, `ValidationError`, `SourceError`
+- [x] Handlers for 404, 422 (validation), Starlette HTTP errors, and unhandled 500 exceptions.
+
+Implemented in [`backend/app/core/errors.py`](file:///C:/Doron/UpTheIrons/backend/app/core/errors.py).
+
+**Status:** ✅ COMPLETE
 
 ## 04.07 Logging Foundation
 
 Create structured logging suitable for:
 
-- API requests
-- worker jobs later
-- errors
-- synchronization
+- [x] API requests (via `RequestLoggingMiddleware` with `X-Process-Time-Ms`)
+- [x] worker jobs later
+- [x] errors
+- [x] synchronization
+
+Implemented in [`backend/app/core/logging.py`](file:///C:/Doron/UpTheIrons/backend/app/core/logging.py).
+
+**Status:** ✅ COMPLETE
 
 ## 04.08 API Versioning Decision
 
-Decide whether routes begin with:
+- [x] Established `/api` and `/api/v1` routers mounted via [`backend/app/api/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/router.py).
+- [x] Master Spec `/api/...` prefix respected.
 
-```text
-/api/...
-```
-
-or another versioning convention.
-
-Master Spec currently proposes `/api/...`.
+**Status:** ✅ COMPLETE
 
 ## 04.09 Backend Test Layout
 
@@ -1060,11 +1085,19 @@ Target:
 tests/backend/
 ```
 
+- [x] Structured layout created: `test_health.py`, `test_errors.py`, `test_config.py`, `test_logging.py`.
+
+**Status:** ✅ COMPLETE
+
 ## 04.10 Backend Quality Gate
 
-- [ ] Unit test command works
-- [ ] Health endpoint test passes
-- [ ] Backend starts from clean environment
+- [x] Unit test command works (`pytest tests/backend`)
+- [x] Health endpoint test passes
+- [x] Backend starts from clean environment
+- [x] 10 of 10 automated tests passing
+
+**Status:** ✅ COMPLETE
+
 
 ---
 
@@ -2538,32 +2571,57 @@ This section records actual development activity.
 
 ---
 
+### WORK-004 — Milestone 04 Backend Foundation Complete
+
+**Date:** 2026-09-09  
+**Milestone:** 04 — Backend Foundation  
+**Status:** ✅ COMPLETE
+
+#### Objective
+Build the structured FastAPI backend foundation including environment configuration, structured logging, centralized error envelopes, and API versioned routing.
+
+#### Implementation
+- Created [`backend/app/core/config.py`](file:///C:/Doron/UpTheIrons/backend/app/core/config.py) for typed Pydantic environment configuration with local defaults.
+- Created [`backend/app/core/logging.py`](file:///C:/Doron/UpTheIrons/backend/app/core/logging.py) with `StructuredFormatter` (JSON logging) and `RequestLoggingMiddleware` measuring latency (`X-Process-Time-Ms`).
+- Created [`backend/app/core/errors.py`](file:///C:/Doron/UpTheIrons/backend/app/core/errors.py) with custom exceptions and global exception handlers standardizing error responses to `{"error": {"code", "message", "details"}}`.
+- Created [`backend/app/api/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/router.py) and [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py) with `/health` diagnostic endpoints.
+- Updated [`backend/app/main.py`](file:///C:/Doron/UpTheIrons/backend/app/main.py) to wire all modules together with CORS and structured logging.
+- Created test suite in [`tests/backend/`](file:///C:/Doron/UpTheIrons/tests/backend) (`test_health.py`, `test_errors.py`, `test_config.py`, `test_logging.py`).
+
+#### Tests & Results
+- Ran `pytest tests/backend`: 10 passed in 0.55s.
+- Tested `app.main:app` import in virtual environment: successful with version 0.1.0.
+
+#### Next Step
+Milestone 05 — Frontend Foundation (`05.01 Next.js Shell & Layout`)
+
+
+---
+
 # 45. Current Task Board
 
 At any point, this section should show the immediate development frontier.
 
 ```text
-MILESTONE 00 — Development Program
-00.01 Master Specification       ✅
-00.02 Development Program       ✅
-00.03 Working Rule              ✅
+MILESTONE 00 — Development Program       ✅
+MILESTONE 01 — Environment               ✅
+MILESTONE 02 — Skeleton & Baseline       ✅
+MILESTONE 03 — Firebase Local Emulator   ✅
+MILESTONE 04 — Backend Foundation        ✅
 
-MILESTONE 01 — Environment
-01.01 Verify Git                 ⬜  ← NEXT
-01.02 Verify VS Code             ⬜
-01.03 Node.js                    ⬜
-01.04 Python                     ⬜
-01.05 Python venv                ⬜
-01.06 Firebase CLI               ⬜
-01.07 Firebase project           ⬜
-01.08 Backend packages           ⬜
-01.09 Frontend packages          ⬜
-01.10 Firebase emulators         ⬜
-01.11 Environment documentation  ⬜
-01.12 Environment smoke test     ⬜
+MILESTONE 05 — Frontend Foundation       ⬜  ← NEXT
+05.01 Next.js Shell                      ⬜
+05.02 Global CSS & Palette               ⬜
+05.03 Typography                         ⬜
+05.04 Navigation Shell                   ⬜
+05.05 Responsive Shell                   ⬜
+05.06 Accessibility Baseline             ⬜
+05.07 Framer Motion Foundation           ⬜
+05.08 Frontend Quality Gate              ⬜
 ```
 
 When work starts, update this board first.
+
 
 ---
 
@@ -2635,6 +2693,12 @@ Architecture decisions must be recorded here rather than hidden in conversation 
 
 **Status:** ACCEPTED  
 **Reason:** The first product should focus on becoming an excellent knowledge resource.
+
+## DEC-014 — API Versioning and Structured Error Envelopes
+
+**Status:** ACCEPTED  
+**Reason:** Route hierarchy is mounted with `/api` and `/api/v1` prefixes in FastAPI. All error responses conform to a unified schema `{"error": {"code": str, "message": str, "details": any}}` allowing consistent error handling across the Next.js frontend client.
+
 
 ---
 

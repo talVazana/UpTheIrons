@@ -11,13 +11,32 @@ from app.main import app
 client = TestClient(app)
 
 
-def test_health_check():
+def test_root():
+    response = client.get("/")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert "Blacksmith Knight" in data["service"]
+
+
+def test_root_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
-def test_root():
-    response = client.get("/")
+def test_api_health():
+    response = client.get("/api/health")
     assert response.status_code == 200
-    assert response.json()["status"] == "ok"
+    data = response.json()
+    assert data["status"] == "ok"
+    assert "diagnostics" in data
+    assert "firestore_emulator" in data["diagnostics"]
+
+
+def test_api_v1_health():
+    response = client.get("/api/v1/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert data["service"] == "Blacksmith Knight API"
