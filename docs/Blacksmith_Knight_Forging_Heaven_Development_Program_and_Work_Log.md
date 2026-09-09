@@ -1809,70 +1809,59 @@ Add
 
 **Goal:** Introduce AI only after deterministic pipelines work.
 
+**Status:** ✅ COMPLETE
+
+**Exit gate:** AI operates purely as an optional enrichment layer; system functions seamlessly with zero external AI dependencies or missing credentials (deterministic-first); metallurgical guardrails prevent hallucinations; provider failures degrade gracefully; cost boundaries prevent batch over-enrichment.
+
 ## 14.01 AI Provider Interface
-
-Target abstraction:
-
-```python
-class AIProvider:
-    def classify(self, content):
-        pass
-
-    def summarize(self, content):
-        pass
-
-    def extract(self, content):
-        pass
-```
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`backend/app/services/ai/base.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/base.py) defining `BaseAIProvider` with `enrich_content()`, `classify()`, `summarize()`, and `extract()`, returning structured `AIEnrichmentResult`.
+- **Tests:** Verified via `test_14_01_ai_provider_interface`.
 
 ## 14.02 Provider Configuration
-
-Support model/provider abstraction so the application is not hard-wired to one vendor.
-
-Potential providers:
-
-```text
-OpenAI
-DeepSeek
-Claude
-other compatible provider
-```
+- **Status:** ✅ COMPLETE
+- **Implementation:** Abstracted provider selection in [`backend/app/services/ai/service.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/service.py) supporting `gemini`, `mock`, and `disabled`. Implemented official Google Gemini REST client in [`backend/app/services/ai/gemini.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/gemini.py) and deterministic offline mock in [`backend/app/services/ai/mock.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/mock.py).
+- **Tests:** Verified via `test_14_02_provider_configuration`, `test_gemini_provider_mocked_http`, and `test_gemini_provider_unconfigured`.
 
 ## 14.03 AI Disabled Mode
-
-Run the application with AI unavailable.
-
-**Acceptance:** deterministic features still work.
+- **Status:** ✅ COMPLETE
+- **Implementation:** When `AI_PROVIDER=disabled` or no API key is supplied, `enrich_envelope()` returns the original envelope unmodified with zero errors or side-effects. All ingestion pipelines and feed queries remain fully functional.
+- **Tests:** Verified via `test_14_03_ai_disabled_mode`.
 
 ## 14.04 Summary Enrichment
-
-Process one controlled content item.
+- **Status:** ✅ COMPLETE
+- **Implementation:** Extracts technical summary without marketing buzzwords, preserving original summary under `envelope.metadata["original_summary"]`.
+- **Tests:** Verified via `test_14_04_summary_enrichment`.
 
 ## 14.05 Classification
+- **Status:** ✅ COMPLETE
+- **Implementation:** Categorizes content strictly into craft domains: `forging`, `bladesmithing`, `heat-treatment`, `tools`, `materials`, `guides`.
+- **Tests:** Verified via `test_14_05_14_06_14_07_classification_tags_difficulty`.
 
 ## 14.06 Tag Extraction
+- **Status:** ✅ COMPLETE
+- **Implementation:** Extracts domain-specific keywords and deduplicates against existing content tags.
+- **Tests:** Verified via `test_14_05_14_06_14_07_classification_tags_difficulty`.
 
 ## 14.07 Difficulty Classification
+- **Status:** ✅ COMPLETE
+- **Implementation:** Maps content difficulty cleanly to `DifficultyLevel` (`beginner`, `intermediate`, `advanced`).
+- **Tests:** Verified via `test_14_05_14_06_14_07_classification_tags_difficulty`.
 
 ## 14.08 Technical Source Guardrails
-
-AI must not invent:
-
-- material composition
-- heat-treatment temperatures
-- hardness values
-- manufacturer specifications
-- safety procedures
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`backend/app/services/ai/guardrails.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/guardrails.py) with `GUARDRAIL_SYSTEM_PROMPT` strictly prohibiting hallucinations of chemical composition, heat-treatment temperatures, hardness (HRC) values, workshop safety rules, or certifications.
+- **Tests:** Verified via `test_14_08_guardrails_prompt`.
 
 ## 14.09 AI Failure Test
-
-Force provider failure.
-
-**Acceptance:** ingestion continues or degrades gracefully according to design.
+- **Status:** ✅ COMPLETE
+- **Implementation:** Any remote network error, timeout, or HTTP 5xx response from AI provider is trapped, logged, and gracefully degraded; envelope is returned intact with zero ingestion pipeline interruption.
+- **Tests:** Verified via `test_14_09_ai_failure_resilience` and `test_gemini_provider_mocked_http`.
 
 ## 14.10 Cost Boundary
-
-AI should normally process only new/changed items, not the entire library every scheduled run.
+- **Status:** ✅ COMPLETE
+- **Implementation:** `batch_enrich_pending(limit=10)` filters solely for documents where `metadata.ai_processed != True`, strictly honoring caller limit and preventing redundant LLM token expenditures.
+- **Tests:** Verified via `test_14_10_cost_boundary` and `test_ai_enrich_item_and_batch_endpoints`.
 
 ---
 

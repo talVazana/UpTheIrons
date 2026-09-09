@@ -46,6 +46,8 @@ class Settings(BaseModel):
     # External APIs (placeholders - not committed to Git)
     YOUTUBE_API_KEY: str = Field(default_factory=lambda: os.getenv("YOUTUBE_API_KEY", ""))
     AI_API_KEY: str = Field(default_factory=lambda: os.getenv("AI_API_KEY", ""))
+    AI_PROVIDER: str = Field(default_factory=lambda: os.getenv("AI_PROVIDER", "gemini"))
+    AI_MODEL: str = Field(default_factory=lambda: os.getenv("AI_MODEL", "gemini-2.5-flash"))
 
 
 settings = Settings()

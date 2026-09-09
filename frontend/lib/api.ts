@@ -294,6 +294,13 @@ export interface VideoItem {
     channel_name?: string;
     duration_seconds?: number;
     embed_url?: string;
+    ai_processed?: boolean;
+    ai_enriched_at?: string;
+    ai_provider?: string;
+    ai_model?: string;
+    techniques?: string[];
+    materials_mentioned?: string[];
+    [key: string]: unknown;
   };
 }
 
@@ -437,6 +444,13 @@ export interface ArticleItem {
     author?: string;
     feed_id?: string;
     feed_name?: string;
+    ai_processed?: boolean;
+    ai_enriched_at?: string;
+    ai_provider?: string;
+    ai_model?: string;
+    techniques?: string[];
+    materials_mentioned?: string[];
+    [key: string]: unknown;
   };
 }
 
@@ -554,6 +568,13 @@ export interface ProductItem {
     beginner_suitable: boolean;
     alternatives: string[];
     affiliate: boolean;
+    ai_processed?: boolean;
+    ai_enriched_at?: string;
+    ai_provider?: string;
+    ai_model?: string;
+    techniques?: string[];
+    materials_mentioned?: string[];
+    [key: string]: unknown;
   };
 }
 
@@ -655,6 +676,76 @@ export async function syncProductSource(id: string): Promise<ProductSyncSummaryI
 
 export async function syncAllProductSources(): Promise<ProductSyncSummaryItem[]> {
   return fetchApi<ProductSyncSummaryItem[]>("/api/v1/products/sync", {
+    method: "POST",
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Milestone 14: AI Enrichment Layer API
+// ---------------------------------------------------------------------------
+
+export interface AIStatusResponse {
+  provider: string;
+  model: string;
+  configured: boolean;
+  enabled: boolean;
+}
+
+export interface AIEnrichmentResult {
+  summary?: string;
+  category?: string;
+  tags: string[];
+  difficulty?: string;
+  techniques: string[];
+  materials_mentioned: string[];
+  ai_provider: string;
+  ai_model: string;
+}
+
+export interface BatchEnrichResponse {
+  total_pending: number;
+  processed: number;
+  success: number;
+  failed: number;
+  enriched_items: {
+    id: string;
+    title: string;
+    category?: string;
+    difficulty?: string;
+    tags: string[];
+  }[];
+}
+
+export async function fetchAIStatus(): Promise<AIStatusResponse> {
+  return fetchApi<AIStatusResponse>("/api/v1/ai/status", { cache: "no-store" });
+}
+
+export async function previewAIEnrichment(data: {
+  title: string;
+  text: string;
+  content_type?: string;
+}): Promise<AIEnrichmentResult> {
+  return fetchApi<AIEnrichmentResult>("/api/v1/ai/preview", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function enrichContentItem(contentId: string): Promise<unknown> {
+  return fetchApi<unknown>(`/api/v1/ai/enrich/${encodeURIComponent(contentId)}`, {
+    method: "POST",
+  });
+}
+
+export async function enrichPendingContent(params?: {
+  limit?: number;
+  content_type?: string;
+}): Promise<BatchEnrichResponse> {
+  const query = new URLSearchParams();
+  if (params?.limit) query.set("limit", String(params.limit));
+  if (params?.content_type) query.set("content_type", params.content_type);
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<BatchEnrichResponse>(`/api/v1/ai/enrich-pending${qs}`, {
     method: "POST",
   });
 }

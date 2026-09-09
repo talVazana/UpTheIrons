@@ -435,6 +435,39 @@ Implemented the controlled product source integration, honest tool evaluation mo
   - Backend test suite: 53 passed in 2.29s (`pytest tests/backend`).
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
 
+---
+
+## Milestone 14 — Optional AI Enrichment Layer
+
+Implemented the optional AI enrichment layer enforcing deterministic-first local architecture, strict metallurgical guardrails, provider abstraction, failure resilience, cost boundary limiting, and frontend enrichment badges:
+
+- **14.01 AI Provider Interface**:
+  - Created `BaseAIProvider` and `AIEnrichmentResult` in [`backend/app/services/ai/base.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/base.py) with methods `enrich_content()`, `classify()`, `summarize()`, and `extract()`.
+- **14.02 Provider Configuration**:
+  - Created [`backend/app/services/ai/gemini.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/gemini.py) implementing Google Gemini REST client with structured JSON output and markdown un-wrapping.
+  - Created [`backend/app/services/ai/mock.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/mock.py) for offline deterministic pipeline testing.
+  - Dynamic API key resolution integrated via `get_effective_ai_api_key()` from Firestore and environment.
+- **14.03 AI Disabled Mode**:
+  - Validated by test that when AI provider is disabled or no key is supplied, ingestion and vault operations continue cleanly with zero failures.
+- **14.04 - 14.07 Structured Content Enrichment**:
+  - Technical summary generation without marketing jargon (preserves original summary in metadata).
+  - Categorization into craft domains (`forging`, `bladesmithing`, `heat-treatment`, `tools`, `materials`, `guides`).
+  - Automated domain tag extraction and merging with existing content tags.
+  - Difficulty classification mapping to `DifficultyLevel` (`beginner`, `intermediate`, `advanced`).
+- **14.08 Technical Source Guardrails**:
+  - Created [`backend/app/services/ai/guardrails.py`](file:///C:/Doron/UpTheIrons/backend/app/services/ai/guardrails.py) enforcing `GUARDRAIL_SYSTEM_PROMPT` prohibiting hallucinations of chemical composition, heat-treatment temperatures, Rockwell hardness values, and safety rules.
+- **14.09 AI Failure Resilience**:
+  - Full exception trapping and timeouts on external AI calls ensure zero pipeline failure or content data loss on network or LLM outage.
+- **14.10 Cost Boundary & Batch Enrichment**:
+  - `batch_enrich_pending(limit=10)` processes solely un-enriched documents (`metadata.ai_processed != True`), preventing repetitive token consumption.
+- **AI Endpoints & Frontend Badges**:
+  - Created [`backend/app/api/v1/ai.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/ai.py) (`GET /status`, `POST /preview`, `POST /enrich/{id}`, `POST /enrich-pending`).
+  - Added AI enrichment controls and badges to [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx) and [`frontend/app/guides/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/guides/page.tsx).
+  - Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with typed client methods.
+- **Milestone Quality Gate**:
+  - Backend test suite: 66 passed in 2.61s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+
 
 
 

@@ -10,6 +10,7 @@ import {
   VideoItem,
   ApiKeysStatus,
   SyncSummaryItem,
+  enrichPendingContent,
 } from "@/lib/api";
 
 const CATEGORIES = [
@@ -35,6 +36,7 @@ export default function VideosPage() {
 
   // Sync state
   const [isSyncing, startSync] = useTransition();
+  const [isEnriching, startEnrich] = useTransition();
   const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   // API Key Settings Modal
@@ -113,6 +115,21 @@ export default function VideosPage() {
     });
   };
 
+  const handleEnrichVault = () => {
+    startEnrich(async () => {
+      setSyncFeedback("Running AI enrichment on pending videos...");
+      try {
+        const res = await enrichPendingContent({ limit: 10, content_type: "video" });
+        setSyncFeedback(
+          `AI Enrichment complete! Processed ${res.processed} video(s), ${res.success} enriched.`
+        );
+        await loadData(selectedCategory);
+      } catch (err: any) {
+        setSyncFeedback(`AI Enrichment failed: ${err.message}`);
+      }
+    });
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       {/* Header Section */}
@@ -159,6 +176,28 @@ export default function VideosPage() {
           >
             Manage Channels &rarr;
           </Link>
+
+          <button
+            type="button"
+            onClick={handleEnrichVault}
+            disabled={isEnriching}
+            className="rounded-lg border border-purple-900/60 bg-purple-950/40 hover:bg-purple-900/40 disabled:opacity-50 px-3 py-2 text-xs font-semibold text-purple-300 shadow transition-all flex items-center gap-2"
+          >
+            {isEnriching ? (
+              <>
+                <svg className="animate-spin h-3.5 w-3.5 text-purple-300" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Enriching...
+              </>
+            ) : (
+              <>
+                <span className="text-purple-400">&#10022;</span>
+                AI Enrich
+              </>
+            )}
+          </button>
 
           <button
             type="button"
@@ -320,9 +359,22 @@ export default function VideosPage() {
                     <span className="font-medium text-[#FF8A65] truncate">
                       {vid.source?.source_name || vid.metadata?.channel_name || "Approved Creator"}
                     </span>
-                    <span className="capitalize text-[11px] bg-neutral-800/80 px-2 py-0.5 rounded text-neutral-300">
-                      {vid.category}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      {vid.metadata?.ai_processed && (
+                        <span className="inline-flex items-center gap-1 rounded bg-purple-950/70 border border-purple-800/60 px-1.5 py-0.5 text-[10px] font-medium text-purple-300" title="Enriched by AI with craft metadata">
+                          <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                          AI
+                        </span>
+                      )}
+                      {vid.difficulty && (
+                        <span className="capitalize text-[10px] bg-neutral-800 border border-neutral-700 px-1.5 py-0.5 rounded text-neutral-300">
+                          {vid.difficulty}
+                        </span>
+                      )}
+                      <span className="capitalize text-[11px] bg-neutral-800/80 px-2 py-0.5 rounded text-neutral-300">
+                        {vid.category}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Video Title */}
