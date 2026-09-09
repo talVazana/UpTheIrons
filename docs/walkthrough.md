@@ -94,3 +94,67 @@ Configured FastAPI backend in `backend/`:
 
 ### Verification
 - Ran `pytest tests/backend`: 2 passed in 0.45s.
+
+---
+
+## Step 03.01 — Initialize Firebase Configuration
+
+Created local configuration for Firebase Local Emulator Suite without cloud credentials:
+- [`.firebaserc`](file:///C:/Doron/UpTheIrons/.firebaserc): Set local project ID `blacksmith-knight-local`.
+- [`firebase.json`](file:///C:/Doron/UpTheIrons/firebase.json): Configured Firestore emulator (port 8080) and Emulator UI (port 4000).
+- [`firestore.rules`](file:///C:/Doron/UpTheIrons/firestore.rules): Open local rules for development.
+- [`firestore.indexes.json`](file:///C:/Doron/UpTheIrons/firestore.indexes.json): Initial indexes manifest.
+
+---
+
+## Step 03.02 — Enable & Verify Firestore Emulator
+
+- Started Firestore emulator background process (`firebase emulators:start --only firestore`).
+- Verified TCP connection on port `8080` (`TcpTestSucceeded: True`).
+- Verified TCP connection on port `4000` (`TcpTestSucceeded: True`).
+- Tested HTTP GET on `http://127.0.0.1:8080`: returned `Ok`.
+
+---
+
+## Step 03.03 — Firestore Write Test
+
+- Created test document `smoke_tests/test_doc_01` via Firestore emulator REST API:
+  - Path: `projects/blacksmith-knight-local/databases/(default)/documents/smoke_tests/test_doc_01`
+  - Body: `{"title": "Anvil Technique Baseline", "status": "verified"}`
+- Verified successful HTTP creation response with timestamp from emulator.
+
+---
+
+## Step 03.04 — Firestore Read Test
+
+- Read test document `smoke_tests/test_doc_01` via GET request:
+  - `http://127.0.0.1:8080/v1/projects/blacksmith-knight-local/databases/(default)/documents/smoke_tests/test_doc_01`
+- Verified response:
+  - Title: `Anvil Technique Baseline`
+  - Status: `verified`
+
+---
+
+## Step 03.05 — Firestore Update Test
+
+- Updated test document `smoke_tests/test_doc_01` via PATCH request:
+  - Field: `status` -> `updated_ok`
+- Verified response:
+  - Status updated to `updated_ok`
+  - Title preserved as `Anvil Technique Baseline`
+
+---
+
+## Step 03.06 — Firestore Delete Test
+
+- Deleted test document `smoke_tests/test_doc_01` via DELETE request.
+- Verified subsequent GET returns 404 (Not Found).
+
+---
+
+## Steps 03.07 - 03.10 — Decisions & Verification Gate
+
+- **03.07 Auth Decision:** User auth deferred to post-MVP. Auth emulator stays disabled.
+- **03.08 Service Boundary:** FastAPI is sole authority for writes, external ingestion, and normalization. Next.js reads via REST.
+- **03.09 Reset Procedure:** In-memory mode + verified live reset endpoint (`DELETE http://127.0.0.1:8080/emulator/v1/projects/blacksmith-knight-local/databases/(default)/documents`).
+- **03.10 Quality Gate:** All 10 Milestone 03 criteria satisfied locally without cloud credentials.
