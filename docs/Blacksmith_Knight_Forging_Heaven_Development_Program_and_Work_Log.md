@@ -2170,6 +2170,12 @@ Minimal first version.
 
 ## 22.07 Recovery Test
 
+## 22.08 Unified Admin Settings Portal (Frontend)
+
+- [ ] Consolidate API Keys management, YouTube channels registry, RSS feeds registry, and sync logs viewer into unified `/admin` or `/settings` page.
+- [ ] Direct secret updates via `POST /api/v1/settings/keys` with masked display.
+- [ ] Provide one-click batch sync triggers for all source families.
+
 ---
 
 # 34. MILESTONE 23 — UI Polish / Responsive / Accessibility
@@ -2977,6 +2983,17 @@ Architecture decisions must be recorded here rather than hidden in conversation 
 
 **Status:** ACCEPTED  
 **Reason:** Route hierarchy is mounted with `/api` and `/api/v1` prefixes in FastAPI. All error responses conform to a unified schema `{"error": {"code": str, "message": str, "details": any}}` allowing consistent error handling across the Next.js frontend client.
+
+## DEC-015 — Unified Admin Settings Portal (API Keys, RSS & YouTube Management)
+
+**Status:** ACCEPTED  
+**Scope:** Frontend & Operations  
+**Reason:** Ingestion sources (YouTube channels, RSS feeds), secret API keys (YouTube Data API v3, Gemini AI API), and sync auditing should have a dedicated Admin Settings portal (`/admin` or `/settings`) in the website rather than scattered modals across user-facing pages.  
+**Components:**
+1. **API Keys Vault:** Dynamic entry via `POST /api/v1/settings/keys`, stored in Firestore `system_config/api_keys` and cached in memory; masked in UI (`AIzaSy...****`); no backend restarts required.
+2. **RSS Feeds Manager:** Register, test connection, toggle enabled/disabled, sync single or batch.
+3. **YouTube Channels Manager:** Register handle/URL, inspect metadata, toggle, sync single or batch.
+4. **Audit Logs & Service Health:** View sync run results, errors, and local emulator connectivity.
 
 
 ---

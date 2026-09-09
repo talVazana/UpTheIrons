@@ -404,6 +404,7 @@ Implemented the controlled RSS and Atom ingestion pipeline, article normalizatio
 - **Milestone Quality Gate**:
   - Backend test suite: 47 passed in 1.86s (`pytest tests/backend`).
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+  - Recorded **DEC-015** (Unified Admin Settings Portal) and scheduled task **22.08** in the master work log.
 
 
 
