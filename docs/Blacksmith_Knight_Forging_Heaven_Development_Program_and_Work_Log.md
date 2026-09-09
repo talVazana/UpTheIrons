@@ -1252,50 +1252,60 @@ Next.js
 
 ## 07.01 Firebase Backend Configuration
 
-- [ ] Server-side Firebase access method selected
-- [ ] Local emulator routing confirmed
-- [ ] Production credentials kept separate
+- [x] Server-side Firebase access method selected (Firestore REST over async HTTP transport)
+- [x] Local emulator routing confirmed (`FIRESTORE_EMULATOR_HOST`)
+- [x] Production credentials kept separate
+
+**Status:** ✅ COMPLETE
 
 ## 07.02 Firestore Repository Abstraction
 
-Create a small storage interface.
+Create a small storage interface:
 
-Example concept:
+- [x] Created [`backend/app/repositories/base.py`](file:///C:/Doron/UpTheIrons/backend/app/repositories/base.py) with `create()`, `get()`, `update()`, `delete()`, `list()`.
+- [x] Created [`backend/app/repositories/firestore.py`](file:///C:/Doron/UpTheIrons/backend/app/repositories/firestore.py) implementing `FirestoreRepository`.
+- [x] Built bidirectional serialization (`dict_to_firestore`, `firestore_to_dict`).
 
-```text
-repository.create()
-repository.get()
-repository.update()
-repository.delete()
-```
-
-Do not expose Firebase implementation details throughout the application.
+**Status:** ✅ COMPLETE
 
 ## 07.03 Repository Unit Tests
 
-Test behavior using controlled local test data.
+- [x] Test type serialization/deserialization across primitive, list, map, and null values in [`tests/backend/test_firestore_repository.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_firestore_repository.py).
+
+**Status:** ✅ COMPLETE
 
 ## 07.04 Backend → Firestore Write
 
-One simple document.
+- [x] Tested document creation and roundtrip verification.
+
+**Status:** ✅ COMPLETE
 
 ## 07.05 Backend → Firestore Read
 
-One simple document.
+- [x] Tested document retrieval by key and 404 None handling.
+
+**Status:** ✅ COMPLETE
 
 ## 07.06 Backend → Firestore Update
 
-One simple document.
+- [x] Tested update merging existing fields and raising NotFoundError on nonexistent keys.
+
+**Status:** ✅ COMPLETE
 
 ## 07.07 Backend → Firestore Delete
 
-One simple document.
+- [x] Tested document deletion returning True on success and False on missing.
+
+**Status:** ✅ COMPLETE
 
 ## 07.08 Storage Error Handling
 
-Simulate unavailable storage.
+- [x] Simulated connection refused / emulator down, verified `StorageError` is raised.
 
 **Exit gate:** FastAPI can safely use local Firestore through a small tested storage layer.
+
+**Status:** ✅ COMPLETE
+
 
 ---
 
@@ -2676,6 +2686,30 @@ Milestone 07 — Firebase Data Layer (`07.01 Firebase Backend Configuration`)
 
 ---
 
+### WORK-007 — Milestone 07 Firebase Data Layer Complete
+
+**Date:** 2026-09-09  
+**Milestone:** 07 — Firebase Data Layer  
+**Status:** ✅ COMPLETE
+
+#### Objective
+Connect FastAPI to local Firestore emulator via clean repository abstraction without leaking database details into domain/API layers.
+
+#### Implementation
+- Added `StorageError` to [`backend/app/core/errors.py`](file:///C:/Doron/UpTheIrons/backend/app/core/errors.py).
+- Created [`backend/app/repositories/base.py`](file:///C:/Doron/UpTheIrons/backend/app/repositories/base.py) defining abstract `BaseRepository` interface.
+- Created [`backend/app/repositories/firestore.py`](file:///C:/Doron/UpTheIrons/backend/app/repositories/firestore.py) with bidirectional JSON/Firestore type encoders (`dict_to_firestore`, `firestore_to_dict`) and async HTTP REST methods (`create`, `get`, `update`, `delete`, `list`).
+- Created test harness in [`tests/backend/test_firestore_repository.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_firestore_repository.py) verifying serialization, CRUD mock operations, 404 handling, and emulator offline `StorageError` handling.
+
+#### Tests & Results
+- Ran `pytest tests/backend`: 13 passed in 0.57s.
+- Ran `npm run build`: compiled in 850ms with exit code 0.
+
+#### Next Step
+Milestone 08 — Core Domain/Data Model (`08.01 Common Content Envelope`)
+
+---
+
 # 45. Current Task Board
 
 At any point, this section should show the immediate development frontier.
@@ -2688,19 +2722,20 @@ MILESTONE 03 — Firebase Local Emulator   ✅
 MILESTONE 04 — Backend Foundation        ✅
 MILESTONE 05 — Frontend Foundation       ✅
 MILESTONE 06 — Frontend ↔ Backend        ✅
+MILESTONE 07 — Firebase Data Layer       ✅
 
-MILESTONE 07 — Firebase Data Layer       ⬜  ← NEXT
-07.01 Firebase Backend Configuration     ⬜
-07.02 Firestore Repository Abstraction   ⬜
-07.03 Repository Unit Tests              ⬜
-07.04 Backend → Firestore Write          ⬜
-07.05 Backend → Firestore Read           ⬜
-07.06 Backend → Firestore Update         ⬜
-07.07 Backend → Firestore Delete         ⬜
-07.08 Storage Error Handling             ⬜
+MILESTONE 08 — Domain / Data Model       ⬜  ← NEXT
+08.01 Common Content Envelope            ⬜
+08.02 Source Entity                      ⬜
+08.03 YouTube Channel Entity             ⬜
+08.04 Content Entity                     ⬜
+08.05 Schema Validation                  ⬜
+08.06 Deduplication Keys                 ⬜
+08.07 Seeding Strategy                   ⬜
 ```
 
 When work starts, update this board first.
+
 
 
 

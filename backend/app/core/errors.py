@@ -45,6 +45,12 @@ class SourceError(AppException):
         super().__init__(message=message, code="SOURCE_ERROR", status_code=502, details=details)
 
 
+class StorageError(AppException):
+    def __init__(self, message: str = "Data storage error", details: Optional[Any] = None):
+        super().__init__(message=message, code="STORAGE_ERROR", status_code=503, details=details)
+
+
+
 def format_error_response(code: str, message: str, details: Optional[Any] = None) -> Dict[str, Any]:
     return {
         "error": {
