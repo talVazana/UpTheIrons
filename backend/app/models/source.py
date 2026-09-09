@@ -46,3 +46,14 @@ class YouTubeChannelEntity(SourceEntity):
     handle: Optional[str] = None
     thumbnail_url: Optional[str] = None
     video_count: int = 0
+
+
+class RSSFeedEntity(SourceEntity):
+    """RSS/Atom feed source entity in the user-managed feed registry."""
+
+    type: SourceType = SourceType.RSS_FEED
+    platform: str = "rss"
+    feed_url: str = Field(min_length=5)
+    site_url: Optional[str] = None
+    feed_format: str = "rss"
+    article_count: int = 0

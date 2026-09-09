@@ -382,4 +382,148 @@ export async function fetchSyncLogs(): Promise<{ logs: SyncSummaryItem[]; total:
   });
 }
 
+export interface RSSFeedItem {
+  id: string;
+  name: string;
+  type: string;
+  platform: string;
+  url: string;
+  feed_url: string;
+  site_url?: string;
+  feed_format?: string;
+  enabled: boolean;
+  priority: number;
+  categories: string[];
+  status: "configured" | "healthy" | "warning" | "failed" | "disabled";
+  article_count: number;
+  last_synced_at?: string | null;
+  last_error?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RSSSyncSummaryItem {
+  feed_id: string;
+  feed_name: string;
+  discovered: number;
+  new_items: number;
+  duplicates: number;
+  errors: string[];
+  started_at: string;
+  completed_at?: string;
+  status: string;
+}
+
+export interface ArticleItem {
+  id: string;
+  type: string;
+  title: string;
+  slug: string;
+  summary: string;
+  category: string;
+  tags: string[];
+  difficulty?: string;
+  image_url?: string;
+  published_at?: string;
+  created_at: string;
+  source?: {
+    source_type: string;
+    source_id: string;
+    source_name: string;
+    source_url: string;
+  };
+  metadata?: {
+    article_url?: string;
+    author?: string;
+    feed_id?: string;
+    feed_name?: string;
+  };
+}
+
+export interface ArticleListResponse {
+  articles: ArticleItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export async function fetchRSSFeeds(params?: {
+  enabled?: boolean;
+  category?: string;
+}): Promise<{ feeds: RSSFeedItem[]; total: number }> {
+  const query = new URLSearchParams();
+  if (params?.enabled !== undefined) query.set("enabled", String(params.enabled));
+  if (params?.category) query.set("category", params.category);
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<{ feeds: RSSFeedItem[]; total: number }>(`/api/v1/rss/feeds${qs}`, {
+    cache: "no-store",
+  });
+}
+
+export async function createRSSFeed(input: {
+  url: string;
+  name?: string;
+  priority?: number;
+  categories?: string[];
+}): Promise<RSSFeedItem> {
+  return fetchApi<RSSFeedItem>("/api/v1/rss/feeds", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function updateRSSFeed(
+  id: string,
+  input: Partial<{ name: string; enabled: boolean; priority: number; categories: string[]; status: string }>
+): Promise<RSSFeedItem> {
+  return fetchApi<RSSFeedItem>(`/api/v1/rss/feeds/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteRSSFeed(id: string): Promise<boolean> {
+  await fetchApi(`/api/v1/rss/feeds/${id}`, {
+    method: "DELETE",
+  });
+  return true;
+}
+
+export async function syncRSSFeed(id: string): Promise<RSSSyncSummaryItem> {
+  return fetchApi<RSSSyncSummaryItem>(`/api/v1/rss/feeds/${id}/sync`, {
+    method: "POST",
+  });
+}
+
+export async function syncAllRSSFeeds(): Promise<RSSSyncSummaryItem[]> {
+  return fetchApi<RSSSyncSummaryItem[]>("/api/v1/rss/sync", {
+    method: "POST",
+  });
+}
+
+export async function fetchArticles(params?: {
+  category?: string;
+  tag?: string;
+  feed_id?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<ArticleListResponse> {
+  const query = new URLSearchParams();
+  if (params?.category) query.set("category", params.category);
+  if (params?.tag) query.set("tag", params.tag);
+  if (params?.feed_id) query.set("feed_id", params.feed_id);
+  if (params?.limit) query.set("limit", String(params.limit));
+  if (params?.offset) query.set("offset", String(params.offset));
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<ArticleListResponse>(`/api/v1/articles${qs}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchArticle(id: string): Promise<ArticleItem> {
+  return fetchApi<ArticleItem>(`/api/v1/articles/${id}`, {
+    cache: "no-store",
+  });
+}
+
 
