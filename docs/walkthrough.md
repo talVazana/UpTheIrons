@@ -158,3 +158,26 @@ Created local configuration for Firebase Local Emulator Suite without cloud cred
 - **03.08 Service Boundary:** FastAPI is sole authority for writes, external ingestion, and normalization. Next.js reads via REST.
 - **03.09 Reset Procedure:** In-memory mode + verified live reset endpoint (`DELETE http://127.0.0.1:8080/emulator/v1/projects/blacksmith-knight-local/databases/(default)/documents`).
 - **03.10 Quality Gate:** All 10 Milestone 03 criteria satisfied locally without cloud credentials.
+
+---
+
+## Milestone 04 — Backend Foundation
+
+Implemented the structured FastAPI service foundation according to specification:
+
+- **04.01 - 04.04 FastAPI Application & Health**:
+  - Application entrypoint in [`backend/app/main.py`](file:///C:/Doron/UpTheIrons/backend/app/main.py).
+  - Root `/` and `/health` endpoints.
+  - Sub-router `/api/health` and `/api/v1/health` with Firestore emulator socket diagnostics.
+- **04.05 API Configuration**:
+  - Created [`backend/app/core/config.py`](file:///C:/Doron/UpTheIrons/backend/app/core/config.py) handling `APP_ENV`, `FIREBASE_PROJECT_ID`, `FIRESTORE_EMULATOR_HOST`, `CORS_ORIGINS`, `LOG_LEVEL`, and external API secret placeholders.
+- **04.06 Error Handling Foundation**:
+  - Created [`backend/app/core/errors.py`](file:///C:/Doron/UpTheIrons/backend/app/core/errors.py) defining standard error response envelopes (`error.code`, `error.message`, `error.details`), custom exceptions (`AppException`, `NotFoundError`, `BadRequestError`, `ValidationError`, `SourceError`), and handlers for 422 validation errors, HTTP exceptions, and uncaught 500 errors.
+- **04.07 Structured Logging Foundation**:
+  - Created [`backend/app/core/logging.py`](file:///C:/Doron/UpTheIrons/backend/app/core/logging.py) with JSON-formatted `StructuredFormatter` and `RequestLoggingMiddleware` capturing method, route path, status code, duration in milliseconds (`X-Process-Time-Ms`), and metadata.
+- **04.08 API Versioning & Routing**:
+  - Established `/api` and `/api/v1` routers in [`backend/app/api/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/router.py) and [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py).
+- **04.09 & 04.10 Test Suite & Quality Gate**:
+  - Created [`tests/backend/test_health.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_health.py), [`tests/backend/test_errors.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_errors.py), [`tests/backend/test_config.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_config.py), and [`tests/backend/test_logging.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_logging.py).
+  - 10 passing tests in 0.55s via `pytest`.
+
