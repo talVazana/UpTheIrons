@@ -3,6 +3,7 @@ from enum import Enum
 
 class ContentType(str, Enum):
     GUIDE = "guide"
+    ARTICLE = "article"
     MATERIAL = "material"
     VIDEO = "video"
     PRODUCT = "product"

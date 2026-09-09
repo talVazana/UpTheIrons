@@ -4,6 +4,7 @@
 
 export type ContentType =
   | "guide"
+  | "article"
   | "material"
   | "video"
   | "product"

@@ -368,6 +368,43 @@ Implemented the controlled YouTube video ingestion pipeline, dynamic Settings AP
   - Backend test suite: 38 passed in 1.75s (`pytest tests/backend`).
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
 
+---
+
+## Milestone 12 — RSS Source Management & Ingestion
+
+Implemented the controlled RSS and Atom ingestion pipeline, article normalization to `ContentEnvelope`, duplicate prevention, strict anti-crawling boundaries, and frontend knowledge feed:
+
+- **12.01 - 12.03 RSS Feed Entity & Registry API**:
+  - Created `RSSFeedEntity` in [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py) (`type=SourceType.RSS_FEED`, `feed_url`, `site_url`, `feed_format`, `article_count`).
+  - Added `ContentType.ARTICLE` to domain enums and TypeScript types.
+  - Created [`backend/app/api/v1/rss.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/rss.py) providing:
+    - `POST /api/v1/rss/feeds`: Registers approved RSS feed, strictly validates URL scheme, enforces duplicate rejection by URL or derived slug.
+    - `GET /api/v1/rss/feeds`: Lists approved feeds with category/enabled filters.
+    - `GET /api/v1/rss/feeds/{id}`: Retrieves single feed.
+    - `PATCH /api/v1/rss/feeds/{id}`: Updates enabled, priority, categories, and title.
+    - `DELETE /api/v1/rss/feeds/{id}`: Removes feed from registry while retaining historical articles in vault.
+    - `POST /api/v1/rss/test`: Tests connection and previews sample articles from feed XML without writing to database.
+- **12.04 - 12.07 RSS Client, Parser, Normalization & Deduplication**:
+  - Created [`backend/app/services/rss_client.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rss_client.py) using Python's built-in `xml.etree.ElementTree` parser for RSS 2.0 and Atom feeds.
+  - Zero heavy third-party spider dependencies. Sanitizes raw HTML content and parses standard date formats (RFC 822 and ISO 8601).
+  - Created [`backend/app/services/rss_ingestion.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rss_ingestion.py):
+    - `normalize_rss_article()` maps feed items to `ContentEnvelope` (`type=ContentType.ARTICLE`), infers categories (`materials`, `heat-treatment`, `tools`, `bladesmithing`, `guides`), extracts tags, and preserves full source attribution.
+    - Uses deterministic canonical deduplication key `compute_deduplication_key(ContentType.ARTICLE, canonical_url=url)`.
+    - Skips existing articles on subsequent sync runs, preventing duplicate writes.
+- **12.08 & 12.11 Articles API & Frontend Knowledge Feed**:
+  - Created [`backend/app/api/v1/articles.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/articles.py) (`GET /api/v1/articles`, `GET /api/v1/articles/{id}`).
+  - Built live knowledge library in [`frontend/app/guides/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/guides/page.tsx) with topic filters, author attribution, direct links to full external articles, and "Sync Feeds Now" trigger.
+  - Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with typed client methods for RSS feeds and articles.
+- **12.09, 12.10, 12.12 Sync Ingestion & Partial Failure Isolation**:
+  - `POST /api/v1/rss/feeds/{id}/sync`: Syncs a single approved feed.
+  - `POST /api/v1/rss/sync`: Syncs all enabled feeds in sequence.
+  - Partial failure shield: one failing feed logs an error and updates feed status to `failed` without interrupting other feeds.
+- **12.13 Strict Anti-Crawling Enforcement**:
+  - Validated by test that parser strictly ingests items present in the feed XML and never spider-crawls outward to external domains.
+- **Milestone Quality Gate**:
+  - Backend test suite: 47 passed in 1.86s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+
 
 
 

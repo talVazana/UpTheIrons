@@ -1654,35 +1654,83 @@ Add
 
 ## 12.01 RSS Feed Entity
 
-## 12.02 Add Feed
+- [x] Defined `RSSFeedEntity` in [`backend/app/models/source.py`](file:///C:/Doron/UpTheIrons/backend/app/models/source.py) (`type=SourceType.RSS_FEED`, `feed_url`, `site_url`, `feed_format`, `article_count`)
+- [x] Added `ContentType.ARTICLE` to domain enums and TypeScript types
 
-## 12.03 Test Feed
+**Status:** ✅ COMPLETE
+
+## 12.02 Add Feed & 12.03 Test Feed
+
+- [x] Created `POST /api/v1/rss/feeds` with strict URL scheme validation (`http://`, `https://`, `test://`)
+- [x] Prevents duplicate registrations by URL or derived slug ID (`rss_{slug}`)
+- [x] Created `POST /api/v1/rss/test` to inspect/preview articles from a feed URL without writing to storage
+- [x] Created `GET`, `PATCH`, and `DELETE` endpoints in [`backend/app/api/v1/rss.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/rss.py)
+
+**Status:** ✅ COMPLETE
 
 ## 12.04 Fetch One Feed
 
+- [x] Created `RSSClient` in [`backend/app/services/rss_client.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rss_client.py)
+- [x] Zero external scraping libraries; uses standard library `xml.etree.ElementTree`
+- [x] Parses both RSS 2.0 (`<channel><item>`) and Atom (`<feed><entry>`)
+- [x] Safe deterministic offline fallback mock batch for local testing
+
+**Status:** ✅ COMPLETE
+
 ## 12.05 Normalize One Article
 
-## 12.06 Store One Article
+- [x] `normalize_rss_article()` in [`backend/app/services/rss_ingestion.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rss_ingestion.py)
+- [x] Maps feed items to `ContentEnvelope` (`type=ContentType.ARTICLE`)
+- [x] Heuristic forge category and tag derivation (`materials`, `heat-treatment`, `tools`, `bladesmithing`, `guides`)
+- [x] HTML tag sanitization and whitespace normalization
 
-## 12.07 Deduplicate Article
+**Status:** ✅ COMPLETE
 
-## 12.08 Display One Article
+## 12.06 Store One Article & 12.07 Deduplicate Article
 
-## 12.09 Sync One Feed
+- [x] Deterministic canonical deduplication key: `compute_deduplication_key(ContentType.ARTICLE, canonical_url=url)`
+- [x] Pre-write check against Firestore `content` collection (`art_{url_hash}`)
+- [x] Re-syncing ignores already stored items and increments `duplicates` counter without duplicate writes
 
-## 12.10 Sync All Enabled Feeds
+**Status:** ✅ COMPLETE
+
+## 12.08 Display One Article & Articles Feed API
+
+- [x] Created `GET /api/v1/articles` and `GET /api/v1/articles/{id}` in [`backend/app/api/v1/articles.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/articles.py)
+- [x] Created curated articles feed in [`frontend/app/guides/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/guides/page.tsx) with category filter pills, author attribution, and source links
+
+**Status:** ✅ COMPLETE
+
+## 12.09 Sync One Feed & 12.10 Sync All Enabled Feeds
+
+- [x] `POST /api/v1/rss/feeds/{feed_id}/sync` executes ingestion for single approved feed
+- [x] `POST /api/v1/rss/sync` synchronizes all enabled RSS feeds sequentially
+- [x] Updates feed `article_count`, `last_synced_at`, and `status=healthy`
+- [x] Sync run metadata recorded in Firestore `sync_logs` collection
+
+**Status:** ✅ COMPLETE
 
 ## 12.11 Source Attribution
 
-Preserve original source URL and retrieval metadata.
+- [x] Every article envelope preserves original article URL, feed name, publication timestamp, and author in `source` and `metadata`
+
+**Status:** ✅ COMPLETE
 
 ## 12.12 Failure Handling
 
-Keep existing content if a feed fails.
+- [x] Feed HTTP or parsing errors set status to `failed` and record `last_error` on the feed document without modifying existing articles or halting batch sync
 
-## 12.13 Explicit Anti-Crawling Test
+**Status:** ✅ COMPLETE
 
-Verify the collector cannot silently expand from one RSS source into arbitrary website crawling.
+## 12.13 Explicit Anti-Crawling Enforcement
+
+- [x] Automated test verifies parser strictly ingests items present in the feed XML and never follows outbound hyperlinks or crawls external domains
+
+**Status:** ✅ COMPLETE
+
+**Exit gate:** Ingestion collects only from approved user RSS feeds, enforces strict anti-crawling, deduplicates strictly, stores in Firestore, and displays in the knowledge feed.
+
+**Status:** ✅ COMPLETE
 
 ---
 
