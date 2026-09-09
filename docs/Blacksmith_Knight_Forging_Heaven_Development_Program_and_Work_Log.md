@@ -179,6 +179,25 @@ The application must remain useful when AI is:
 
 AI should not become a single point of failure for deterministic ingestion or basic application behavior.
 
+## 1.8 Git Branching & Milestone Lifecycle Rules
+
+To maintain high development velocity with total repo stability, every milestone strictly adheres to this protocol:
+
+1. **Dedicated Milestone Branch:** For each milestone, work on a dedicated branch named `feature/MilestoneXX` (where `XX` is its milestone number, e.g. `feature/Milestone14`).
+2. **Proactive File Operations:** Create, update, and refactor code, models, endpoints, and components proactively without prompting for permission.
+3. **Delete Confirmation Boundary:** Prompt the user ONLY before deleting files or components, and ONLY at the conclusion of the milestone.
+4. **Milestone Quality Gate:** Before closing any milestone:
+   - Run backend automated test suite: `pytest tests/backend`
+   - Run frontend production build: `npm --prefix frontend run build`
+   - Verify zero lint/type errors and 100% test pass rate.
+5. **Documentation Discipline:**
+   - Update `docs/Blacksmith_Knight_Forging_Heaven_Development_Program_and_Work_Log.md` marking the milestone tasks as COMPLETE with technical notes.
+   - Update `docs/walkthrough.md` with walkthrough notes and verified gates.
+6. **Git Merge & Sync Flow:**
+   - Commit all changes and push `feature/MilestoneXX` to remote.
+   - Checkout `develop`, merge `feature/MilestoneXX`, and push `develop` to `origin/develop`.
+7. **Stop at Completion:** Conclude each milestone cleanly and wait for user instruction before starting the next milestone.
+
 ---
 
 # 2. Relationship to the Master Specification
@@ -3014,6 +3033,18 @@ Architecture decisions must be recorded here rather than hidden in conversation 
 3. **YouTube Channels Manager:** Register handle/URL, inspect metadata, toggle, sync single or batch.
 4. **Audit Logs & Service Health:** View sync run results, errors, and local emulator connectivity.
 
+## DEC-016 — Git Branching & Milestone Execution Protocol
+
+**Status:** ACCEPTED  
+**Scope:** Development Operations & Workflow  
+**Reason:** Ensures clean isolation per milestone, zero regressions on `develop`, and predictable quality gates across both backend and frontend codebases.  
+**Protocol:**
+1. **Branch Naming:** Dedicated branch per milestone: `feature/MilestoneXX` (e.g. `feature/Milestone14`).
+2. **Autonomous Execution:** Proactively create, update, and refactor files without pausing to ask confirmation.
+3. **Delete Boundary:** Ask permission ONLY before deleting files or components, and ONLY at the conclusion of the milestone.
+4. **Quality Gates:** Before merging, verify 100% passing tests (`pytest tests/backend`) and clean build (`npm --prefix frontend run build`).
+5. **Documentation:** Update both `docs/Blacksmith_Knight_Forging_Heaven_Development_Program_and_Work_Log.md` and `docs/walkthrough.md`.
+6. **Merge Flow:** Commit and push `feature/MilestoneXX`, checkout `develop`, merge `feature/MilestoneXX`, push `origin/develop`, and stop at completion.
 
 ---
 
