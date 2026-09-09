@@ -303,6 +303,37 @@ Implemented source management backend endpoints, validation schemas, repository 
   - Frontend production build: all 12 routes compiled cleanly (`npm run build`, exit code 0).
   - Backend test suite: 23 passed in 0.75s.
 
+---
+
+## Milestone 10 — YouTube Channel Management
+
+Implemented the controlled YouTube channel management registry, identifier resolver, duplicate prevention, ingestion sync triggers, and user interface:
+
+- **10.01 - 10.05 YouTube Channel API & Deduplication**:
+  - Created [`backend/app/api/v1/youtube.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/youtube.py) providing endpoints:
+    - `POST /api/youtube/channels`: Register approved YouTube channel from `@handle`, full URL, or `UC...` ID. Enforces duplicate rejection by deterministic ID.
+    - `GET /api/youtube/channels`: Query approved channels with `enabled`, `status`, and `category` filters.
+    - `GET /api/youtube/channels/{channel_id}`: Fetch single channel.
+    - `PATCH /api/youtube/channels/{channel_id}`: Update enabled toggle, priority, and categories.
+    - `DELETE /api/youtube/channels/{channel_id}`: Remove channel from registry while retaining historical video records in content vault.
+  - Mounted router in [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py).
+- **10.06 & 10.10 Identifier Resolution & Anti-Crawling Enforcement**:
+  - `POST /api/youtube/resolve`: Validates and parses channels from URLs or handles; integrates with YouTube Data API v3 when `YOUTUBE_API_KEY` is present, with deterministic offline fallback for local tests. Strictly rejects autonomous crawling.
+- **10.11 Ingestion Sync Placeholder**:
+  - `POST /api/youtube/channels/{channel_id}/sync`: Validates channel is enabled, marks status as `HEALTHY`, and records `last_synced_at` timestamp. Rejects disabled channels with 400 Bad Request.
+- **10.08 - 10.09 Channel Manager UI**:
+  - Created [`frontend/app/videos/channels/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/channels/page.tsx) with:
+    - Channel cards with avatar/thumbnails, handles, priority badges, category chips, and live status.
+    - Filter tabs ("All Channels", "Enabled", "Disabled") and category selector.
+    - Add Channel Modal with handle/URL input, real-time metadata inspector/preview, and priority selector.
+    - Enable/disable toggle switches, "Sync Now" trigger, and deletion action.
+  - Linked to `/videos/channels` from [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx) and [`frontend/app/sources/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/sources/page.tsx).
+- **Milestone Quality Gate**:
+  - Backend test suite: 31 passed in 1.12s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+  - Live Firestore verification: Registered `@BlackBearForge` on port 8000/8080, verified sync trigger, and verified duplicate rejection.
+
+
 
 
 

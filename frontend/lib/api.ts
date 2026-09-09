@@ -181,3 +181,105 @@ export async function testSourceConnection(id: string): Promise<{
   });
 }
 
+export interface YouTubeChannelItem {
+  id: string;
+  name: string;
+  type: "youtube_channel";
+  platform: string;
+  url: string;
+  youtube_channel_id: string;
+  handle?: string | null;
+  thumbnail_url?: string | null;
+  video_count: number;
+  enabled: boolean;
+  priority: number;
+  categories: string[];
+  status: "configured" | "healthy" | "warning" | "failed" | "disabled";
+  last_synced_at?: string | null;
+  last_error?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface YouTubeChannelListResponse {
+  channels: YouTubeChannelItem[];
+  total: number;
+}
+
+export interface CreateYouTubeChannelInput {
+  url_or_handle: string;
+  name?: string;
+  priority?: number;
+  categories?: string[];
+  thumbnail_url?: string;
+}
+
+export interface ResolveChannelResult {
+  youtube_channel_id: string;
+  handle: string | null;
+  canonical_url: string;
+  name: string;
+  thumbnail_url: string;
+  video_count: number;
+  resolved_via_api: boolean;
+}
+
+export async function fetchYouTubeChannels(params?: {
+  enabled?: boolean;
+  category?: string;
+}): Promise<YouTubeChannelListResponse> {
+  const query = new URLSearchParams();
+  if (params?.enabled !== undefined) query.set("enabled", String(params.enabled));
+  if (params?.category) query.set("category", params.category);
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<YouTubeChannelListResponse>(`/api/youtube/channels${qs}`, {
+    cache: "no-store",
+  });
+}
+
+export async function resolveYouTubeChannel(query: string): Promise<ResolveChannelResult> {
+  return fetchApi<ResolveChannelResult>("/api/youtube/resolve", {
+    method: "POST",
+    body: JSON.stringify({ query }),
+  });
+}
+
+export async function createYouTubeChannel(
+  input: CreateYouTubeChannelInput
+): Promise<YouTubeChannelItem> {
+  return fetchApi<YouTubeChannelItem>("/api/youtube/channels", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function updateYouTubeChannel(
+  id: string,
+  input: Partial<CreateYouTubeChannelInput> & { enabled?: boolean; status?: string }
+): Promise<YouTubeChannelItem> {
+  return fetchApi<YouTubeChannelItem>(`/api/youtube/channels/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteYouTubeChannel(id: string): Promise<boolean> {
+  await fetchApi<{ deleted: boolean }>(`/api/youtube/channels/${id}`, {
+    method: "DELETE",
+  });
+  return true;
+}
+
+export async function syncYouTubeChannel(id: string): Promise<{
+  channel_id: string;
+  name: string;
+  status: string;
+  last_synced_at: string;
+  message: string;
+}> {
+  return fetchApi(`/api/youtube/channels/${id}/sync`, {
+    method: "POST",
+  });
+}
+
+

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   fetchSources,
   createSource,
@@ -121,13 +122,21 @@ export default function SourcesPage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center justify-center rounded-lg bg-[#FF5722] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#FF7043] transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722] shadow-md shadow-[#FF5722]/20 shrink-0"
-        >
-          + Add Approved Source
-        </button>
+        <div className="flex items-center gap-3 shrink-0">
+          <Link
+            href="/videos/channels"
+            className="inline-flex items-center justify-center rounded-lg border border-neutral-700 bg-neutral-850 px-3.5 py-2.5 text-xs font-semibold text-neutral-200 hover:text-white hover:bg-neutral-800 transition-colors"
+          >
+            &#9658; YouTube Channels
+          </Link>
+          <button
+            type="button"
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center justify-center rounded-lg bg-[#FF5722] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#FF7043] transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722] shadow-md shadow-[#FF5722]/20 shrink-0"
+          >
+            + Add Approved Source
+          </button>
+        </div>
       </div>
 
       {/* Anti-crawling policy alert */}

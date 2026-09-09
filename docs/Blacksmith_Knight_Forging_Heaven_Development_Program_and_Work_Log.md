@@ -1518,6 +1518,8 @@ Add
 → delete
 ```
 
+**Status:** ✅ COMPLETE
+
 ---
 
 # 22. MILESTONE 11 — YouTube Video Ingestion
@@ -2746,6 +2748,40 @@ Milestone 10 — YouTube Channel Management (`10.01 Channel API Model & Ingestio
 
 ---
 
+### WORK-010 — Milestone 10 YouTube Channel Management Complete
+
+**Date:** 2026-09-09  
+**Milestone:** 10 — YouTube Channel Management  
+**Status:** ✅ COMPLETE
+
+#### Objective
+Implement the controlled YouTube channel management registry, identifier resolver, duplicate prevention, ingestion sync triggers, and Channel Manager UI.
+
+#### Implementation
+- Created [`backend/app/api/v1/youtube.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/youtube.py) with full REST endpoints:
+  - `POST /api/youtube/channels`: Register approved YouTube channel from `@handle`, full URL, or `UC...` ID with duplicate prevention.
+  - `GET /api/youtube/channels`: Query approved channels with `enabled`, `status`, and `category` filters.
+  - `GET /api/youtube/channels/{channel_id}`: Single channel lookup.
+  - `PATCH /api/youtube/channels/{channel_id}`: Update enabled toggle, priority, and categories.
+  - `DELETE /api/youtube/channels/{channel_id}`: Remove channel from registry while retaining historical video records.
+  - `POST /api/youtube/resolve`: Validates and parses channels with YouTube Data API v3 fallback.
+  - `POST /api/youtube/channels/{channel_id}/sync`: Validates channel is enabled, marks status as `HEALTHY`, and records `last_synced_at`.
+- Mounted router in [`backend/app/api/v1/router.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/router.py).
+- Created [`tests/backend/test_youtube_api.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_youtube_api.py) with 8 tests covering handle resolution, URL parsing, creation, duplicate rejection, filtering, toggle activation/deactivation, sync trigger, and deletion.
+- Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with `fetchYouTubeChannels`, `resolveYouTubeChannel`, `createYouTubeChannel`, `updateYouTubeChannel`, `deleteYouTubeChannel`, and `syncYouTubeChannel`.
+- Created [`frontend/app/videos/channels/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/channels/page.tsx) with channel cards, add channel modal, resolve inspector, sync trigger, and enable/disable toggle.
+- Linked to `/videos/channels` from [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx) and [`frontend/app/sources/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/sources/page.tsx).
+
+#### Tests & Results
+- Ran `pytest tests/backend`: 31 passed in 1.12s.
+- Ran `npm run build`: 13 static pages compiled cleanly in 964ms with exit code 0.
+- Verified live FastAPI backend on port 8000 and Next.js frontend on port 3000.
+
+#### Next Step
+Milestone 11 — YouTube Video Ingestion (`11.01 YouTube API Client & Ingestion Collector`)
+
+---
+
 # 45. Current Task Board
 
 At any point, this section should show the immediate development frontier.
@@ -2761,15 +2797,16 @@ MILESTONE 06 — Frontend ↔ Backend        ✅
 MILESTONE 07 — Firebase Data Layer       ✅
 MILESTONE 08 — Domain / Data Model       ✅
 MILESTONE 09 — Source Management         ✅
+MILESTONE 10 — YouTube Channels          ✅
 
-MILESTONE 10 — YouTube Channels          ⬜  ← NEXT
-10.01 Channel API Model                  ⬜
-10.02 Create Channel Endpoint            ⬜
-10.03 List Channels                      ⬜
-10.04 Get Channel                        ⬜
-10.05 Update Channel                     ⬜
-10.06 Channel Search / Resolve Helper    ⬜
-10.07 Channel Manager UI                 ⬜
+MILESTONE 11 — YouTube Ingestion         ⬜  ← NEXT
+11.01 YouTube API Configuration          ⬜
+11.02 YouTube Collector Client           ⬜
+11.03 Video Ingestion Normalizer         ⬜
+11.04 Deduplication Key Enforcement      ⬜
+11.05 Firestore Video Persistence        ⬜
+11.06 Ingestion Trigger & Logging        ⬜
+11.07 Video Stream UI Integration        ⬜
 ```
 
 When work starts, update this board first.
