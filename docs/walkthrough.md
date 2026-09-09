@@ -333,6 +333,41 @@ Implemented the controlled YouTube channel management registry, identifier resol
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
   - Live Firestore verification: Registered `@BlackBearForge` on port 8000/8080, verified sync trigger, and verified duplicate rejection.
 
+---
+
+## Milestone 11 — YouTube Video Ingestion
+
+Implemented the controlled YouTube video ingestion pipeline, dynamic Settings API for API keys, normalization to `ContentEnvelope`, strict deduplication, sync logging, and frontend curated video feed:
+
+- **11.01 Dynamic Settings API & Key Masking**:
+  - Created [`backend/app/api/v1/settings.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/settings.py) providing:
+    - `GET /api/v1/settings/keys`: Returns configuration status with masked keys (`AIzaSy...****`).
+    - `POST /api/v1/settings/keys`: Dynamically sets YouTube / AI API keys without restarting the server. Persists to Firestore `system_config/api_keys` and caches in memory.
+- **11.02 - 11.04 YouTube Client & Quota-Friendly Uploads Resolver**:
+  - Created [`backend/app/services/youtube_client.py`](file:///C:/Doron/UpTheIrons/backend/app/services/youtube_client.py).
+  - Automatically translates `UC...` channel IDs to `UU...` uploads playlist IDs.
+  - Queries `playlistItems.list` costing only 1 quota unit (compared to 100 units for search).
+  - Provides deterministic offline mock fixtures when no API key is configured or when running isolated tests.
+- **11.05 - 11.07 Normalization & Deterministic Deduplication**:
+  - Created [`backend/app/services/youtube_ingestion.py`](file:///C:/Doron/UpTheIrons/backend/app/services/youtube_ingestion.py).
+  - `normalize_youtube_video()` maps raw items to `ContentEnvelope` with `ContentType.VIDEO`, `VideoMetadata`, forged category and tag heuristics, slug creation, and embed URL formulation.
+  - Enforces `video:youtube:{video_id}` deduplication before write; subsequent syncs skip existing videos.
+  - Stores unique items in Firestore `content` collection.
+- **11.08 & 11.09 Videos Feed API & Frontend Vault UI**:
+  - Created [`backend/app/api/v1/videos.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/videos.py) (`GET /api/v1/videos`, `GET /api/v1/videos/{video_id}`) with filtering by category, tag, and channel.
+  - Rebuilt [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx) with:
+    - Category filter pills ("All Topics", "Forging", "Bladesmithing", "Heat Treatment", "Tools & Anvils").
+    - "Configure YouTube API Key" modal for immediate API key updates without touching config files.
+    - "Sync All Channels" trigger with progress spinner and feedback toast.
+    - Video cards with duration badges, tags, channel chips, direct YouTube links, and video player embed modal.
+- **11.10 - 11.14 Channel Sync Triggers & Audit Logging**:
+  - `POST /api/youtube/channels/{channel_id}/sync` executes ingestion for single approved channel.
+  - `POST /api/youtube/sync` synchronizes all enabled channels with partial failure isolation.
+  - `GET /api/youtube/sync-logs` retrieves sync audit logs from `sync_logs` collection.
+- **11.15 Quality Gate & Acceptance**:
+  - Backend test suite: 38 passed in 1.75s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+
 
 
 

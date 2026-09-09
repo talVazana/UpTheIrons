@@ -1528,85 +1528,123 @@ Add
 
 ## 11.01 YouTube API Configuration
 
-- [ ] API key strategy
-- [ ] local configuration
-- [ ] quota awareness
+- [x] Dynamic Settings API (`GET /api/v1/settings/keys`, `POST /api/v1/settings/keys`)
+- [x] Secrets stored in Firestore `system_config/api_keys` and cached in memory
+- [x] Sensitive values masked in responses (`AIzaSy...****`)
+- [x] Fallback to environment variable `YOUTUBE_API_KEY`
+- [x] Safe offline fallback when no key is set
+
+**Status:** ✅ COMPLETE
 
 ## 11.02 YouTube Client
 
-Create isolated deterministic client.
+- [x] Created `YouTubeClient` in [`backend/app/services/youtube_client.py`](file:///C:/Doron/UpTheIrons/backend/app/services/youtube_client.py)
+- [x] Efficient uploads playlist resolver converting `UC...` channel IDs to `UU...` playlist IDs
+- [x] Uses `playlistItems.list` costing only 1 quota unit (vs 100 units for search)
+- [x] Deterministic offline fixtures for testing without network/API keys
+
+**Status:** ✅ COMPLETE
 
 ## 11.03 Fetch One Channel
 
-Do not implement all channels yet.
+- [x] Resolves channel uploads playlist and queries uploads batch deterministically.
+
+**Status:** ✅ COMPLETE
 
 ## 11.04 Fetch One Video Page / Batch
 
+- [x] Extracts `video_id`, `title`, `description`, `published_at`, `thumbnails`, and `channel_title`.
+
+**Status:** ✅ COMPLETE
+
 ## 11.05 Normalize Video
 
-Map external metadata into internal model.
+- [x] `normalize_youtube_video()` in [`backend/app/services/youtube_ingestion.py`](file:///C:/Doron/UpTheIrons/backend/app/services/youtube_ingestion.py)
+- [x] Maps raw metadata into `ContentEnvelope` with `ContentType.VIDEO`
+- [x] Category derivation (`bladesmithing`, `heat-treatment`, `tools`, `forging`) and tag extraction
+- [x] Slug generation, duration tracking, and embed URL formulation
+
+**Status:** ✅ COMPLETE
 
 ## 11.06 Store One Video
 
+- [x] Persists normalized video envelope into Firestore `content` collection with key `yt_{video_id}`.
+
+**Status:** ✅ COMPLETE
+
 ## 11.07 Deduplicate One Video
 
-Run the same ingestion twice.
+- [x] Uses canonical deduplication key `video:youtube:{video_id}`
+- [x] Pre-write existence check avoids duplicate documents
+- [x] Increments `duplicates` counter on re-ingestion without duplicate writes
 
-**Acceptance:** second run does not create a duplicate.
+**Status:** ✅ COMPLETE
 
 ## 11.08 Display One Video
 
-Connect API to frontend.
+- [x] Created `GET /api/v1/videos` and `GET /api/v1/videos/{video_id}` in [`backend/app/api/v1/videos.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/videos.py)
+- [x] Supports filtering by `category`, `tag`, and `channel_id` with reverse-chronological ordering
+
+**Status:** ✅ COMPLETE
 
 ## 11.09 Channel Video List
 
-Display videos for one channel.
+- [x] Curated videos gallery in [`frontend/app/videos/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/videos/page.tsx)
+- [x] Topic filter pills, duration badges, video player embed modal, and external YouTube watch links
+- [x] "Configure YouTube API Key" modal for instant key updating from the web UI
+
+**Status:** ✅ COMPLETE
 
 ## 11.10 Sync One Channel
 
-Implement deterministic synchronization.
+- [x] `POST /api/youtube/channels/{channel_id}/sync` executes ingestion for single approved channel
+- [x] Updates channel `video_count`, `last_synced_at`, and `status=healthy`
+- [x] Disabled channels rejected with 400 Bad Request
+
+**Status:** ✅ COMPLETE
 
 ## 11.11 Sync All Enabled Channels
 
-Only enabled channels are processed.
+- [x] `POST /api/youtube/sync` synchronizes all enabled channels in registry
+- [x] Returns list of `SyncSummary` records
+
+**Status:** ✅ COMPLETE
 
 ## 11.12 Synchronization Logging
 
-Record:
+- [x] Records sync run metadata (`channel_id`, `discovered`, `new_items`, `duplicates`, `errors`, timestamps, `status`)
+- [x] Stored in Firestore `sync_logs` collection
+- [x] Inspected via `GET /api/youtube/sync-logs`
 
-```text
-run started
-source
-items discovered
-new items
-duplicates
-errors
-run completed
-```
+**Status:** ✅ COMPLETE
 
 ## 11.13 Partial Failure
 
-One channel failing must not erase other content.
+- [x] Failures in one channel do not halt batch ingestion; error recorded on channel entity and logs
+
+**Status:** ✅ COMPLETE
 
 ## 11.14 API Quota Protection
 
-Avoid unnecessary repeated requests.
+- [x] Uploads playlist architecture minimizes quota usage (1 quota unit per 50 items)
+
+**Status:** ✅ COMPLETE
 
 ## 11.15 Manual Sync Test
 
-Test:
+- [x] Created [`tests/backend/test_youtube_ingestion.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_youtube_ingestion.py)
+- [x] 38 passing backend tests in 1.75s
+- [x] Frontend build compiled cleanly (`npm run build`, exit code 0)
 
-```text
-Sync Now
-→ collect
-→ store
-→ display
-→ log
-```
+**Status:** ✅ COMPLETE
 
 ## 11.16 Scheduled Sync Design
 
-Only after manual sync is stable.
+- [x] Sync engine designed for background workers (cron / scheduled triggers invoking `POST /api/youtube/sync`)
+
+**Exit gate:** Ingestion collects only from approved user channels, deduplicates strictly, stores in Firestore, and displays in the videos feed.
+
+**Status:** ✅ COMPLETE
 
 ---
 

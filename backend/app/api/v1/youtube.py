@@ -11,6 +11,8 @@ from app.core.errors import NotFoundError, BadRequestError, StorageError
 from app.models.enums import SourceType, SourceStatus
 from app.models.source import SourceEntity, YouTubeChannelEntity, utc_now
 from app.repositories.firestore import firestore_repository
+from app.api.v1.settings import get_effective_youtube_api_key
+from app.services.youtube_ingestion import youtube_ingestion_service, SyncSummary, SYNC_LOGS_COLLECTION
 
 router = APIRouter(prefix="/youtube", tags=["youtube"])
 
@@ -129,10 +131,11 @@ def parse_channel_identifier(input_str: str):
 
 async def resolve_with_youtube_api(parsed_info: dict) -> dict:
     """
-    If YOUTUBE_API_KEY is configured, calls YouTube Data API v3 channels endpoint.
+    If YouTube API key is configured (via settings or env), calls YouTube Data API v3 channels endpoint.
     Otherwise returns parsed info with fallback defaults.
     """
-    api_key = settings.YOUTUBE_API_KEY.strip() if settings.YOUTUBE_API_KEY else None
+    effective_key = await get_effective_youtube_api_key()
+    api_key = effective_key.strip() if effective_key else None
     result = {
         "youtube_channel_id": parsed_info["channel_id"],
         "handle": parsed_info["handle"],
@@ -362,36 +365,38 @@ async def delete_channel(channel_id: str):
     return {"message": f"YouTube channel '{canonical_id}' deleted successfully.", "deleted": True, "id": canonical_id}
 
 
-@router.post("/channels/{channel_id}/sync")
+@router.post("/channels/{channel_id}/sync", response_model=SyncSummary)
 async def trigger_channel_sync(channel_id: str):
     """
-    Simulates / triggers ingestion sync for a channel.
+    Executes real ingestion sync for an approved channel.
+    Deduplicates videos and stores new items in the knowledge vault.
     Disabled channels are rejected.
     """
     canonical_id = channel_id.lower() if channel_id.startswith("yt_") else f"yt_{channel_id.lower()}"
     existing = await firestore_repository.get(YOUTUBE_COLLECTION, canonical_id)
     if not existing:
-        raise NotFoundError(f"YouTube channel with ID '{channel_id}' not found in registry.")
+        # Check direct channel ID
+        existing = await firestore_repository.get(YOUTUBE_COLLECTION, channel_id)
+        if existing:
+            canonical_id = channel_id
+        else:
+            raise NotFoundError(f"YouTube channel with ID '{channel_id}' not found in registry.")
 
-    channel = YouTubeChannelEntity(**existing)
-    if not channel.enabled:
-        raise BadRequestError(f"Cannot synchronize disabled channel '{channel.name}'. Enable it first.")
+    return await youtube_ingestion_service.sync_channel(canonical_id)
 
-    now = utc_now()
-    await firestore_repository.update(
-        YOUTUBE_COLLECTION,
-        canonical_id,
-        {
-            "last_synced_at": now.isoformat(),
-            "status": SourceStatus.HEALTHY.value,
-            "updated_at": now.isoformat(),
-        },
-    )
 
-    return {
-        "channel_id": canonical_id,
-        "name": channel.name,
-        "status": SourceStatus.HEALTHY.value,
-        "last_synced_at": now.isoformat(),
-        "message": f"Ingestion sync triggered for '{channel.name}'. (Baseline simulated sync for M10)",
-    }
+@router.post("/sync", response_model=List[SyncSummary])
+async def trigger_all_channels_sync():
+    """
+    Executes synchronization across all enabled approved YouTube channels.
+    Isolates partial failures so healthy channels succeed.
+    """
+    return await youtube_ingestion_service.sync_all_enabled_channels()
+
+
+@router.get("/sync-logs")
+async def list_sync_logs(limit: int = Query(20, ge=1, le=100)):
+    """Returns recent synchronization run logs."""
+    logs = await firestore_repository.list(SYNC_LOGS_COLLECTION, limit=limit)
+    logs.sort(key=lambda x: x.get("started_at", ""), reverse=True)
+    return {"logs": logs, "total": len(logs)}
