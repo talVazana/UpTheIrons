@@ -270,15 +270,115 @@ export async function deleteYouTubeChannel(id: string): Promise<boolean> {
   return true;
 }
 
-export async function syncYouTubeChannel(id: string): Promise<{
+export interface VideoItem {
+  id: string;
+  type: string;
+  title: string;
+  slug: string;
+  summary: string;
+  category: string;
+  tags: string[];
+  difficulty?: string;
+  image_url?: string;
+  published_at?: string;
+  created_at: string;
+  source?: {
+    source_type: string;
+    source_id: string;
+    source_name: string;
+    source_url: string;
+  };
+  metadata?: {
+    youtube_video_id?: string;
+    channel_id?: string;
+    channel_name?: string;
+    duration_seconds?: number;
+    embed_url?: string;
+  };
+}
+
+export interface VideoListResponse {
+  videos: VideoItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface SyncSummaryItem {
   channel_id: string;
-  name: string;
+  channel_name: string;
+  discovered: number;
+  new_items: number;
+  duplicates: number;
+  errors: string[];
+  started_at: string;
+  completed_at?: string;
   status: string;
-  last_synced_at: string;
-  message: string;
-}> {
-  return fetchApi(`/api/youtube/channels/${id}/sync`, {
+}
+
+export interface ApiKeysStatus {
+  youtube_api_key_configured: boolean;
+  youtube_api_key_masked: string | null;
+  ai_api_key_configured: boolean;
+  ai_api_key_masked: string | null;
+}
+
+export async function syncYouTubeChannel(id: string): Promise<SyncSummaryItem> {
+  return fetchApi<SyncSummaryItem>(`/api/youtube/channels/${id}/sync`, {
     method: "POST",
+  });
+}
+
+export async function syncAllYouTubeChannels(): Promise<SyncSummaryItem[]> {
+  return fetchApi<SyncSummaryItem[]>("/api/youtube/sync", {
+    method: "POST",
+  });
+}
+
+export async function fetchVideos(params?: {
+  category?: string;
+  tag?: string;
+  channel_id?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<VideoListResponse> {
+  const query = new URLSearchParams();
+  if (params?.category) query.set("category", params.category);
+  if (params?.tag) query.set("tag", params.tag);
+  if (params?.channel_id) query.set("channel_id", params.channel_id);
+  if (params?.limit) query.set("limit", String(params.limit));
+  if (params?.offset) query.set("offset", String(params.offset));
+  const qs = query.toString() ? `?${query.toString()}` : "";
+  return fetchApi<VideoListResponse>(`/api/v1/videos${qs}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchVideo(id: string): Promise<VideoItem> {
+  return fetchApi<VideoItem>(`/api/v1/videos/${id}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchApiKeysStatus(): Promise<ApiKeysStatus> {
+  return fetchApi<ApiKeysStatus>("/api/v1/settings/keys", {
+    cache: "no-store",
+  });
+}
+
+export async function updateApiKeys(keys: {
+  youtube_api_key?: string;
+  ai_api_key?: string;
+}): Promise<ApiKeysStatus> {
+  return fetchApi<ApiKeysStatus>("/api/v1/settings/keys", {
+    method: "POST",
+    body: JSON.stringify(keys),
+  });
+}
+
+export async function fetchSyncLogs(): Promise<{ logs: SyncSummaryItem[]; total: number }> {
+  return fetchApi<{ logs: SyncSummaryItem[]; total: number }>("/api/youtube/sync-logs", {
+    cache: "no-store",
   });
 }
 

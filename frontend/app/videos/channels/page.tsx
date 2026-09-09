@@ -133,13 +133,18 @@ export default function YouTubeChannelsPage() {
       setChannels((prev) =>
         prev.map((c) =>
           c.id === channel.id
-            ? { ...c, status: "healthy", last_synced_at: result.last_synced_at }
+            ? {
+                ...c,
+                status: (result.status === "SUCCESS" ? "healthy" : "failed") as YouTubeChannelItem["status"],
+                video_count: c.video_count + result.new_items,
+                last_synced_at: result.started_at,
+              }
             : c
         )
       );
       setFeedback({
-        type: "success",
-        message: `Sync triggered for '${channel.name}'. Baseline sync verified.`,
+        type: result.status === "SUCCESS" ? "success" : "error",
+        message: `Synced '${channel.name}': +${result.new_items} new video(s), ${result.duplicates} duplicate(s) skipped.`,
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to trigger sync.";

@@ -179,8 +179,11 @@ def test_channel_sync_endpoint():
     sync_resp = client.post(f"/api/youtube/channels/{cid}/sync")
     assert sync_resp.status_code == 200
     sync_data = sync_resp.json()
-    assert sync_data["status"] == "healthy"
-    assert "last_synced_at" in sync_data
+    assert sync_data["status"] == "SUCCESS"
+    assert sync_data["new_items"] >= 0
+    # Channel entity in registry is marked healthy
+    ch_check = client.get(f"/api/youtube/channels/{cid}")
+    assert ch_check.json()["status"] == "healthy"
 
     # Disable channel
     client.patch(f"/api/youtube/channels/{cid}", json={"enabled": False})
