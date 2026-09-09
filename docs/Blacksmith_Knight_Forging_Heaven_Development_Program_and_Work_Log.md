@@ -1888,53 +1888,64 @@ Add
 
 **Goal:** Make content behavior configurable and explicit.
 
-Target files:
+**Status:** ✅ COMPLETE
 
-```text
-config/
-├── mission.md
-├── rules.md
-├── content_rules.md
-├── safety_rules.md
-├── source_rules.md
-├── product_rules.md
-├── metallurgy_rules.md
-└── editorial_style.md
-```
+**Exit gate:** All 8 modular rule documents authored and stored in `config/`; rules dynamically loaded and cached by `RulesService`; automated `RuleValidator` validates positive and negative test cases (anti-spam, clickbait, critical hazards like zinc fumes & Kaowool silica); editorial override workflow supports `featured`, `pinned`, `verified`, `needs_review`, `hidden`; interactive Codex and Validator testbed live on frontend.
 
 ## 15.01 Create Rules Directory
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created and organized [`config/`](file:///C:/Doron/UpTheIrons/config) containing all 8 modular rule documents.
+- **Tests:** Verified via `test_15_01_15_02_rules_directory_and_master_files`.
 
 ## 15.02 Move/Adapt Master Rules
+- **Status:** ✅ COMPLETE
+- **Implementation:** Extracted and adapted foundational rules from Master Spec v3 into [`config/rules.md`](file:///C:/Doron/UpTheIrons/config/rules.md) and domain sub-files.
+- **Tests:** Verified via `test_15_01_15_02_rules_directory_and_master_files`.
 
 ## 15.03 Content Inclusion Rules
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`config/content_rules.md`](file:///C:/Doron/UpTheIrons/config/content_rules.md) defining core craft domains, relevance thresholds, and strict rejection boundaries.
+- **Tests:** Verified via `test_15_03_content_inclusion_rules`.
 
 ## 15.04 Source Quality Rules
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`config/source_rules.md`](file:///C:/Doron/UpTheIrons/config/source_rules.md) mandating author attribution, deterministic deduplication, failure isolation, and strict anti-crawling boundaries.
+- **Tests:** Verified via `test_15_04_source_quality_rules`.
 
 ## 15.05 Safety Rules
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`config/safety_rules.md`](file:///C:/Doron/UpTheIrons/config/safety_rules.md) detailing mandatory PPE (ANSI Z87.1 glasses, N95/P100 respirators, natural fibers) and critical workshop hazards (zinc fume fever, unsealed Kaowool silica inhalation, quench oil fires).
+- **Tests:** Verified via `test_15_05_safety_rules`.
 
 ## 15.06 Product Rules
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`config/product_rules.md`](file:///C:/Doron/UpTheIrons/config/product_rules.md) establishing zero ranking distortion, transparent affiliate disclosures, live price timestamping, and mandatory pros/cons/alternatives for all tools.
+- **Tests:** Verified via `test_15_06_product_rules`.
 
 ## 15.07 Editorial Style Rules
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`config/editorial_style.md`](file:///C:/Doron/UpTheIrons/config/editorial_style.md) enforcing terse, craft-first voice, standardized steel designations, and anti-hype terminology.
+- **Tests:** Verified via `test_15_07_editorial_style_rules`.
 
-## 15.08 Rule Loading
+## 15.08 Rule Loading Service
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`backend/app/services/rules_service.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rules_service.py) dynamically loading and caching `.md` files with UTF-8 BOM tolerance, header parsing, section slicing, and `reload_all()` capability.
+- **Tests:** Verified via `test_15_08_rule_loading_service`.
 
-Backend reads configuration without hard-coding every editorial rule.
+## 15.09 Rule Test Cases & Validation Engine
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created [`backend/app/services/rule_validator.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rule_validator.py) evaluating content items for commercial spam, clickbait, critical hazards (galvanized zinc without warning, unsealed ceramic fiber), and computing craft relevance score.
+- **Tests:** Verified via `test_15_09_rule_validation_positive_and_negative` (positive and negative cases).
 
-## 15.09 Rule Test Cases
+## 15.10 Editorial Override Engine
+- **Status:** ✅ COMPLETE
+- **Implementation:** Extended [`ContentStatus`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) enum with `PINNED`, `VERIFIED`, `HIDDEN`. Implemented `apply_editorial_override()` and `POST /api/v1/rules/override/{id}` endpoint.
+- **Tests:** Verified via `test_15_10_editorial_override` and `test_editorial_override_endpoint`.
 
-Create positive and negative examples.
-
-## 15.10 Editorial Override
-
-Support future states such as:
-
-```text
-featured
-pinned
-verified
-needs_review
-hidden
-```
+## 15.11 Interactive Codex & Testbed UI
+- **Status:** ✅ COMPLETE
+- **Implementation:** Rebuilt [`frontend/app/rules/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/rules/page.tsx) with rule file navigator, section reader, live disk reload, and an interactive real-time compliance testbed.
+- **Tests:** Verified via Next.js production build (`npm --prefix frontend run build`, 13/13 routes).
 
 ---
 

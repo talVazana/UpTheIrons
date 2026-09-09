@@ -750,4 +750,90 @@ export async function enrichPendingContent(params?: {
   });
 }
 
+// ---------------------------------------------------------------------------
+// Milestone 15: Rules & Editorial Codex API
+// ---------------------------------------------------------------------------
+
+export interface RuleSummaryItem {
+  id: string;
+  filename: string;
+  title: string;
+  description?: string;
+  section_count: number;
+  updated_at: string;
+}
+
+export interface RuleSectionItem {
+  title: string;
+  content: string;
+}
+
+export interface RuleDocumentItem {
+  id: string;
+  filename: string;
+  title: string;
+  description?: string;
+  content: string;
+  sections: RuleSectionItem[];
+  updated_at: string;
+}
+
+export interface ValidationIssueItem {
+  severity: "error" | "warning" | "info";
+  rule_category: string;
+  message: string;
+}
+
+export interface ContentValidationResponse {
+  valid: boolean;
+  relevance_score: number;
+  suggested_status: string;
+  issues: ValidationIssueItem[];
+  craft_keywords_found: string[];
+}
+
+export async function fetchRules(): Promise<RuleSummaryItem[]> {
+  return fetchApi<RuleSummaryItem[]>("/api/v1/rules", { cache: "no-store" });
+}
+
+export async function fetchRuleDetail(ruleId: string): Promise<RuleDocumentItem> {
+  return fetchApi<RuleDocumentItem>(`/api/v1/rules/${encodeURIComponent(ruleId)}`, {
+    cache: "no-store",
+  });
+}
+
+export async function reloadRules(): Promise<RuleSummaryItem[]> {
+  return fetchApi<RuleSummaryItem[]>("/api/v1/rules/reload", {
+    method: "POST",
+  });
+}
+
+export async function validateContentAgainstRules(payload: {
+  title: string;
+  text: string;
+  tags?: string[];
+  source_name?: string;
+}): Promise<ContentValidationResponse> {
+  return fetchApi<ContentValidationResponse>("/api/v1/rules/validate", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function applyEditorialOverride(
+  contentId: string,
+  payload: {
+    status?: string;
+    is_pinned?: boolean;
+    is_featured?: boolean;
+    is_verified?: boolean;
+    editorial_notes?: string;
+  }
+): Promise<unknown> {
+  return fetchApi<unknown>(`/api/v1/rules/override/${encodeURIComponent(contentId)}`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 

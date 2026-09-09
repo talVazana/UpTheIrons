@@ -16,8 +16,11 @@ class ContentStatus(str, Enum):
     DRAFT = "draft"
     PUBLISHED = "published"
     FEATURED = "featured"
+    PINNED = "pinned"
+    VERIFIED = "verified"
     NEEDS_REVIEW = "needs_review"
     ARCHIVED = "archived"
+    HIDDEN = "hidden"
 
 
 class DifficultyLevel(str, Enum):

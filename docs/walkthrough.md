@@ -468,6 +468,36 @@ Implemented the optional AI enrichment layer enforcing deterministic-first local
   - Backend test suite: 66 passed in 2.61s (`pytest tests/backend`).
   - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
 
+---
+
+## Milestone 15 — Rules / Editorial / Safety Configuration
+
+Implemented the comprehensive rules, safety standards, and editorial configuration layer:
+
+- **15.01 - 15.07 Modular Rule Documents (`config/`)**:
+  - Created [`config/mission.md`](file:///C:/Doron/UpTheIrons/config/mission.md): Core vision, craft over commerce, non-commercial ethos, local-first principles.
+  - Created [`config/rules.md`](file:///C:/Doron/UpTheIrons/config/rules.md): Master rule index linking all domain rule specifications.
+  - Created [`config/content_rules.md`](file:///C:/Doron/UpTheIrons/config/content_rules.md): Priority craft topics, relevance scoring thresholds, and mandatory rejection boundaries.
+  - Created [`config/safety_rules.md`](file:///C:/Doron/UpTheIrons/config/safety_rules.md): Mandatory PPE standards (ANSI Z87.1, N95/P100, natural fibers) and critical hazard warnings (toxic zinc fumes on galvanized steel, unsealed Kaowool silica inhalation, oil quench fire procedures).
+  - Created [`config/source_rules.md`](file:///C:/Doron/UpTheIrons/config/source_rules.md): Controlled source criteria, author attribution, deduplication, and anti-crawling boundaries.
+  - Created [`config/product_rules.md`](file:///C:/Doron/UpTheIrons/config/product_rules.md): Commercial neutrality, transparent affiliate disclosure, live pricing timestamping, mandatory pros/cons/alternatives for tools.
+  - Created [`config/metallurgy_rules.md`](file:///C:/Doron/UpTheIrons/config/metallurgy_rules.md): Anti-hallucination mandate for chemistry and heat treatment, manufacturer reference requirements, scrap steel warnings.
+  - Created [`config/editorial_style.md`](file:///C:/Doron/UpTheIrons/config/editorial_style.md): Terse, craft-first voice, standard steel designations, anti-hype terminology.
+- **15.08 Rule Loading Service**:
+  - Created [`backend/app/services/rules_service.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rules_service.py) with dynamic scanning, UTF-8 BOM tolerance, section parsing, and disk reload.
+- **15.09 Rule Test Cases & Validation Engine**:
+  - Created [`backend/app/services/rule_validator.py`](file:///C:/Doron/UpTheIrons/backend/app/services/rule_validator.py) with automated evaluation for commercial spam, clickbait, critical hazards (galvanized steel without acid strip, raw Kaowool), and craft relevance scoring.
+  - Validated via 11 automated test cases in [`tests/backend/test_rules.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_rules.py) covering positive and negative scenarios.
+- **15.10 Editorial Override Engine**:
+  - Extended [`ContentStatus`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) enum with `PINNED`, `VERIFIED`, and `HIDDEN`.
+  - Added editorial status and metadata override API (`POST /api/v1/rules/override/{id}`).
+- **15.11 Interactive Codex & Safety Testbed UI**:
+  - Rebuilt [`frontend/app/rules/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/rules/page.tsx) with rule file navigator, section reader, live disk reload, and real-time interactive compliance tester.
+  - Extended [`frontend/lib/api.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/api.ts) with typed client methods for rules and overrides.
+- **Milestone Quality Gate**:
+  - Backend test suite: 77 passed in 2.74s (`pytest tests/backend`).
+  - Frontend production build: all 13 routes compiled cleanly (`npm run build`, exit code 0).
+
 
 
 
