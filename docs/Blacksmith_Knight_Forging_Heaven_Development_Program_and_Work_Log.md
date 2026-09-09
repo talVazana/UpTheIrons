@@ -885,63 +885,101 @@ local emulator data where appropriate
 
 ## 03.01 Initialize Firebase Configuration
 
-- [ ] Firebase configuration initialized
-- [ ] Local project identifier selected
-- [ ] Configuration committed without secrets
+- [x] Firebase configuration initialized
+- [x] Local project identifier selected
+- [x] Configuration committed without secrets
+
+**Status:** ✅ COMPLETE
 
 ## 03.02 Enable Firestore Emulator
 
-- [ ] Firestore emulator configured
-- [ ] Emulator starts
-- [ ] Local console behavior understood
+- [x] Firestore emulator configured
+- [x] Emulator starts
+- [x] Local console behavior understood
+
+**Status:** ✅ COMPLETE
+
 
 ## 03.03 Firestore Write Test
 
-Create one test document.
+- [x] Create one test document (`smoke_tests/test_doc_01`) via emulator REST API.
 
 **Acceptance:** Document appears in local emulator.
 
+**Status:** ✅ COMPLETE
+
+
 ## 03.04 Firestore Read Test
 
-Read the test document.
+- [x] Read the test document (`smoke_tests/test_doc_01`) via emulator REST API and verify fields.
+
+**Status:** ✅ COMPLETE
+
 
 ## 03.05 Firestore Update Test
 
-Update the document.
+- [x] Update the document (`smoke_tests/test_doc_01`) via PATCH request and verify status changed to `updated_ok`.
+
+**Status:** ✅ COMPLETE
+
 
 ## 03.06 Firestore Delete Test
 
-Delete the document.
+- [x] Delete the document (`smoke_tests/test_doc_01`) via DELETE request and verify GET returns 404.
+
+**Status:** ✅ COMPLETE
+
 
 ## 03.07 Authentication Emulator Decision
 
-Determine whether authentication is required for MVP.
+- [x] Determine whether authentication is required for MVP.
 
-Current Master Spec says user accounts are not required for MVP, so this may remain a future capability.
+**Decision:** User accounts are not required for MVP per Master Spec (public non-commercial knowledge vault and personal curated forge library). Authentication emulator remains disabled until post-MVP.
+
+**Status:** ✅ COMPLETE
 
 ## 03.08 Firebase Service Boundary
 
-Document which application components talk to:
+- [x] Document service ownership boundary:
 
 ```text
-Firebase directly
-FastAPI
-both
+Next.js Frontend
+      ↓ (REST HTTP)
+FastAPI Backend
+      ↓ (Firestore Admin / REST)
+Firestore Emulator / Production
 ```
 
-Do not create duplicate ownership of the same business logic without reason.
+- **FastAPI:** Sole authority for data validation, ingestion (YouTube, RSS), normalization, and Firestore writes.
+- **Next.js:** Consumes FastAPI endpoints for bento cards, search, and library data. Direct client SDK reads optional only if real-time subscriptions needed.
+- No duplicate business logic across boundaries.
+
+**Status:** ✅ COMPLETE
 
 ## 03.09 Local Data Reset Procedure
 
-Document how to:
+- [x] Document reset procedure:
+  - Default: In-memory mode (restarting `firebase emulators:start` resets state to zero).
+  - Live Reset: `DELETE http://127.0.0.1:8080/emulator/v1/projects/blacksmith-knight-local/databases/(default)/documents` clears all collections instantaneously.
+  - Seed strategy: Python seed script will populate initial metallurgy/workshop fixtures in Milestone 08.
 
-- clear emulator data
-- seed test data
-- restart a clean local environment
+**Status:** ✅ COMPLETE
 
 ## 03.10 Firebase Integration Smoke Test
 
+- [x] Local Firestore started on port 8080.
+- [x] UI started on port 4000.
+- [x] Write test verified.
+- [x] Read test verified.
+- [x] Update test verified.
+- [x] Delete test verified.
+- [x] Live reset endpoint verified.
+- [x] Zero cloud / production dependencies touched.
+
 **Milestone exit gate:** Local Firestore can be started, written, read, updated, deleted, and reset without touching production data.
+
+**Status:** ✅ COMPLETE
+
 
 ---
 
