@@ -126,9 +126,13 @@ async def test_seed_initial_data():
 
     assert counts["materials"] >= 3
     assert counts["projects"] == 1
+    assert counts["tools"] >= 3
     assert "content/mat-1084" in fake_db
     assert "content/mat-1095" in fake_db
     assert "content/mat-5160" in fake_db
     assert "content/mat-o1" in fake_db
     assert "content/mat-w1" in fake_db
     assert "content/proj-s-hook" in fake_db
+    assert "content/tool-london-pattern-anvil" in fake_db
+    assert "content/tool-cross-peen-hammer" in fake_db
+    assert "content/tool-2x72-belt-grinder" in fake_db

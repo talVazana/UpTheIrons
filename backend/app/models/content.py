@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, field_validator
-from app.models.enums import ContentType, ContentStatus, DifficultyLevel, TrustLabel
+from app.models.enums import ContentType, ContentStatus, DifficultyLevel, TrustLabel, ToolCategory
 from app.models.source import SourceProvenance
 
 
@@ -154,4 +154,22 @@ class GuideMetadata(BaseModel):
     safety_precautions: List[SafetyPrecaution] = Field(default_factory=list)
     related_content: List[RelatedContentLink] = Field(default_factory=list)
     table_of_contents: List[Dict[str, str]] = Field(default_factory=list)
+
+
+class ToolMetadata(BaseModel):
+    """Domain model for structured workshop knowledge, equipment, and tooling."""
+
+    tool_category: ToolCategory = Field(default=ToolCategory.FORGING)
+    primary_purpose: str = Field(min_length=5, max_length=500)
+    essential_for: List[str] = Field(default_factory=list)
+    selection_criteria: List[str] = Field(default_factory=list)
+    beginner_guidance: str = Field(min_length=10, max_length=1500)
+    beginner_friendly: bool = Field(default=True)
+    diy_buildable: bool = Field(default=False)
+    diy_alternatives: List[str] = Field(default_factory=list)
+    maintenance_protocols: List[str] = Field(default_factory=list)
+    safety_precautions: List[SafetyPrecaution] = Field(default_factory=list)
+    specifications: Dict[str, Any] = Field(default_factory=dict)
+    related_tools: List[RelatedContentLink] = Field(default_factory=list)
+    source_references: List[SourceReference] = Field(default_factory=list)
 

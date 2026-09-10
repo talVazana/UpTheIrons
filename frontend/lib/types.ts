@@ -10,7 +10,8 @@ export type ContentType =
   | "product"
   | "project"
   | "workshop_tip"
-  | "rule";
+  | "rule"
+  | "tool";
 
 export type ContentStatus =
   | "draft"
@@ -195,5 +196,37 @@ export interface GuideMetadata {
   safety_precautions: SafetyPrecaution[];
   related_content: RelatedContentLink[];
   table_of_contents?: Array<{ id: string; title: string }>;
+}
+
+export type ToolCategory =
+  | "forging"
+  | "heating"
+  | "grinding"
+  | "finishing"
+  | "infrastructure";
+
+export interface ToolMetadata {
+  tool_category: ToolCategory;
+  primary_purpose: string;
+  essential_for: string[];
+  selection_criteria: string[];
+  beginner_guidance: string;
+  beginner_friendly: boolean;
+  diy_buildable: boolean;
+  diy_alternatives: string[];
+  maintenance_protocols: string[];
+  safety_precautions: SafetyPrecaution[];
+  specifications: Record<string, any>;
+  related_tools: RelatedContentLink[];
+  source_references: SourceReference[];
+}
+
+export interface ToolItem extends ContentEnvelope<ToolMetadata> {}
+
+export interface ToolListResponse {
+  tools: ToolItem[];
+  total: number;
+  limit: number;
+  offset: number;
 }
 

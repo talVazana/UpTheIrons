@@ -567,6 +567,39 @@ Implemented the complete technical metallurgy vault, chemical composition breakd
   - Backend test suite: 92 passed in 3.00s (`pytest tests/backend -v`).
   - Frontend production build: all routes compiled cleanly including `○ /materials` and `ƒ /materials/[slug]` (`npm --prefix frontend run build`, exit code 0).
 
+---
+
+## Milestone 18 — Workshop / Tools Library
+
+Implemented structured workshop knowledge covering tool selection criteria, apprentice guidance, technical specifications, hazard analysis with mandatory PPE, maintenance protocols, DIY alternatives, and cross-tool relationships:
+
+- **18.01 & 18.02 Tool Domain Model & Tool Categories**:
+  - Created [`ToolMetadata`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) and [`ToolCategory`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) (`forging`, `heating`, `grinding`, `finishing`, `infrastructure`), synchronized in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts).
+  - Captures primary purpose, essential tasks, selection criteria, beginner guidance, beginner friendliness, DIY buildability, improvised alternatives, maintenance protocols, safety precautions, and engineering specifications.
+- **18.03 Dedicated Workshop Knowledge Pages & UI Components**:
+  - Created [`frontend/app/workshop/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/workshop/page.tsx): interactive catalog with category tabs, beginner-friendly toggle, DIY buildable filter, live text search, and the Smith's Golden Triangle layout guide (Forge ↔ Anvil ↔ Vise ↔ Quench).
+  - Created [`frontend/app/workshop/[slug]/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/workshop/[slug]/page.tsx): comprehensive single-tool technical dossier.
+  - Created [`frontend/components/tools/ToolCard.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/tools/ToolCard.tsx) displaying category icons, purpose, essential tasks, and links.
+  - Created [`frontend/components/tools/ToolSpecsGrid.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/tools/ToolSpecsGrid.tsx) rendering formatted engineering parameters.
+  - Created [`frontend/components/tools/MaintenanceGuide.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/tools/MaintenanceGuide.tsx) outlining upkeep protocols.
+  - Created [`frontend/components/tools/DiyAlternativesCard.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/tools/DiyAlternativesCard.tsx) providing low-cost and improvised alternatives.
+- **18.04 Seeded London-Pattern Anvil Entry**:
+  - Seeded *"London-Pattern Cast Steel Anvil"* (`tool-london-pattern-anvil`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py): monolithic cast alloy steel body, 80%+ rebound score, horn geometry, knuckle height rule, and silicone/chain sound deadening.
+- **18.05 Seeded Swedish Cross-Peen Hammer Entry**:
+  - Seeded *"Swedish Cross-Peen Blacksmith Hammer"* (`tool-cross-peen-hammer`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py): 2.0 to 2.5 lb weight recommendation, crowned planishing face, perpendicular drawing out, and straight-grain hickory wedging.
+- **18.06 Seeded 2x72 Industrial Belt Grinder Entry**:
+  - Seeded *"2x72 Variable Speed Industrial Belt Grinder"* (`tool-2x72-belt-grinder`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py): 2–3 HP TEFC motor, VFD surface-feet-per-minute control (400–4500 SFPM), platen options, and spark trap water trough.
+- **18.07 Rigorous Workshop Safety Metadata**:
+  - Built [`frontend/components/tools/ToolSafetyNotice.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/tools/ToolSafetyNotice.tsx) enforcing explicit hazard analysis, mitigation procedures, and mandatory PPE checklists (ANSI Z87.1 glasses, NRR 28+ hearing protection, NIOSH P100/N95 respirator for metal dust, refractory ceramic fiber sealing).
+- **18.08 Related Tools Cross-Referencing**:
+  - Wired bidirectional `RelatedContentLink` relationships cross-referencing tools across common forge workflows (Anvil ↔ Hammer ↔ Propane Forge ↔ Post Vise).
+- **Backend API & Test Suite**:
+  - Implemented `GET /api/v1/tools`, `GET /api/v1/tools/{slug_or_id}`, and `POST /api/v1/tools` in [`backend/app/api/v1/tools.py`](file:///C:/Doron/UpTheIrons/backend/app/api/v1/tools.py).
+  - Created [`tests/backend/test_tools.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_tools.py) with 10 comprehensive tests.
+- **Milestone Quality Gate**:
+  - Backend test suite: 102 passed in 3.12s (`pytest tests/backend -v`).
+  - Frontend production build: all routes compiled cleanly including `○ /workshop` and `ƒ /workshop/[slug]` (`npm --prefix frontend run build`, exit code 0).
+
 
 
 

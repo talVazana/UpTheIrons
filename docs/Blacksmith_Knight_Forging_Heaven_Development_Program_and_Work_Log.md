@@ -2088,20 +2088,44 @@ Workshop Infrastructure
 ```
 
 ## 18.01 Tool Model
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created `ToolMetadata` in [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) and matching TypeScript interface in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts). Model captures tool category, primary purpose, essential tasks, selection criteria checklist, beginner guidance, beginner friendliness, DIY buildability, DIY improvised alternatives, maintenance protocols, safety precautions, technical specifications, related tools, and source citations.
+- **Tests:** Verified via `test_18_01_18_02_tool_metadata_model` in [`tests/backend/test_tools.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_tools.py).
 
 ## 18.02 Tool Category
+- **Status:** ✅ COMPLETE
+- **Implementation:** Defined `ToolCategory` enum in [`backend/app/models/enums.py`](file:///C:/Doron/UpTheIrons/backend/app/models/enums.py) supporting `forging`, `heating`, `grinding`, `finishing`, and `infrastructure`. Filterable via `GET /api/v1/tools?category=...` and interactive category tabs in [`frontend/app/workshop/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/workshop/page.tsx).
+- **Tests:** Verified via `test_list_tools_and_filters` in [`tests/backend/test_tools.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_tools.py).
 
 ## 18.03 Tool Knowledge Page
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created dedicated Workshop Tools catalog at [`frontend/app/workshop/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/workshop/page.tsx) and dynamic tool dossier reader at [`frontend/app/workshop/[slug]/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/workshop/[slug]/page.tsx). Renders forge aesthetic cards, selection checklists, apprentice guidance alerts, technical specification grids, safety notices, maintenance steps, and DIY alternatives.
+- **Tests:** Verified via Next.js production build (`○ /workshop` and `ƒ /workshop/[slug]`).
 
 ## 18.04 One Anvil Entry
+- **Status:** ✅ COMPLETE
+- **Implementation:** Authored and seeded *"London-Pattern Cast Steel Anvil"* (`tool-london-pattern-anvil`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py). Details monolithic cast 4140 steel body, 80%+ rebound score, knuckle-height rule, horn geometry, cutting step, hardy/pritchel holes, and silicone/chain sound deadening.
+- **Tests:** Verified via `test_18_04_seeded_anvil_entry`.
 
 ## 18.05 One Hammer Entry
+- **Status:** ✅ COMPLETE
+- **Implementation:** Authored and seeded *"Swedish Cross-Peen Blacksmith Hammer"* (`tool-cross-peen-hammer`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py). Specifies 2.0 to 2.5 lb beginner weight recommendation to avoid tendonitis, crowned square face dressing, perpendicular drawing out, straight-grain hickory handle wedging, and boiled linseed oil maintenance.
+- **Tests:** Verified via `test_18_05_seeded_hammer_entry`.
 
 ## 18.06 One Grinder Entry
+- **Status:** ✅ COMPLETE
+- **Implementation:** Authored and seeded *"2x72 Variable Speed Industrial Belt Grinder"* (`tool-2x72-belt-grinder`) in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py). Details 2–3 HP TEFC motor, VFD surface-feet-per-minute (SFPM) speed control, ceramic abrasives, platen liners, and spark trap buckets.
+- **Tests:** Verified via `test_18_06_seeded_grinder_entry`.
 
 ## 18.07 Safety Metadata
+- **Status:** ✅ COMPLETE
+- **Implementation:** Implemented structured `SafetyPrecaution` models across all workshop tools, displayed via [`frontend/components/tools/ToolSafetyNotice.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/tools/ToolSafetyNotice.tsx). Enforces explicit hazard analysis, mitigation procedures, and required PPE (ANSI Z87.1 eye protection, NRR 28+ hearing protection, NIOSH P100/N95 respirator for metal dust, refractory ceramic fiber sealing).
+- **Tests:** Verified via `test_18_07_tool_safety_metadata`.
 
 ## 18.08 Related Tools
+- **Status:** ✅ COMPLETE
+- **Implementation:** Integrated bidirectional `RelatedContentLink` relationships cross-linking workshop tools (e.g. Anvil ↔ Hammer ↔ Leg Vise ↔ Propane Forge), rendered in tool dossiers for seamless workflow exploration.
+- **Tests:** Verified via `test_18_08_related_tools`.
 
 ---
 

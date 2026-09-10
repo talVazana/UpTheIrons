@@ -10,6 +10,9 @@ import type {
   MaterialListResponse,
   MaterialComparisonResponse,
   MaterialMetadata,
+  ToolItem,
+  ToolListResponse,
+  ToolMetadata,
 } from "./types";
 
 export const BACKEND_URL =
@@ -955,6 +958,54 @@ export async function createMaterial(payload: {
   metadata: MaterialMetadata;
 }): Promise<MaterialItem> {
   return fetchApi<MaterialItem>("/api/v1/materials", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function fetchTools(params?: {
+  category?: string;
+  beginner_friendly?: boolean;
+  diy_buildable?: boolean;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<ToolListResponse> {
+  const query = new URLSearchParams();
+  if (params?.category && params.category !== "all") query.append("category", params.category);
+  if (params?.beginner_friendly !== undefined && params.beginner_friendly !== null) {
+    query.append("beginner_friendly", params.beginner_friendly.toString());
+  }
+  if (params?.diy_buildable !== undefined && params.diy_buildable !== null) {
+    query.append("diy_buildable", params.diy_buildable.toString());
+  }
+  if (params?.q) query.append("q", params.q);
+  if (params?.limit) query.append("limit", params.limit.toString());
+  if (params?.offset) query.append("offset", params.offset.toString());
+
+  const qs = query.toString();
+  return fetchApi<ToolListResponse>(`/api/v1/tools${qs ? `?${qs}` : ""}`, {
+    cache: "no-store",
+  });
+}
+
+export async function fetchToolBySlug(slugOrId: string): Promise<ToolItem> {
+  return fetchApi<ToolItem>(`/api/v1/tools/${encodeURIComponent(slugOrId)}`, {
+    cache: "no-store",
+  });
+}
+
+export async function createTool(payload: {
+  title: string;
+  slug?: string;
+  summary: string;
+  category?: string;
+  tags?: string[];
+  difficulty?: string;
+  status?: string;
+  metadata: ToolMetadata;
+}): Promise<ToolItem> {
+  return fetchApi<ToolItem>("/api/v1/tools", {
     method: "POST",
     body: JSON.stringify(payload),
   });

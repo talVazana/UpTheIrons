@@ -10,6 +10,15 @@ class ContentType(str, Enum):
     PROJECT = "project"
     WORKSHOP_TIP = "workshop_tip"
     RULE = "rule"
+    TOOL = "tool"
+
+
+class ToolCategory(str, Enum):
+    FORGING = "forging"
+    HEATING = "heating"
+    GRINDING = "grinding"
+    FINISHING = "finishing"
+    INFRASTRUCTURE = "infrastructure"
 
 
 class ContentStatus(str, Enum):

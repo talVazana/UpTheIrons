@@ -1,11 +1,12 @@
 from typing import Dict, List
-from app.models.enums import ContentType, ContentStatus, DifficultyLevel, SourceType, TrustLabel
+from app.models.enums import ContentType, ContentStatus, DifficultyLevel, SourceType, TrustLabel, ToolCategory
 from app.models.content import (
     ContentEnvelope,
     MaterialMetadata,
     HeatTreatmentRecipe,
     ProjectMetadata,
     GuideMetadata,
+    ToolMetadata,
     SourceReference,
     SafetyPrecaution,
     RelatedContentLink,
@@ -697,10 +698,416 @@ Immediately following the quench (as soon as the blade cools to 125°F and can b
     ),
 ]
 
+SEED_TOOLS: List[ContentEnvelope] = [
+    ContentEnvelope(
+        id="tool-london-pattern-anvil",
+        type=ContentType.TOOL,
+        title="London-Pattern Cast Steel Anvil",
+        slug="london-pattern-anvil",
+        summary="The definitive blacksmithing foundation. Features a hardened continuous face, conical horn for scrolling, cutting step, square hardy hole, and round pritchel hole.",
+        category="workshop",
+        tags=["anvil", "forging", "london-pattern", "foundation", "hardy", "rebound"],
+        difficulty=DifficultyLevel.BEGINNER,
+        status=ContentStatus.PUBLISHED,
+        source=SourceProvenance(
+            source_type=SourceType.MANUAL,
+            source_id="workshop-guild",
+            source_name="Blacksmith Knight Guild",
+            source_url="https://blacksmithknight.local/workshop/london-pattern-anvil",
+        ),
+        metadata=ToolMetadata(
+            tool_category=ToolCategory.FORGING,
+            primary_purpose="The primary rebound mass and striking anvil upon which glowing steel is forged, drawn, bent, and planished.",
+            essential_for=["Drawing out bar stock", "Upsetting tenons and shoulders", "Forming rings on the horn", "Holding bottom hardy tooling"],
+            selection_criteria=[
+                "Monolithic cast alloy steel (4140, 8640) or forged wrought body with forge-welded tool steel faceplate.",
+                "Empirical ball-bearing rebound score of 75% to 90%+ across the central mass.",
+                "Unbroken, crisp edges with gentle 1/8-inch dressing radius (avoid chipped or jagged corners).",
+                "Clear, sustained bell-like ring indicating zero internal delamination voids.",
+            ],
+            beginner_guidance="For a personal workshop, target an anvil between 100 and 150 lbs (45–70 kg). Never buy hardware-store cast gray iron 'Anvil Shaped Objects' (ASOs)—gray iron shatters and has under 30% rebound.",
+            beginner_friendly=True,
+            diy_buildable=False,
+            diy_alternatives=[
+                "Vertical railroad track section (mounted on end so the entire head mass sits directly beneath hammer blows)",
+                "Solid 4140 forklift tine billet cut to 18 inches and embedded into end-grain timber",
+                "100 lb steel crane rail or drop-forge die block",
+            ],
+            maintenance_protocols=[
+                "Never grind an antique face flat with an abrasive grinding cup; you will overheat and destroy the paper-thin temper.",
+                "Dress working edges with an 80-grit flap disc to establish smooth 1/8-inch to 3/16-inch blending radii.",
+                "Bed the base in 100% silicone architectural caulk and wrap chains around the waist to eliminate deafening 118 dB ring.",
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="critical",
+                    hazard="High-velocity spalling steel chips: Striking a hardened hammer directly against a hardened anvil face can shatter glass-hard steel shards at bullet velocity.",
+                    mitigation="Never strike the anvil face directly with a steel hammer without glowing hot workpiece in between. Use soft brass, copper, or mild steel drifts.",
+                    ppe=["ANSI Z87.1 Approved Safety Glasses with Side Shields", "Full Face Shield for heavy striking"],
+                ),
+                SafetyPrecaution(
+                    level="warning",
+                    hazard="Deafening high-frequency acoustic shock: Bare anvil strikes exceed 115 dB, causing irreversible sensorineural hearing loss within minutes.",
+                    mitigation="Mount on silicone caulk bed, wrap waist tightly with link chain, and wear certified hearing protection.",
+                    ppe=["NRR 28+ dB Earmuffs or Molded Silicone Earplugs"],
+                ),
+            ],
+            specifications={
+                "optimal_weight_lbs": "110 – 160 lbs for amateur home forge, 250+ lbs for two-person striking",
+                "face_hardness": "54 – 58 HRC on high-grade cast steel",
+                "hardy_hole_size": "Standard 1.0 inch (or 3/4 inch on European patterns)",
+                "pritchel_hole_size": "1/2 inch to 5/8 inch cylindrical hole",
+                "working_height": "Knuckle height rule: top of face aligns with bottom of closed fist standing in shop boots",
+            },
+            related_tools=[
+                RelatedContentLink(
+                    content_id="tool-cross-peen-hammer",
+                    title="Swedish Cross-Peen Blacksmith Hammer",
+                    type=ContentType.TOOL,
+                    slug="cross-peen-hammer",
+                    relationship="recommended_tool",
+                ),
+                RelatedContentLink(
+                    content_id="tool-blacksmith-leg-vise",
+                    title="Solid Wrought-Iron Post Leg Vise",
+                    type=ContentType.TOOL,
+                    slug="blacksmith-leg-vise",
+                    relationship="prerequisite_project",
+                ),
+            ],
+            source_references=[
+                SourceReference(
+                    title="Anvils in America",
+                    author="Richard A. Postman",
+                    publication="Postman Publishing",
+                    year=1998,
+                    trust_label=TrustLabel.FACT,
+                    citation_key="Postman1998",
+                ),
+            ],
+        ).model_dump(),
+    ),
+    ContentEnvelope(
+        id="tool-cross-peen-hammer",
+        type=ContentType.TOOL,
+        title="Swedish Cross-Peen Blacksmith Hammer",
+        slug="cross-peen-hammer",
+        summary="The fundamental forging hammer for every blacksmith. The crowned square face provides clean planishing while the horizontal wedge peen draws hot steel outward directionally.",
+        category="workshop",
+        tags=["hammer", "forging", "cross-peen", "swedish-pattern", "hand-tool"],
+        difficulty=DifficultyLevel.BEGINNER,
+        status=ContentStatus.PUBLISHED,
+        source=SourceProvenance(
+            source_type=SourceType.MANUAL,
+            source_id="workshop-guild",
+            source_name="Blacksmith Knight Guild",
+            source_url="https://blacksmithknight.local/workshop/cross-peen-hammer",
+        ),
+        metadata=ToolMetadata(
+            tool_category=ToolCategory.FORGING,
+            primary_purpose="The hand extension that converts physical arm energy into directed plastic deformation of hot incandescent metal.",
+            essential_for=["Directional drawing out of billets", "Planishing hammer marks smooth", "Forging bevels and tapers", "Fullering and texturing"],
+            selection_criteria=[
+                "Weight between 2.0 and 2.5 lbs (0.9 to 1.1 kg) for general forging and joint longevity.",
+                "Drop-forged medium carbon or alloy steel (1045 or 4140), differentially hardened with faces at 50–55 HRC.",
+                "Straight-grain hickory or ash handle with grain running parallel to the line of strike.",
+                "Both wooden wedge and cross metal wedge securing the eye firmly.",
+            ],
+            beginner_guidance="Resist the urge to forge with a 3.5 or 4 lb sledge hammer as a beginner. A 2.2 lb hammer swinging rhythmically with gravity will move metal faster and save you from crippling elbow tendonitis.",
+            beginner_friendly=True,
+            diy_buildable=True,
+            diy_alternatives=[
+                "Dressed 2.5 lb engineer's drilling hammer with ground radius",
+                "Ball-peen machinist hammer (16 oz to 24 oz) for small decorative work",
+                "Repurposed vintage sledgehammer head reshaped on the forge",
+            ],
+            maintenance_protocols=[
+                "Crown the square face: radius the sharp outer edges to prevent cutting crescent scars ('half-moons') into the workpiece.",
+                "Sand the handle clean of factory polyurethane varnish; wipe with boiled linseed oil to prevent hand blisters.",
+                "Inspect the eye wedge before every heat; soak in linseed oil or replace wood wedge if the head exhibits slight play.",
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="warning",
+                    hazard="Mushroomed edges chipping off hammer face: Hardened tool steel striking mushroomed rims sends razor fragments flying.",
+                    mitigation="Immediately dress any mushroomed edges on a grinder before beginning forging operations.",
+                    ppe=["ANSI Z87.1 Safety Glasses", "Sturdy Natural-Fiber Workshop Attire"],
+                ),
+            ],
+            specifications={
+                "recommended_head_weight": "2.0 – 2.5 lbs (1000g)",
+                "face_geometry": "Slightly crowned square flat with blended radiused perimeter",
+                "peen_geometry": "Horizontal cross-peen with 1/8-inch smooth contact crown",
+                "handle_length": "14 to 16 inches",
+                "handle_wood": "Flame-treated second-growth American Hickory",
+            },
+            related_tools=[
+                RelatedContentLink(
+                    content_id="tool-london-pattern-anvil",
+                    title="London-Pattern Cast Steel Anvil",
+                    type=ContentType.TOOL,
+                    slug="london-pattern-anvil",
+                    relationship="recommended_tool",
+                ),
+            ],
+            source_references=[
+                SourceReference(
+                    title="The Blacksmith's Craft",
+                    author="Charles McRaven",
+                    publication="Storey Publishing",
+                    year=2005,
+                    trust_label=TrustLabel.CRAFT_PRACTICE,
+                    citation_key="McRaven2005",
+                ),
+            ],
+        ).model_dump(),
+    ),
+    ContentEnvelope(
+        id="tool-2x72-belt-grinder",
+        type=ContentType.TOOL,
+        title="2x72 Variable Speed Industrial Belt Grinder",
+        slug="2x72-belt-grinder",
+        summary="The undisputed powerhouse of modern bladesmithing and tool fabrication. Rapidly profiles billets, bevels blades, hollow grinds, and cleans scale with ceramic abrasive belts.",
+        category="workshop",
+        tags=["grinder", "grinding", "2x72", "abrasives", "profiling", "beveling"],
+        difficulty=DifficultyLevel.INTERMEDIATE,
+        status=ContentStatus.PUBLISHED,
+        source=SourceProvenance(
+            source_type=SourceType.MANUAL,
+            source_id="workshop-guild",
+            source_name="Blacksmith Knight Guild",
+            source_url="https://blacksmithknight.local/workshop/2x72-belt-grinder",
+        ),
+        metadata=ToolMetadata(
+            tool_category=ToolCategory.GRINDING,
+            primary_purpose="Precision stock removal, bevel geometry shaping, scale grinding, and satin abrasive finishing of heat-treated blades and forged tools.",
+            essential_for=["Hogging forge scale from normalized stock", "Precision flat and hollow bevel grinding", "Handle contouring and shaping", "Post-heat-treat finish grinding"],
+            selection_criteria=[
+                "Minimum 2.0 HP industrial TEFC (Totally Enclosed Fan Cooled) motor to resist metallic dust short-circuits.",
+                "Variable Frequency Drive (VFD) offering smooth control from 400 to 4500+ Surface Feet Per Minute (SFPM).",
+                "Solid tooling arm system accommodating flat platens, small wheel attachments, and contact wheels (8 to 10 inch).",
+                "Quick-release gas-strut or tension spring for rapid 2-second belt changes.",
+            ],
+            beginner_guidance="A 2x72 grinder is an investment. If budget is tight, begin with a 1x30 or 2x42 grinder, or master high-quality bastard cut mill files before investing in a high-power industrial machine.",
+            beginner_friendly=False,
+            diy_buildable=True,
+            diy_alternatives=[
+                "DIY welded steel chassis kit (e.g. Revolution, KMG clone, or Gen-2 grinder kits)",
+                "2x42 belt and 6-inch disc sander with upgraded ceramic belts",
+                "Quality 14-inch mill bastard file with draw filing wooden jig",
+            ],
+            maintenance_protocols=[
+                "Vacuum aluminum tracking wheels and platen daily; metal dust accumulation creates belt tracking wobble.",
+                "True the platen liner: replace worn ceramic platen glass when grooves exceed 0.010 inches.",
+                "Blow out the motor housing periodically with dry compressed air.",
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="critical",
+                    hazard="Toxic Inhalation Hazard: Inhaling airborne metal swarf, toxic alloying oxides (chromium, manganese), and ceramic abrasive particles causes irreversible lung damage and silicosis.",
+                    mitigation="Mandatory tight-fitting NIOSH P100 or N95 half-mask respirator during all grinding operations. Install spark-trap water trough below grinding wheel.",
+                    ppe=["NIOSH P100 Half-Mask Respirator", "Full Polycarbonate Face Shield (ANSI Z87+)", "Ear Protection (grinder whine exceeds 95 dB)"],
+                ),
+                SafetyPrecaution(
+                    level="critical",
+                    hazard="Rotational entanglement hazard: Wearing loose gloves near a 4000 SFPM abrasive belt can grab fingers into the contact pinch point instantly.",
+                    mitigation="Never wear loose cloth gloves or dangling clothing when operating rotating belt grinders. Keep fingers clear of pinch zones.",
+                    ppe=["Tight-fitting workshop leather apron", "Tied-back hair"],
+                ),
+            ],
+            specifications={
+                "motor_power": "2.0 to 3.0 HP 3-phase motor with single-phase VFD converter",
+                "belt_size": "2 inches wide × 72 inches long (industry standard)",
+                "speed_range": "400 to 5000 Surface Feet Per Minute (SFPM)",
+                "platen_type": "Hardened tool steel or ceramic glass-faced 8-inch flat platen",
+            },
+            related_tools=[
+                RelatedContentLink(
+                    content_id="tool-cross-peen-hammer",
+                    title="Swedish Cross-Peen Blacksmith Hammer",
+                    type=ContentType.TOOL,
+                    slug="cross-peen-hammer",
+                    relationship="related_technique",
+                ),
+            ],
+            source_references=[
+                SourceReference(
+                    title="Knife Engineering: Steel, Heat Treating, and Geometry",
+                    author="Dr. Larrin Thomas",
+                    publication="Independently Published",
+                    year=2020,
+                    trust_label=TrustLabel.FACT,
+                    citation_key="Thomas2020",
+                ),
+            ],
+        ).model_dump(),
+    ),
+    ContentEnvelope(
+        id="tool-atmospheric-propane-forge",
+        type=ContentType.TOOL,
+        title="Atmospheric Dual-Burner Propane Forge",
+        slug="atmospheric-propane-forge",
+        summary="A clean, versatile heating chamber powered by LPG/propane venturi burners. Capable of consistent thermal control up to 2400°F for general forging and solid-state forge welding.",
+        category="workshop",
+        tags=["forge", "heating", "propane", "burner", "insulation", "refractory"],
+        difficulty=DifficultyLevel.BEGINNER,
+        status=ContentStatus.PUBLISHED,
+        source=SourceProvenance(
+            source_type=SourceType.MANUAL,
+            source_id="workshop-guild",
+            source_name="Blacksmith Knight Guild",
+            source_url="https://blacksmithknight.local/workshop/atmospheric-propane-forge",
+        ),
+        metadata=ToolMetadata(
+            tool_category=ToolCategory.HEATING,
+            primary_purpose="Heats steel billets to forging temperature (1600°F–2150°F) in a controllable atmospheric fire without producing coal smoke or sulfur contamination.",
+            essential_for=["Heating bar stock uniformly", "Thermal cycle soaking for normalization and hardening", "Damascus billet forge welding"],
+            selection_criteria=[
+                "High-density ceramic blanket insulation (minimum 2-inch thickness, 8 lb/cu ft rating).",
+                "Insulation rigidized with colloidal silica and sealed with high-temperature refractory mortar (e.g. Satanite or Kast-O-Lite 30).",
+                "Adjustable air choke plates on atmospheric venturi burners for managing oxidation scale.",
+                "UL-certified high-pressure propane regulator (0–30 PSI) with braided stainless steel line.",
+            ],
+            beginner_guidance="Ensure your propane forge has pass-through doors at both front and back so you can heat long bars anywhere along their length. Always keep a refractory firebrick on the chamber floor to catch flux.",
+            beginner_friendly=True,
+            diy_buildable=True,
+            diy_alternatives=[
+                "Single-burner 'coffee can' mini-forge for small knives and punches",
+                "Brake-drum coal forge built with black iron plumbing pipes and hair dryer blower",
+                "Refractory firebrick chamber with handheld MAPP gas torch",
+            ],
+            maintenance_protocols=[
+                "Inspect ceramic fiber lining: patch any flaking mortar immediately with damp Satanite to prevent airborne fiber release.",
+                "Perform soapy bubble leak tests on all brass gas fittings before turning on tank valves.",
+                "Clean burner nozzles of insect nests and carbon soot every season.",
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="critical",
+                    hazard="Ceramic fiber inhalation (Refractory Ceramic Fiber Fibrosis): Exposed, unsealed ceramic blanket sheds microscopic needles that permanently lodge in lung alveoli.",
+                    mitigation="Never operate a forge with exposed ceramic fiber. Coat 100% of internal insulation in rigidizer and refractory wash.",
+                    ppe=["NIOSH N95 / P100 Respirator", "Long Leather Welding Gauntlets"],
+                ),
+                SafetyPrecaution(
+                    level="critical",
+                    hazard="Carbon Monoxide (CO) poisoning: Combustion consumed indoors exhausts deadly odorless CO gas.",
+                    mitigation="Operate only with roll-up doors open or dedicated fume exhaust hood. Install digital CO alarm at waist level.",
+                    ppe=["Digital Carbon Monoxide Alarm within 6 feet"],
+                ),
+            ],
+            specifications={
+                "burner_type": "2× 3/4-inch Venturi atmospheric burners with brass 0.035 Mig contact tips",
+                "maximum_operating_temp": "2350°F – 2450°F",
+                "fuel_consumption": "1.5 to 2.5 lbs LPG per hour at 8 PSI",
+                "insulation_type": "2-inch 2600°F Ceramic Fiber sealed with Satanite",
+            },
+            related_tools=[
+                RelatedContentLink(
+                    content_id="tool-london-pattern-anvil",
+                    title="London-Pattern Cast Steel Anvil",
+                    type=ContentType.TOOL,
+                    slug="london-pattern-anvil",
+                    relationship="recommended_tool",
+                ),
+                RelatedContentLink(
+                    content_id="tool-cross-peen-hammer",
+                    title="Swedish Cross-Peen Blacksmith Hammer",
+                    type=ContentType.TOOL,
+                    slug="cross-peen-hammer",
+                    relationship="recommended_tool",
+                ),
+            ],
+            source_references=[
+                SourceReference(
+                    title="Gas Burners for Forges, Furnaces, and Kilns",
+                    author="Michael Porter",
+                    publication="Artisan Ideas",
+                    year=2004,
+                    trust_label=TrustLabel.SOURCE_BACKED,
+                    citation_key="Porter2004",
+                ),
+            ],
+        ).model_dump(),
+    ),
+    ContentEnvelope(
+        id="tool-blacksmith-leg-vise",
+        type=ContentType.TOOL,
+        title="Solid Wrought-Iron Post Leg Vise",
+        slug="blacksmith-leg-vise",
+        summary="An indispensable heavy-duty clamping post engineered specifically for hot bending, twisting, chiseling, and heavy sledge hammering.",
+        category="workshop",
+        tags=["vise", "infrastructure", "leg-vise", "post-vise", "bending", "twisting"],
+        difficulty=DifficultyLevel.BEGINNER,
+        status=ContentStatus.PUBLISHED,
+        source=SourceProvenance(
+            source_type=SourceType.MANUAL,
+            source_id="workshop-guild",
+            source_name="Blacksmith Knight Guild",
+            source_url="https://blacksmithknight.local/workshop/blacksmith-leg-vise",
+        ),
+        metadata=ToolMetadata(
+            tool_category=ToolCategory.INFRASTRUCTURE,
+            primary_purpose="Securely grips hot steel during violent torsional bending, hot filing, chisel parting, and heavy sledge hammer blows.",
+            essential_for=["Hot scroll bending and bar twisting", "Chisel hot-cutting and punching", "Heavy hand filing and planishing", "Holding hardy tools and bending forks"],
+            selection_criteria=[
+                "Forged wrought iron or ductile cast body—machinist bench vises made from gray cast iron will crack instantly under hammer blows.",
+                "Long solid support leg that transfers all downward striking forces directly into the shop floor.",
+                "Unbroken box and screw threads (check for stripped square-thread lead screws).",
+                "Original or properly fitted leaf spring that pushes jaws open smoothly as screw turns.",
+            ],
+            beginner_guidance="Look for a 4.5 to 6-inch jaw width post vise at antique auctions, farm sales, or tailgate swap meets. It is one of the only tools in the world that cannot be broken by heavy forging.",
+            beginner_friendly=True,
+            diy_buildable=False,
+            diy_alternatives=[
+                "Heavy-duty forged steel mechanics vise (ductile iron only; never strike gray iron)",
+                "Fabricated heavy floor clamp stand with heavy C-clamps",
+            ],
+            maintenance_protocols=[
+                "Grease the acme or square box screw threads with heavy lithium grease or anti-seize compound twice yearly.",
+                "Check pivot pin cotter key for wear or slop.",
+                "Ensure leg floor plate is firmly bolted or nestled into a recessed dimple in shop floor.",
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="warning",
+                    hazard="Crush and pinch point: High-leverage screw generates tons of force; spring release can snap jaws shut on finger flesh.",
+                    mitigation="Keep hands on outer crank handle; use aluminum or copper jaw pads when clamping delicate blades.",
+                    ppe=["Sturdy Work Gloves", "Steel-toe Shop Boots"],
+                ),
+            ],
+            specifications={
+                "jaw_width": "5.0 to 6.0 inches",
+                "overall_height": "38 to 42 inches (designed to match elbow height for filing)",
+                "weight_lbs": "65 to 110 lbs",
+                "body_material": "Forged wrought iron with tool-steel jaw inserts",
+            },
+            related_tools=[
+                RelatedContentLink(
+                    content_id="tool-cross-peen-hammer",
+                    title="Swedish Cross-Peen Blacksmith Hammer",
+                    type=ContentType.TOOL,
+                    slug="cross-peen-hammer",
+                    relationship="recommended_tool",
+                ),
+            ],
+            source_references=[
+                SourceReference(
+                    title="The Blacksmith's Guide",
+                    author="J. F. Sallows",
+                    publication="Technical Press",
+                    year=1907,
+                    trust_label=TrustLabel.HISTORICAL_INTERPRETATION,
+                    citation_key="Sallows1907",
+                ),
+            ],
+        ).model_dump(),
+    ),
+]
+
 
 async def seed_initial_data(repository: BaseRepository) -> Dict[str, int]:
     """Populates local storage with baseline fixtures."""
-    counts = {"materials": 0, "projects": 0, "guides": 0}
+    counts = {"materials": 0, "projects": 0, "guides": 0, "tools": 0}
 
     for item in SEED_MATERIALS:
         await repository.create("content", item.id, item.model_dump())
@@ -713,6 +1120,10 @@ async def seed_initial_data(repository: BaseRepository) -> Dict[str, int]:
     for item in SEED_GUIDES:
         await repository.create("content", item.id, item.model_dump())
         counts["guides"] += 1
+
+    for item in SEED_TOOLS:
+        await repository.create("content", item.id, item.model_dump())
+        counts["tools"] += 1
 
     return counts
 
