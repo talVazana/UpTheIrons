@@ -41,9 +41,12 @@ class HeatTreatmentRecipe(BaseModel):
     normalizing_temp_f: Optional[int] = None
     annealing_temp_f: Optional[int] = None
     hardening_temp_f: Optional[int] = None
+    decalescence_temp_f: Optional[int] = None
     quench_medium: Optional[str] = None
+    soak_time_minutes: Optional[int] = None
     tempering_range_f: Optional[str] = None
     target_hardness_hrc: Optional[str] = None
+    tempering_table: Optional[List[Dict[str, Any]]] = None
     notes: Optional[str] = None
 
 
@@ -53,12 +56,21 @@ class MaterialMetadata(BaseModel):
     classification: str
     carbon_pct: float = Field(ge=0.0, le=5.0)
     alloying_elements: Dict[str, float] = Field(default_factory=dict)
+    steel_category: str = Field(default="carbon_steel", description="carbon_steel, tool_steel, spring_steel, alloy_steel, stainless_steel")
     forging_temp_range_f: Optional[str] = None
     heat_treatment: Optional[HeatTreatmentRecipe] = None
+    spark_testing_profile: Optional[str] = None
+    grinding_characteristics: Optional[str] = None
+    weldability: Optional[str] = None
+    corrosion_resistance: Optional[str] = None
+    confidence_score: float = Field(default=0.95, ge=0.0, le=1.0)
+    confidence_level: str = Field(default="handbook_verified", description="handbook_verified, manufacturer_spec, empirical_test, unverified_estimate")
     beginner_suitability: bool = True
     common_applications: List[str] = Field(default_factory=list)
     common_mistakes: List[str] = Field(default_factory=list)
     source_reference: Optional[str] = None
+    source_metadata: Dict[str, str] = Field(default_factory=dict)
+
 
 
 class VideoMetadata(BaseModel):
