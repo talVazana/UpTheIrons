@@ -618,3 +618,16 @@ Implemented progressive hands-on workshop projects:
 - **19.04 Advanced Project**: Seeded High Carbon Camp Knife.
 - **19.05 Project Navigation**: Created `frontend/app/projects/page.tsx` library grid with difficulty filters.
 - **19.06 Related Materials/Tools**: Displayed tools and materials clearly on the project detail page at `frontend/app/projects/[slug]/page.tsx`.
+
+## Milestone 20 - Bento Feed Engine
+
+Implemented Bento Feed Engine. Created feed.py API endpoint. Updated UI. M20 complete.
+
+## Milestone 21 - Search & Filtering
+
+Implemented global search and filtering. Created search.py. M21 complete.
+
+## Milestone 22 - Source / Sync Monitoring & Logs
+
+Implemented sync logs monitoring. Created sync_logs.py. M22 complete.
+
