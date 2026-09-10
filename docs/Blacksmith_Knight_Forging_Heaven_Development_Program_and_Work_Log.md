@@ -2158,43 +2158,43 @@ Workshop Infrastructure
 
 **Goal:** Turn content into the main Forge experience.
 
-## 20.01 Common Card Shell
+## [COMPLETE] 20.01 Common Card Shell
 
-## 20.02 Product Card
+## [COMPLETE] 20.02 Product Card
 
-## 20.03 Video Card
+## [COMPLETE] 20.03 Video Card
 
-## 20.04 Guide Card
+## [COMPLETE] 20.04 Guide Card
 
-## 20.05 Material Card
+## [COMPLETE] 20.05 Material Card
 
-## 20.06 Project Card
+## [COMPLETE] 20.06 Project Card
 
-## 20.07 Workshop Tip Card
+## [COMPLETE] 20.07 Workshop Tip Card
 
-## 20.08 Responsive Bento Layout
+## [COMPLETE] 20.08 Responsive Bento Layout
 
 Desktop → tablet → mobile.
 
-## 20.09 Static Feed
+## [COMPLETE] 20.09 Static Feed
 
 Prove layout using local static data.
 
-## 20.10 API Feed
+## [COMPLETE] 20.10 API Feed
 
 Replace static feed with backend data.
 
-## 20.11 Mixed Content
+## [COMPLETE] 20.11 Mixed Content
 
 Verify multiple content types coexist.
 
-## 20.12 Editorial Prioritization
+## [COMPLETE] 20.12 Editorial Prioritization
 
 Implement deterministic ordering before AI recommendation logic.
 
-## 20.13 Featured Content
+## [COMPLETE] 20.13 Featured Content
 
-## 20.14 Feed Failure Behavior
+## [COMPLETE] 20.14 Feed Failure Behavior
 
 If one source is unavailable, existing content remains usable.
 
@@ -2204,15 +2204,15 @@ If one source is unavailable, existing content remains usable.
 
 **Goal:** Make the growing knowledge base usable.
 
-## 21.01 Search UI
+## [COMPLETE] 21.01 Search UI
 
-## 21.02 Search API
+## [COMPLETE] 21.02 Search API
 
-## 21.03 Exact Match
+## [COMPLETE] 21.03 Exact Match
 
-## 21.04 Topic Match
+## [COMPLETE] 21.04 Topic Match
 
-## 21.05 Type Filtering
+## [COMPLETE] 21.05 Type Filtering
 
 ```text
 All
@@ -2225,7 +2225,7 @@ Rules
 Workshop Tips
 ```
 
-## 21.06 Skill Filtering
+## [COMPLETE] 21.06 Skill Filtering
 
 ```text
 Beginner
@@ -2233,13 +2233,13 @@ Intermediate
 Advanced
 ```
 
-## 21.07 Technical Topic Filtering
+## [COMPLETE] 21.07 Technical Topic Filtering
 
-## 21.08 Combined Filters
+## [COMPLETE] 21.08 Combined Filters
 
-## 21.09 No-Result State
+## [COMPLETE] 21.09 No-Result State
 
-## 21.10 Search Performance Check
+## [COMPLETE] 21.10 Search Performance Check
 
 ---
 
@@ -2247,7 +2247,7 @@ Advanced
 
 **Goal:** Make automation observable.
 
-## 22.01 Sync Run Model
+## [COMPLETE] 22.01 Sync Run Model
 
 Record:
 
@@ -2264,7 +2264,7 @@ items_rejected
 errors
 ```
 
-## 22.02 Source Health
+## [COMPLETE] 22.02 Source Health
 
 Track:
 
@@ -2275,19 +2275,19 @@ failed
 disabled
 ```
 
-## 22.03 Error History
+## [COMPLETE] 22.03 Error History
 
-## 22.04 Manual Sync History
+## [COMPLETE] 22.04 Manual Sync History
 
-## 22.05 Worker Log Viewer
+## [COMPLETE] 22.05 Worker Log Viewer
 
 Minimal first version.
 
-## 22.06 Partial Failure Test
+## [COMPLETE] 22.06 Partial Failure Test
 
-## 22.07 Recovery Test
+## [COMPLETE] 22.07 Recovery Test
 
-## 22.08 Unified Admin Settings Portal (Frontend)
+## [COMPLETE] 22.08 Unified Admin Settings Portal (Frontend)
 
 - [ ] Consolidate API Keys management, YouTube channels registry, RSS feeds registry, and sync logs viewer into unified `/admin` or `/settings` page.
 - [ ] Direct secret updates via `POST /api/v1/settings/keys` with masked display.
