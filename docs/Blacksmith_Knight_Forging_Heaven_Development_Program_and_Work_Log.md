@@ -2133,34 +2133,24 @@ Workshop Infrastructure
 
 **Goal:** Provide practical projects with progressive difficulty.
 
-## 19.01 Project Model
+## 19.01 Project Model [COMPLETE]
+- Created `ProjectMetadata` and `ProjectStep` models
+- Linked tools and materials.
 
-Fields:
+## 19.02 Beginner Project [COMPLETE]
+- Seeded Classic Blacksmith's S-Hook
 
-```text
-Difficulty
-Estimated time
-Required tools
-Required material
-Safety
-Skills learned
-Steps
-Troubleshooting
-Variations
-References
-```
+## 19.03 Intermediate Project [COMPLETE]
+- Seeded Forging Wolf Jaw Tongs
 
-## 19.02 Beginner Project
+## 19.04 Advanced Project [COMPLETE]
+- Seeded Forging a High Carbon Camp Knife
 
-Build one complete beginner project.
+## 19.05 Project Navigation [COMPLETE]
+- Built `/projects` library and filters
 
-## 19.03 Intermediate Project
-
-## 19.04 Advanced Project
-
-## 19.05 Project Navigation
-
-## 19.06 Related Materials / Tools
+## 19.06 Related Materials / Tools [COMPLETE]
+- Displayed required tools and materials on project cards and detail pages.
 
 ---
 

@@ -151,14 +151,25 @@ export interface VideoMetadata {
   view_count?: number | null;
 }
 
+export interface ProjectStep {
+  title: string;
+  description: string;
+  duration_minutes?: number | null;
+  warning?: string | null;
+}
+
 export interface ProjectMetadata {
-  level: number;
+  difficulty_level: DifficultyLevel;
   estimated_time_minutes: number;
   required_tools: string[];
   required_materials: string[];
   skills_learned: string[];
-  steps: string[];
-  safety_warnings: string[];
+  steps: ProjectStep[];
+  safety_precautions: SafetyPrecaution[];
+  troubleshooting: string[];
+  variations: string[];
+  source_references: SourceReference[];
+  related_content: RelatedContentLink[];
 }
 
 export interface SourceReference {

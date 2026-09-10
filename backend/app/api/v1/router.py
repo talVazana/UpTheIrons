@@ -12,6 +12,7 @@ from app.api.v1.rules import router as rules_router
 from app.api.v1.guides import router as guides_router
 from app.api.v1.materials import router as materials_router
 from app.api.v1.tools import router as tools_router
+from app.api.v1.projects import router as projects_router
 
 v1_router = APIRouter()
 v1_router.include_router(health_router)
@@ -27,6 +28,7 @@ v1_router.include_router(rules_router)
 v1_router.include_router(guides_router)
 v1_router.include_router(materials_router)
 v1_router.include_router(tools_router)
+v1_router.include_router(projects_router)
 
 
 

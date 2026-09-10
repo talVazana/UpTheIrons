@@ -83,16 +83,27 @@ class VideoMetadata(BaseModel):
     view_count: Optional[int] = None
 
 
+class ProjectStep(BaseModel):
+    title: str = Field(min_length=2, max_length=200)
+    description: str = Field(min_length=5, max_length=2000)
+    duration_minutes: Optional[int] = None
+    warning: Optional[str] = None
+
+
 class ProjectMetadata(BaseModel):
     """Domain model for progressive apprentice projects."""
 
-    level: int = Field(default=1, ge=1, le=4)
+    difficulty_level: DifficultyLevel = Field(default=DifficultyLevel.BEGINNER)
     estimated_time_minutes: int = Field(default=60, ge=5)
     required_tools: List[str] = Field(default_factory=list)
     required_materials: List[str] = Field(default_factory=list)
     skills_learned: List[str] = Field(default_factory=list)
-    steps: List[str] = Field(default_factory=list)
-    safety_warnings: List[str] = Field(default_factory=list)
+    steps: List[ProjectStep] = Field(default_factory=list)
+    safety_precautions: List[SafetyPrecaution] = Field(default_factory=list)
+    troubleshooting: List[str] = Field(default_factory=list)
+    variations: List[str] = Field(default_factory=list)
+    source_references: List[SourceReference] = Field(default_factory=list)
+    related_content: List[RelatedContentLink] = Field(default_factory=list)
 
 
 class ProductMetadata(BaseModel):

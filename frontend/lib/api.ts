@@ -13,6 +13,7 @@ import type {
   ToolItem,
   ToolListResponse,
   ToolMetadata,
+  ProjectMetadata,
 } from "./types";
 
 export const BACKEND_URL =
@@ -1008,5 +1009,38 @@ export async function createTool(payload: {
   return fetchApi<ToolItem>("/api/v1/tools", {
     method: "POST",
     body: JSON.stringify(payload),
+  });
+}
+export type ProjectItem = ContentEnvelope & {
+  metadata: ProjectMetadata;
+};
+
+export interface ProjectListResponse {
+  projects: ProjectItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export async function fetchProjects(params?: {
+  difficulty?: string;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<ProjectListResponse> {
+  const url = new URL(`${BACKEND_URL}/api/v1/projects`);
+  if (params?.difficulty) url.searchParams.append("difficulty", params.difficulty);
+  if (params?.q) url.searchParams.append("q", params.q);
+  if (params?.limit) url.searchParams.append("limit", params.limit.toString());
+  if (params?.offset) url.searchParams.append("offset", params.offset.toString());
+
+  return fetchApi<ProjectListResponse>(url.pathname + url.search, {
+    cache: "no-store",
+  });
+}
+
+export async function getProject(slugOrId: string): Promise<ProjectItem> {
+  return fetchApi<ProjectItem>(`/api/v1/projects/${encodeURIComponent(slugOrId)}`, {
+    cache: "no-store",
   });
 }

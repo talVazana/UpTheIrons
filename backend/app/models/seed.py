@@ -5,6 +5,7 @@ from app.models.content import (
     MaterialMetadata,
     HeatTreatmentRecipe,
     ProjectMetadata,
+    ProjectStep,
     GuideMetadata,
     ToolMetadata,
     SourceReference,
@@ -278,21 +279,104 @@ SEED_PROJECTS: List[ContentEnvelope] = [
         tags=["beginner", "fundamentals", "drawing-out", "bending"],
         difficulty=DifficultyLevel.BEGINNER,
         metadata=ProjectMetadata(
-            level=1,
+            difficulty_level=DifficultyLevel.BEGINNER,
             estimated_time_minutes=45,
             required_tools=["Anvil", "2 lb cross-peen hammer", "Tongs", "Wire brush"],
             required_materials=["3/8 inch round or square mild steel (8 inches)"],
             skills_learned=["Square-to-round transition", "Tapering", "Scroll forming over horn"],
             steps=[
-                "Heat 3 inches of bar to bright orange heat.",
-                "Draw out a clean 4-sided square taper on both ends.",
-                "Octagonalize and then round the tapers over the anvil face.",
-                "Turn the scroll tips over the far edge of the anvil.",
-                "Bend the first loop over the anvil horn to create half the 'S'.",
-                "Reverse the bar, bend the opposite loop in the reverse direction.",
-                "Wire brush scale vigorously while hot and apply beeswax finish.",
+                ProjectStep(title="Heating", description="Heat 3 inches of bar to bright orange heat.", duration_minutes=5),
+                ProjectStep(title="Tapering", description="Draw out a clean 4-sided square taper on both ends.", duration_minutes=10),
+                ProjectStep(title="Rounding", description="Octagonalize and then round the tapers over the anvil face.", duration_minutes=5),
+                ProjectStep(title="Scrolling", description="Turn the scroll tips over the far edge of the anvil.", duration_minutes=5),
+                ProjectStep(title="Bending 1", description="Bend the first loop over the anvil horn to create half the 'S'.", duration_minutes=10),
+                ProjectStep(title="Bending 2", description="Reverse the bar, bend the opposite loop in the reverse direction.", duration_minutes=5),
+                ProjectStep(title="Finishing", description="Wire brush scale vigorously while hot and apply beeswax finish.", duration_minutes=5),
             ],
-            safety_warnings=["Always keep tongs cool by quenching between heats."],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="warning",
+                    hazard="Hot tongs can burn the hand.",
+                    mitigation="Always keep tongs cool by quenching between heats.",
+                    ppe=["Leather gloves"]
+                )
+            ],
+            troubleshooting=["If the S-hook is uneven, re-heat and adjust the loops over the horn. Keep material at forging temp."],
+            variations=["Add a twisted center section", "Reverse the scrolls"],
+            source_references=[]
+        ).model_dump(),
+    ),
+    ContentEnvelope(
+        id="proj-wolf-jaw-tongs",
+        type=ContentType.PROJECT,
+        title="Forging Wolf Jaw Tongs",
+        slug="wolf-jaw-tongs",
+        summary="An essential intermediate project: forging a pair of versatile wolf jaw tongs from medium carbon steel.",
+        category="projects",
+        tags=["intermediate", "tongs", "tool-making", "riveting"],
+        difficulty=DifficultyLevel.INTERMEDIATE,
+        metadata=ProjectMetadata(
+            difficulty_level=DifficultyLevel.INTERMEDIATE,
+            estimated_time_minutes=180,
+            required_tools=["Anvil", "2.5 lb cross-peen hammer", "Tongs", "Rivet buck", "Punch or drill"],
+            required_materials=["5/8 inch round or square 1045 or mild steel (two 18-inch pieces)", "1/4 inch mild steel rivet"],
+            skills_learned=["Isolating mass", "Forging the boss", "Drawing out reins", "Riveting"],
+            steps=[
+                ProjectStep(title="Isolating the boss", description="Set down half the material on the near edge of the anvil.", duration_minutes=15),
+                ProjectStep(title="Forging the jaw", description="Draw out the jaw and shape it with a V-notch or fuller.", duration_minutes=30),
+                ProjectStep(title="Drawing the reins", description="Draw out the long handles (reins) smoothly and evenly.", duration_minutes=45),
+                ProjectStep(title="Punching the hole", description="Hot punch a 1/4 inch hole through the center of the boss.", duration_minutes=15),
+                ProjectStep(title="Riveting", description="Align both halves, insert the rivet, and upset the rivet hot.", duration_minutes=15),
+                ProjectStep(title="Adjusting", description="Heat the jaws and grab the stock you intend to hold to set the jaw shape.", duration_minutes=10),
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="warning",
+                    hazard="Misaligned hammer strikes during riveting can send the rivet flying.",
+                    mitigation="Ensure flat, deliberate strikes when upsetting the rivet.",
+                    ppe=["Safety glasses"]
+                )
+            ],
+            troubleshooting=["If tongs are stiff, heat the rivet joint to a dull red and work them open and closed until cool."],
+            variations=["Flat jaws", "V-bit jaws"],
+            source_references=[]
+        ).model_dump(),
+    ),
+    ContentEnvelope(
+        id="proj-camp-knife",
+        type=ContentType.PROJECT,
+        title="Forging a High Carbon Camp Knife",
+        slug="camp-knife",
+        summary="A comprehensive advanced project: forging, heat treating, and finishing a rugged camp knife from 1084 steel.",
+        category="projects",
+        tags=["advanced", "bladesmithing", "knife-making", "heat-treatment"],
+        difficulty=DifficultyLevel.ADVANCED,
+        metadata=ProjectMetadata(
+            difficulty_level=DifficultyLevel.ADVANCED,
+            estimated_time_minutes=480,
+            required_tools=["Anvil", "Hammer", "Tongs", "Belt grinder or files", "Quench tank", "Oven for tempering"],
+            required_materials=["1084 high carbon steel bar", "Quench oil (Parks 50 or canola)", "Handle material (wood/micarta)", "Epoxy and pins"],
+            skills_learned=["Forging bevels", "Distal taper", "Normalizing", "Quenching", "Tempering", "Handle fitting"],
+            steps=[
+                ProjectStep(title="Forging the tip", description="Forge the tip down to shape.", duration_minutes=20),
+                ProjectStep(title="Forging bevels", description="Hammer in the edge bevels, being careful to keep the spine straight.", duration_minutes=60),
+                ProjectStep(title="Forging the tang", description="Isolate and draw out the tang for the handle.", duration_minutes=30),
+                ProjectStep(title="Normalizing", description="Heat to non-magnetic and let air cool three times for grain refinement.", duration_minutes=45),
+                ProjectStep(title="Quenching", description="Heat evenly to critical temp (1500°F) and plunge vertically into warm quench oil.", duration_minutes=10),
+                ProjectStep(title="Tempering", description="Temper in an oven at 400°F for two cycles of 2 hours each.", duration_minutes=240),
+                ProjectStep(title="Grinding and Finishing", description="Grind the final edge, attach handle scales, and shape handle.", duration_minutes=120),
+            ],
+            safety_precautions=[
+                SafetyPrecaution(
+                    level="critical",
+                    hazard="Oil quench fire flare-up.",
+                    mitigation="Always have a tight-fitting lid nearby to smother flames. Never use water to extinguish oil fires.",
+                    ppe=["Leather apron", "Respirator", "Safety glasses", "Fire extinguisher"]
+                )
+            ],
+            troubleshooting=["If the blade warps during quench, straighten during tempering or using a specialized straightening jig.", "If file bites after quench, the blade didn't harden; re-normalize and try again."],
+            variations=["Hidden tang", "Drop point vs clip point"],
+            source_references=[]
         ).model_dump(),
     )
 ]

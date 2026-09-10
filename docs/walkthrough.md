@@ -607,3 +607,14 @@ Implemented structured workshop knowledge covering tool selection criteria, appr
 
 
 
+
+## Milestone 19 — Projects Library
+
+Implemented progressive hands-on workshop projects:
+
+- **19.01 Project Model**: Extended models to include `ProjectStep` with duration and warnings, and linked materials/tools.
+- **19.02 Beginner Project**: Seeded Classic Blacksmith's S-Hook.
+- **19.03 Intermediate Project**: Seeded Wolf Jaw Tongs.
+- **19.04 Advanced Project**: Seeded High Carbon Camp Knife.
+- **19.05 Project Navigation**: Created `frontend/app/projects/page.tsx` library grid with difficulty filters.
+- **19.06 Related Materials/Tools**: Displayed tools and materials clearly on the project detail page at `frontend/app/projects/[slug]/page.tsx`.
