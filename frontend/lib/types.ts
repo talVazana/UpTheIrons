@@ -67,13 +67,23 @@ export interface ContentEnvelope<T = Record<string, unknown>> {
   metadata: T;
 }
 
+export interface TemperingPoint {
+  temp_f: number;
+  hrc: string;
+  toughness: string;
+  color: string;
+}
+
 export interface HeatTreatmentRecipe {
   normalizing_temp_f?: number | null;
   annealing_temp_f?: number | null;
   hardening_temp_f?: number | null;
+  decalescence_temp_f?: number | null;
+  soak_time_minutes?: number | null;
   quench_medium?: string | null;
   tempering_range_f?: string | null;
   target_hardness_hrc?: string | null;
+  tempering_table?: TemperingPoint[] | null;
   notes?: string | null;
 }
 
@@ -81,12 +91,55 @@ export interface MaterialMetadata {
   classification: string;
   carbon_pct: number;
   alloying_elements: Record<string, number>;
+  steel_category?: string;
   forging_temp_range_f?: string | null;
   heat_treatment?: HeatTreatmentRecipe | null;
+  spark_testing_profile?: string | null;
+  grinding_characteristics?: string | null;
+  weldability?: string | null;
+  corrosion_resistance?: string | null;
+  confidence_score?: number;
+  confidence_level?: string;
   beginner_suitability: boolean;
   common_applications: string[];
   common_mistakes: string[];
   source_reference?: string | null;
+  source_metadata?: Record<string, string>;
+}
+
+export interface MaterialItem extends ContentEnvelope<MaterialMetadata> {}
+
+export interface MaterialListResponse {
+  materials: MaterialItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface MaterialComparisonItem {
+  id: string;
+  slug: string;
+  title: string;
+  classification: string;
+  steel_category: string;
+  carbon_pct: number;
+  alloying_elements: Record<string, number>;
+  forging_temp_range_f?: string | null;
+  hardening_temp_f?: number | null;
+  quench_medium?: string | null;
+  target_hardness_hrc?: string | null;
+  beginner_suitability: boolean;
+  confidence_score: number;
+  confidence_level: string;
+  source_reference?: string | null;
+}
+
+export interface MaterialComparisonResponse {
+  items: MaterialComparisonItem[];
+  compared_elements: string[];
+  toughness_rank: string[];
+  edge_retention_rank: string[];
+  quench_speed_summary: Record<string, string>;
 }
 
 export interface VideoMetadata {

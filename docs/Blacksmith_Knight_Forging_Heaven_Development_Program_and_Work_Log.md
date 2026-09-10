@@ -2010,30 +2010,66 @@ Add
 **Goal:** Build a trustworthy technical material reference.
 
 ## 17.01 Material Model
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created `MaterialMetadata` model in [`backend/app/models/content.py`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) and synchronized TypeScript type in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts). Model captures material classification, carbon percentage, nominal alloying elements, steel category (`carbon_steel`, `tool_steel`, `spring_steel`, `alloy_steel`, `stainless_steel`), forging thermal range, spark testing profile, grindability, weldability, corrosion resistance, beginner suitability, applications, mistakes, and source references.
+- **Tests:** Verified via `test_17_01_17_02_material_and_steel_model` in [`tests/backend/test_materials.py`](file:///C:/Doron/UpTheIrons/tests/backend/test_materials.py).
 
 ## 17.02 Steel Model
+- **Status:** ✅ COMPLETE
+- **Implementation:** Integrated `HeatTreatmentRecipe` model specifying normalizing temp, annealing temp, hardening/austenitizing temp, decalescence line, soak time in minutes, quench medium, target hardness range (HRC), tempering range, and calibrated `tempering_table` entries with temper oxidation colors.
+- **Tests:** Verified via `test_17_01_17_02_material_and_steel_model` and `test_17_06_17_07_composition_and_heat_treatment_display`.
 
 ## 17.03 Source Metadata
+- **Status:** ✅ COMPLETE
+- **Implementation:** Implemented strict metallurgical provenance in `MaterialMetadata`: `source_reference` (mandatory citing of ASM, ASTM, or SAE standards), `confidence_score` (0.0 to 1.0), `confidence_level` (`handbook_verified`, `manufacturer_spec`, `empirical_test`), and `source_metadata` mapping AISI and UNS designations. Rejects creations lacking verifiable citations per Metallurgical Standard.
+- **Tests:** Verified via `test_create_material_and_validation` rejecting inputs without verified source reference.
 
 ## 17.04 One Steel Record
-
-Start with one carefully sourced example.
+- **Status:** ✅ COMPLETE
+- **Implementation:** Seeded 5 authoritative metallurgical alloys in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py):
+  1. `1084 High Carbon Steel` (eutectoid ~0.84% C, beginner benchmark, cited ASM Vol 1)
+  2. `1095 High Carbon Steel` (hypereutectoid ~0.95% C, high keeness/hamon, cited ASM Vol 4)
+  3. `5160 Spring Steel` (shock-resistant ~0.60% C, 0.80% Cr, cited SAE J403)
+  4. `O1 Tool Steel` (oil-hardening cold work tool steel, W/V carbides, cited ASTM A681)
+  5. `W1 Tool Steel` (shallow-hardening water/fast-oil steel ~1.00% C, cited ASTM standards)
+- **Tests:** Verified via `test_17_04_17_05_seeded_steels_retrieval`.
 
 ## 17.05 Material Page
+- **Status:** ✅ COMPLETE
+- **Implementation:** Created responsive Next.js catalog page in [`frontend/app/materials/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/materials/page.tsx) and detailed individual alloy dossier route in [`frontend/app/materials/[slug]/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/materials/[slug]/page.tsx). Renders forge-themed cards with carbon bar indicator, alloy badges, thermal specs, and beginner guidance.
+- **Tests:** Verified via successful Next.js production build (`npm --prefix frontend run build`).
 
 ## 17.06 Composition Display
+- **Status:** ✅ COMPLETE
+- **Implementation:** Built [`frontend/components/materials/CompositionBreakdown.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/CompositionBreakdown.tsx). Features an alloy bar visualizer illustrating nominal element percentages against the iron balance, alongside metallurgical cards explaining the chemical role of each alloy (Carbon for martensite, Chromium for hardenability, Manganese for quench depth, Vanadium/Tungsten for wear-resistant carbides, Silicon for elastic limit).
+- **Tests:** Verified via `test_17_06_17_07_composition_and_heat_treatment_display`.
 
 ## 17.07 Heat Treatment Display
-
-Only display values with appropriate source/qualification.
+- **Status:** ✅ COMPLETE
+- **Implementation:** Built [`frontend/components/materials/HeatTreatmentProtocol.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/HeatTreatmentProtocol.tsx). Visualizes the 4 thermal phases (Normalizing, Annealing, Austenitizing/Decalescence, and Quenching) with quench medium safety warnings and an interactive tempering curve table mapping oven temperatures to HRC, toughness, and oxidation temper colors (Pale Straw, Straw, Dark Straw, Purple, Blue).
+- **Tests:** Verified via `test_17_06_17_07_composition_and_heat_treatment_display`.
 
 ## 17.08 Confidence / Source Handling
+- **Status:** ✅ COMPLETE
+- **Implementation:** Integrated trust indicators, handbook verification badges (`⚖ Handbook Verified 99%`), and explicit ASTM/SAE/AISI citations. High-visibility warnings warn smiths against using unverified scrap or overheating hypereutectoid alloys.
+- **Tests:** Verified via `test_create_material_and_validation` and UI rendering.
 
 ## 17.09 Material Search
+- **Status:** ✅ COMPLETE
+- **Implementation:** Implemented multi-criteria search and filtering in `backend/app/api/v1/materials.py`:
+  - `steel_category` filter (`carbon_steel`, `tool_steel`, `spring_steel`, etc.)
+  - `beginner_friendly` boolean toggle
+  - `min_carbon` and `max_carbon` percentage range bounds
+  - `q` full-text search scanning designations, classifications, summaries, applications, mistakes, and tags
+  - Connected live to interactive filter controls in [`frontend/app/materials/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/materials/page.tsx).
+- **Tests:** Verified via `test_17_09_material_search_and_filtering`.
 
 ## 17.10 Material Comparison Foundation
-
-Comparison can initially be deterministic.
+- **Status:** ✅ COMPLETE
+- **Implementation:** Built deterministic multi-steel comparison engine:
+  - Backend endpoint `GET /api/v1/materials/compare?ids=1084,1095,5160` generates side-by-side composition matrix, edge retention ranking (correlating to carbon & carbide volume), impact toughness ranking (correlating to lower carbon & chromium shock resistance), and quench speed summaries.
+  - Frontend comparison modal in [`frontend/components/materials/MaterialComparisonModal.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/MaterialComparisonModal.tsx) triggered from floating selection tray when 2 to 4 steels are selected.
+- **Tests:** Verified via `test_17_10_material_comparison_foundation` and `test_material_comparison_validation`.
 
 ---
 

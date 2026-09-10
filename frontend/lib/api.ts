@@ -2,7 +2,15 @@
  * API client for Blacksmith Knight backend.
  */
 
-import type { ContentEnvelope, GuideMetadata, TrustLabel } from "./types";
+import type {
+  ContentEnvelope,
+  GuideMetadata,
+  TrustLabel,
+  MaterialItem,
+  MaterialListResponse,
+  MaterialComparisonResponse,
+  MaterialMetadata,
+} from "./types";
 
 export const BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
@@ -893,5 +901,61 @@ export async function createGuide(payload: {
   });
 }
 
+export async function fetchMaterials(params?: {
+  steel_category?: string;
+  beginner_friendly?: boolean;
+  min_carbon?: number;
+  max_carbon?: number;
+  q?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<MaterialListResponse> {
+  const query = new URLSearchParams();
+  if (params?.steel_category && params.steel_category !== "all") query.append("steel_category", params.steel_category);
+  if (params?.beginner_friendly !== undefined && params.beginner_friendly !== null) {
+    query.append("beginner_friendly", params.beginner_friendly.toString());
+  }
+  if (params?.min_carbon !== undefined && params.min_carbon !== null) {
+    query.append("min_carbon", params.min_carbon.toString());
+  }
+  if (params?.max_carbon !== undefined && params.max_carbon !== null) {
+    query.append("max_carbon", params.max_carbon.toString());
+  }
+  if (params?.q) query.append("q", params.q);
+  if (params?.limit) query.append("limit", params.limit.toString());
+  if (params?.offset) query.append("offset", params.offset.toString());
 
+  const qs = query.toString();
+  return fetchApi<MaterialListResponse>(`/api/v1/materials${qs ? `?${qs}` : ""}`, {
+    cache: "no-store",
+  });
+}
 
+export async function fetchMaterialBySlug(slugOrId: string): Promise<MaterialItem> {
+  return fetchApi<MaterialItem>(`/api/v1/materials/${encodeURIComponent(slugOrId)}`, {
+    cache: "no-store",
+  });
+}
+
+export async function compareMaterials(ids: string[]): Promise<MaterialComparisonResponse> {
+  const idsParam = ids.map((id) => id.trim()).join(",");
+  return fetchApi<MaterialComparisonResponse>(`/api/v1/materials/compare?ids=${encodeURIComponent(idsParam)}`, {
+    cache: "no-store",
+  });
+}
+
+export async function createMaterial(payload: {
+  title: string;
+  slug?: string;
+  summary: string;
+  category?: string;
+  tags?: string[];
+  difficulty?: string;
+  status?: string;
+  metadata: MaterialMetadata;
+}): Promise<MaterialItem> {
+  return fetchApi<MaterialItem>("/api/v1/materials", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}

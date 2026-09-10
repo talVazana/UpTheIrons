@@ -535,6 +535,38 @@ Implemented the static/editorial knowledge library foundation, Technical Trust C
   - Backend test suite: 85 passed in 2.90s (`pytest tests/backend -v`).
   - Frontend production build: all 13 routes compiled cleanly (`npm --prefix frontend run build`, exit code 0).
 
+---
+
+## Milestone 17 — Material & Steel Library
+
+Implemented the complete technical metallurgy vault, chemical composition breakdown, four-phase heat treatment protocols, spark testing profiles, side-by-side multi-steel comparison engine, and responsive frontend catalog and dossier views:
+
+- **17.01 - 17.03 Metallurgical Domain Models & Standard Provenance**:
+  - Created [`MaterialMetadata`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) and [`HeatTreatmentRecipe`](file:///C:/Doron/UpTheIrons/backend/app/models/content.py) in backend, synchronized in [`frontend/lib/types.ts`](file:///C:/Doron/UpTheIrons/frontend/lib/types.ts).
+  - Captures carbon percentages, alloying elements map, steel category (`carbon_steel`, `tool_steel`, `spring_steel`, etc.), forging thermal ranges, quench speed and mediums, and ASTM/SAE standard cross-references.
+  - Enforced strict validation requiring peer-reviewed metallurgical handbook citations for all created materials.
+- **17.04 Seeded Metallurgy Vault**:
+  - Authored and seeded 5 authoritative reference alloys in [`backend/app/models/seed.py`](file:///C:/Doron/UpTheIrons/backend/app/models/seed.py):
+    - `1084 High Carbon Steel` (`mat-1084`): Eutectoid carbon benchmark (~0.84% C), beginner-friendly, oil quench.
+    - `1095 High Carbon Steel` (`mat-1095`): Hypereutectoid carbon steel (~0.95% C), fast oil quench (Parks 50), hamon activity.
+    - `5160 Spring Steel` (`mat-5160`): Tough chromium spring alloy (~0.60% C, 0.80% Cr), deep hardenability, shock choppers.
+    - `O1 Tool Steel` (`mat-o1`): Oil-hardening cold work tool steel (W, V carbides), 10 min soak time, keen edge stability.
+    - `W1 Tool Steel` (`mat-w1`): High-carbon water/fast-oil steel (~1.00% C), shallow-hardening shock core.
+- **17.05 - 17.08 Frontend Metallurgy Dossier & Interactive Protocols**:
+  - Created [`frontend/components/materials/CompositionBreakdown.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/CompositionBreakdown.tsx): visual percentage bar displaying nominal elements against the iron matrix with educational cards explaining the metallurgical role of each element (martensite formation, grain refinement, quench depth, wear resistance).
+  - Created [`frontend/components/materials/HeatTreatmentProtocol.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/HeatTreatmentProtocol.tsx): 4-phase thermal cycle timeline (Normalizing, Annealing, Austenitizing/Decalescence line, Quenching) and a calibrated tempering schedule table mapping temperatures to HRC, toughness, and oxide colors.
+  - Created [`frontend/components/materials/SparkProfileCard.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/SparkProfileCard.tsx): diagnostic spark testing guide for workshop identification of mystery steel.
+  - Created [`frontend/components/materials/MaterialCard.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/MaterialCard.tsx): catalog card with carbon visualizer, key alloy chips, thermal specs, beginner suitability badge, and comparison selector checkbox.
+  - Created [`frontend/app/materials/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/materials/page.tsx): dynamic catalog with category tabs, beginner-friendly filter, carbon % presets, live search query, and floating comparison tray.
+  - Created [`frontend/app/materials/[slug]/page.tsx`](file:///C:/Doron/UpTheIrons/frontend/app/materials/[slug]/page.tsx): comprehensive single-steel technical dossier.
+- **17.09 & 17.10 Multi-Criteria Search & Deterministic Steel Comparison**:
+  - Implemented `GET /api/v1/materials` supporting category, carbon range, beginner toggle, and full-text search.
+  - Implemented `GET /api/v1/materials/compare?ids=1084,1095,5160`: compares 2–4 steels side-by-side, generating composition matrices, edge retention rankings, and impact toughness rankings.
+  - Created [`frontend/components/materials/MaterialComparisonModal.tsx`](file:///C:/Doron/UpTheIrons/frontend/components/materials/MaterialComparisonModal.tsx): modal providing side-by-side metallurgical property tables and comparative rankings.
+- **Milestone Quality Gate**:
+  - Backend test suite: 92 passed in 3.00s (`pytest tests/backend -v`).
+  - Frontend production build: all routes compiled cleanly including `○ /materials` and `ƒ /materials/[slug]` (`npm --prefix frontend run build`, exit code 0).
+
 
 
 
