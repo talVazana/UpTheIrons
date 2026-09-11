@@ -631,3 +631,19 @@ Implemented global search and filtering. Created search.py. M21 complete.
 
 Implemented sync logs monitoring. Created sync_logs.py. M22 complete.
 
+
+---
+
+## Milestone 18 — Admin Authentication & Rebranding
+
+Implemented the initial Admin settings portal and visual branding updates:
+
+- **18.01 Rebranding**:
+  - Replaced all occurrences of "Blacksmith Knight" with "Kiko's BlackSmith Heaven" across the application.
+  - Replaced legacy images (hero_forge.jpg, 	ools_workshop.jpg, ideo_forge.jpg) with new images keeping the forge motive but strictly removing human figures.
+- **18.02 Admin Authentication**:
+  - Created ackend/app/api/v1/auth.py providing /login, /change-password, and /verify.
+  - Added simple MVP session tracking and Firestore fallback for credentials (default Kiko / Kiko).
+- **18.03 Admin Portal UI**:
+  - Created rontend/app/admin/page.tsx for login and password management.
+  - Added a floating kiko.png logo button to the main page to access the admin portal.

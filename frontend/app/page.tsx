@@ -3,7 +3,10 @@ import Image from "next/image";
 
 export default function HomePage() {
   return (
-    <div className="bg-[var(--bg-primary)] text-[var(--text-primary)] min-h-screen">
+    <div className="bg-[var(--bg-primary)] text-[var(--text-primary)] min-h-screen relative">
+      <Link href="/admin" className="fixed bottom-4 right-4 z-50 bg-[var(--bg-surface)] border border-[var(--border-muted)] p-2 rounded-full hover:border-[var(--accent-forge)] shadow-lg shadow-black/50 transition-colors">
+        <Image src="/kiko.png" alt="Admin Login" width={32} height={32} className="object-contain" />
+      </Link>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         {/* Forge Pillars Section */}
         <section className="mb-20">

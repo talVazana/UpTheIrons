@@ -3519,3 +3519,12 @@ And above all:
 - Set up basic E2E and regression testing foundation.
 - Validated core flows against Firebase local emulators.
 
+
+---
+
+### Milestone 18 — Admin Authentication & Rebranding (COMPLETE)
+[x] Replace website title and references with Kiko's BlackSmith Heaven.
+[x] Update imagery to remove human figures while maintaining forge atmosphere.
+[x] Build POST /api/v1/auth/login and /change-password endpoints.
+[x] Build frontend /admin login page and change password form.
+[x] Add Kiko logo floating button to the home page for admin access.
