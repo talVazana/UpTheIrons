@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -6,9 +7,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 text-white font-bold text-base mb-2">
-              <span className="text-[#FF5722] text-lg">&#x2692;</span>
-              <span>Blacksmith Knight — Forging Heaven</span>
+            <div className="flex items-center gap-3 text-white font-bold text-base mb-2">
+              <div className="relative w-8 h-8">
+                <Image src="/kiko.png" alt="Blacksmith Knight Logo" fill className="object-contain" />
+              </div>
+              <span>Blacksmith Knight &mdash; Forging Heaven</span>
             </div>
             <p className="text-sm text-neutral-400 max-w-md leading-relaxed mb-4">
               A digital blacksmith&apos;s workshop, knowledge vault, and technical reference for

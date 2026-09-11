@@ -1,217 +1,200 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-      {/* Hero Section */}
-      <section className="relative rounded-2xl border border-neutral-800 bg-gradient-to-b from-neutral-900/90 via-[#161616] to-[#121212] p-8 sm:p-12 mb-16 overflow-hidden">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-[#FF5722]/5 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#FF5722] bg-[#FF5722]/10 border border-[#FF5722]/20 rounded-full mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722] animate-pulse"></span>
-            The Digital Forge &amp; Knowledge Vault
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-            Knowledge, Steel, <br className="hidden sm:inline" />
-            Fire &amp; Craftsmanship.
-          </h1>
-
-          <p className="text-base sm:text-xl text-neutral-300 mb-8 leading-relaxed">
-            A digital blacksmith&apos;s workshop and engineering reference designed for amateur makers.
-            Learn the craft, understand the metallurgy, build your workshop, and forge your own path.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/materials"
-              className="inline-flex items-center justify-center rounded-lg bg-[#FF5722] px-5 py-3 text-sm font-semibold text-white hover:bg-[#FF7043] transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722] shadow-lg shadow-[#FF5722]/20"
-            >
-              Explore Materials
-            </Link>
-
-            <Link
-              href="/projects"
-              className="inline-flex items-center justify-center rounded-lg border border-neutral-700 bg-neutral-850 px-5 py-3 text-sm font-semibold text-neutral-200 hover:bg-neutral-800 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722]"
-            >
-              Apprentice Projects
-            </Link>
-
-            <Link
-              href="/guides"
-              className="inline-flex items-center justify-center rounded-lg border border-transparent px-5 py-3 text-sm font-semibold text-neutral-400 hover:text-white transition-colors"
-            >
-              Read Guides &rarr;
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Bento Pillars Section */}
-      <section className="mb-16">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              The Forge Pillars
+    <div className="bg-[var(--bg-primary)] text-[var(--text-primary)] min-h-screen">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        {/* Forge Pillars Section */}
+        <section className="mb-20">
+          <div className="mb-10">
+            <div className="text-xs font-bold uppercase tracking-widest text-[var(--accent-forge)] mb-2">
+              THE DIGITAL WORKSHOP
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
+              THE FORGE
             </h2>
-            <p className="text-sm text-neutral-400 mt-1">
-              Explore technical references, curated videos, and hands-on projects.
+            <p className="text-base text-[var(--text-secondary)] mt-2">
+              Six foundations of the craft.
             </p>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: Materials */}
-          <Link
-            href="/materials"
-            className="group rounded-xl border border-neutral-800 bg-[#171717] p-6 hover:border-[#FF5722]/50 hover:bg-[#1c1c1c] transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="text-xs font-mono uppercase text-[#FF5722] mb-2 tracking-wider">
-                01 &bull; Metallurgy
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Card 1: Materials */}
+            <Link
+              href="/materials"
+              className="group relative rounded-sm border-[4px] border-[var(--border-focus)] shadow-2xl shadow-black/60 relative before:absolute before:inset-1 before:border before:border-[var(--border-muted)] before:pointer-events-none bg-[var(--bg-card)] overflow-hidden hover:border-[var(--border-focus)] transition-all flex flex-col"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image src="/images/materials_steel.jpg" alt="Materials and Steel" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF5722] transition-colors">
-                Materials &amp; Steel Database
-              </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                Chemical compositions, carbon percentages, heating ranges, quenching media, and predictable heat treatment.
-              </p>
-            </div>
-            <div className="mt-6 text-xs text-neutral-500 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>Inspect steels</span> &rarr;
-            </div>
-          </Link>
-
-          {/* Card 2: Videos */}
-          <Link
-            href="/videos"
-            className="group rounded-xl border border-neutral-800 bg-[#171717] p-6 hover:border-[#FF5722]/50 hover:bg-[#1c1c1c] transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="text-xs font-mono uppercase text-[#FF5722] mb-2 tracking-wider">
-                02 &bull; Visual Learning
+              <div className="p-6 relative z-10 flex-grow flex flex-col justify-end -mt-16">
+                <div className="text-xs font-mono uppercase text-[var(--accent-forge)] mb-2 tracking-wider">
+                  01 &middot; METALLURGY
+                </div>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-forge)] transition-colors">
+                  Materials &amp; Steel
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Chemical compositions, heat treatment, and predictable metallurgy.
+                </p>
+                <div className="mt-auto text-xs text-[var(--text-muted)] font-medium flex items-center gap-1 group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all">
+                  EXPLORE &rarr;
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF5722] transition-colors">
-                Curated Video Forge
-              </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                Controlled YouTube ingestion strictly from master smith channels you approve. No noise, no open crawler spam.
-              </p>
-            </div>
-            <div className="mt-6 text-xs text-neutral-500 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>View channels</span> &rarr;
-            </div>
-          </Link>
+            </Link>
 
-          {/* Card 3: Guides */}
-          <Link
-            href="/guides"
-            className="group rounded-xl border border-neutral-800 bg-[#171717] p-6 hover:border-[#FF5722]/50 hover:bg-[#1c1c1c] transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="text-xs font-mono uppercase text-[#FF5722] mb-2 tracking-wider">
-                03 &bull; Technique
+            {/* Card 2: Videos */}
+            <Link
+              href="/videos"
+              className="group relative rounded-sm border-[4px] border-[var(--border-focus)] shadow-2xl shadow-black/60 relative before:absolute before:inset-1 before:border before:border-[var(--border-muted)] before:pointer-events-none bg-[var(--bg-card)] overflow-hidden hover:border-[var(--border-focus)] transition-all flex flex-col"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image src="/images/video_forge.jpg" alt="Video Forge" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF5722] transition-colors">
-                Knowledge &amp; Technique Guides
-              </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                Progressive disclosure: simple explanation first, practical steps second, and deep metallurgical mechanics third.
-              </p>
-            </div>
-            <div className="mt-6 text-xs text-neutral-500 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>Read guides</span> &rarr;
-            </div>
-          </Link>
-
-          {/* Card 4: Projects */}
-          <Link
-            href="/projects"
-            className="group rounded-xl border border-neutral-800 bg-[#171717] p-6 hover:border-[#FF5722]/50 hover:bg-[#1c1c1c] transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="text-xs font-mono uppercase text-[#FF5722] mb-2 tracking-wider">
-                04 &bull; Progression
+              <div className="p-6 relative z-10 flex-grow flex flex-col justify-end -mt-16">
+                <div className="text-xs font-mono uppercase text-[var(--accent-forge)] mb-2 tracking-wider">
+                  02 &middot; VISUAL LEARNING
+                </div>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-forge)] transition-colors">
+                  Curated Video Forge
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Controlled YouTube ingestion from master smiths.
+                </p>
+                <div className="mt-auto text-xs text-[var(--text-muted)] font-medium flex items-center gap-1 group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all">
+                  EXPLORE &rarr;
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF5722] transition-colors">
-                Apprentice Projects
-              </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                Step-by-step projects from Level 1 S-hooks and leaves to Level 4 pattern welding and complex tool making.
-              </p>
-            </div>
-            <div className="mt-6 text-xs text-neutral-500 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>Start forging</span> &rarr;
-            </div>
-          </Link>
+            </Link>
 
-          {/* Card 5: Workshop & Tools */}
-          <Link
-            href="/tools"
-            className="group rounded-xl border border-neutral-800 bg-[#171717] p-6 hover:border-[#FF5722]/50 hover:bg-[#1c1c1c] transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="text-xs font-mono uppercase text-[#FF5722] mb-2 tracking-wider">
-                05 &bull; Equipment
+            {/* Card 3: Guides */}
+            <Link
+              href="/guides"
+              className="group relative rounded-sm border-[4px] border-[var(--border-focus)] shadow-2xl shadow-black/60 relative before:absolute before:inset-1 before:border before:border-[var(--border-muted)] before:pointer-events-none bg-[var(--bg-card)] overflow-hidden hover:border-[var(--border-focus)] transition-all flex flex-col"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image src="/images/knowledge_guides.jpg" alt="Technique Guides" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF5722] transition-colors">
-                Tools &amp; Workshop Setup
-              </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                Anvil anatomy, hammer selection, tong geometries, forge ventilation, and practical workshop construction advice.
-              </p>
-            </div>
-            <div className="mt-6 text-xs text-neutral-500 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>Examine tools</span> &rarr;
-            </div>
-          </Link>
-
-          {/* Card 6: Rules & Safety */}
-          <Link
-            href="/rules"
-            className="group rounded-xl border border-neutral-800 bg-[#171717] p-6 hover:border-[#FF5722]/50 hover:bg-[#1c1c1c] transition-all flex flex-col justify-between"
-          >
-            <div>
-              <div className="text-xs font-mono uppercase text-[#FF5722] mb-2 tracking-wider">
-                06 &bull; Codex
+              <div className="p-6 relative z-10 flex-grow flex flex-col justify-end -mt-16">
+                <div className="text-xs font-mono uppercase text-[var(--accent-forge)] mb-2 tracking-wider">
+                  03 &middot; TECHNIQUE
+                </div>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-forge)] transition-colors">
+                  Knowledge Guides
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Progressive disclosure: simple explanations to deep mechanics.
+                </p>
+                <div className="mt-auto text-xs text-[var(--text-muted)] font-medium flex items-center gap-1 group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all">
+                  READ GUIDE &rarr;
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#FF5722] transition-colors">
-                Safety &amp; Rules Codex
-              </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
-                The non-commercial manifesto, safety protocols, controlled source architecture, and anti-hallucination rules.
-              </p>
-            </div>
-            <div className="mt-6 text-xs text-neutral-500 font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>Read rules</span> &rarr;
-            </div>
-          </Link>
-        </div>
-      </section>
+            </Link>
 
-      {/* Apprentice Note Banner */}
-      <section className="rounded-xl border border-neutral-800 bg-[#151515] p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div>
-          <div className="text-xs font-bold uppercase tracking-wider text-[#FF5722] mb-1">
-            The Apprentice&apos;s Rule
+            {/* Card 4: Projects */}
+            <Link
+              href="/projects"
+              className="group relative rounded-sm border-[4px] border-[var(--border-focus)] shadow-2xl shadow-black/60 relative before:absolute before:inset-1 before:border before:border-[var(--border-muted)] before:pointer-events-none bg-[var(--bg-card)] overflow-hidden hover:border-[var(--border-focus)] transition-all flex flex-col"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image src="/images/apprentice_projects.jpg" alt="Apprentice Projects" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent" />
+              </div>
+              <div className="p-6 relative z-10 flex-grow flex flex-col justify-end -mt-16">
+                <div className="text-xs font-mono uppercase text-[var(--accent-forge)] mb-2 tracking-wider">
+                  04 &middot; PROGRESSION
+                </div>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-forge)] transition-colors">
+                  Apprentice Projects
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Step-by-step projects from Level 1 to Level 4 pattern welding.
+                </p>
+                <div className="mt-auto text-xs text-[var(--text-muted)] font-medium flex items-center gap-1 group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all">
+                  EXPLORE &rarr;
+                </div>
+              </div>
+            </Link>
+
+            {/* Card 5: Tools */}
+            <Link
+              href="/tools"
+              className="group relative rounded-sm border-[4px] border-[var(--border-focus)] shadow-2xl shadow-black/60 relative before:absolute before:inset-1 before:border before:border-[var(--border-muted)] before:pointer-events-none bg-[var(--bg-card)] overflow-hidden hover:border-[var(--border-focus)] transition-all flex flex-col md:col-span-2 lg:col-span-1"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image src="/images/tools_workshop.jpg" alt="Tools and Workshop" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent" />
+              </div>
+              <div className="p-6 relative z-10 flex-grow flex flex-col justify-end -mt-16">
+                <div className="text-xs font-mono uppercase text-[var(--accent-forge)] mb-2 tracking-wider">
+                  05 &middot; EQUIPMENT
+                </div>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-forge)] transition-colors">
+                  Tools &amp; Workshop
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Anvil anatomy, hammer selection, and workshop construction advice.
+                </p>
+                <div className="mt-auto text-xs text-[var(--text-muted)] font-medium flex items-center gap-1 group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all">
+                  EXPLORE &rarr;
+                </div>
+              </div>
+            </Link>
+
+            {/* Card 6: Rules */}
+            <Link
+              href="/rules"
+              className="group relative rounded-sm border-[4px] border-[var(--border-focus)] shadow-2xl shadow-black/60 relative before:absolute before:inset-1 before:border before:border-[var(--border-muted)] before:pointer-events-none bg-[var(--bg-card)] overflow-hidden hover:border-[var(--border-focus)] transition-all flex flex-col md:col-span-2 lg:col-span-1"
+            >
+              <div className="relative aspect-video w-full overflow-hidden">
+                <Image src="/images/safety_rules.jpg" alt="Safety and Rules" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent" />
+              </div>
+              <div className="p-6 relative z-10 flex-grow flex flex-col justify-end -mt-16">
+                <div className="text-xs font-mono uppercase text-[var(--accent-forge)] mb-2 tracking-wider">
+                  06 &middot; CODEX
+                </div>
+                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2 group-hover:text-[var(--accent-forge)] transition-colors">
+                  Safety &amp; Rules
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed mb-4">
+                  Safety protocols, controlled sources, and anti-hallucination rules.
+                </p>
+                <div className="mt-auto text-xs text-[var(--text-muted)] font-medium flex items-center gap-1 group-hover:text-[var(--text-primary)] group-hover:translate-x-1 transition-all">
+                  READ RULES &rarr;
+                </div>
+              </div>
+            </Link>
           </div>
-          <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-            You do not need an expensive shop to start learning.
-          </h3>
-          <p className="text-sm text-neutral-400 max-w-2xl">
-            A solid striking surface, a 2 lb cross-peen hammer, basic tongs, personal protective equipment,
-            and a small fire are all that is required to move hot steel.
-          </p>
-        </div>
+        </section>
 
-        <Link
-          href="/workshop"
-          className="shrink-0 rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2 text-sm font-semibold text-neutral-200 hover:bg-neutral-700 hover:text-white transition-colors"
-        >
-          View Minimum Setup
-        </Link>
-      </section>
+        {/* Apprentice Note Banner */}
+        <section className="rounded-sm bg-[var(--bg-surface)] border-l-4 border-[var(--accent-forge)] p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8 shadow-xl">
+          <div className="max-w-3xl">
+            <div className="text-xs font-bold uppercase tracking-widest text-[var(--accent-forge)] mb-2">
+              THE APPRENTICE'S RULE
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)] mb-4">
+              You do not need an expensive shop to start learning.
+            </h3>
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed">
+              A solid striking surface, a 2 lb cross-peen hammer, basic tongs, and a small fire are enough to begin.
+            </p>
+          </div>
+
+          <Link
+            href="/workshop"
+            className="shrink-0 inline-flex items-center justify-center rounded-md border border-[var(--border-muted)] bg-[var(--bg-card)] px-6 py-3 text-sm font-bold text-[var(--text-primary)] hover:border-[var(--border-focus)] hover:bg-[var(--bg-surface-hover)] hover:text-white transition-all"
+          >
+            VIEW MINIMUM SETUP &rarr;
+          </Link>
+        </section>
+
+      </div>
     </div>
   );
 }

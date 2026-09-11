@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BackendStatusBadge } from "@/components/workshop/BackendStatusBadge";
@@ -36,8 +37,13 @@ export function Navbar() {
           href="/"
           className="flex items-center gap-3 rounded-md px-2 py-1 text-white hover:text-[#FF5722] transition-colors focus-visible:ring-2 focus-visible:ring-[#FF5722]"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#FF5722]/10 border border-[#FF5722]/30 text-[#FF5722] font-bold text-base">
-            &#x2692;
+          <div className="flex items-center justify-center relative w-10 h-10 overflow-hidden">
+            <Image 
+              src="/kiko.png" 
+              alt="Blacksmith Knight Logo" 
+              fill
+              className="object-contain"
+            />
           </div>
           <div className="flex flex-col">
             <span className="font-extrabold tracking-tight text-sm sm:text-base leading-tight">
