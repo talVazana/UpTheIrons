@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Search Knowledge Vault — Blacksmith Knight",
+  title: "Search Knowledge Vault — Kiko's BlackSmith Heaven",
   description: "Search across materials, steels, videos, guides, projects, and workshop tools.",
 };
 

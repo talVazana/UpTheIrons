@@ -40,17 +40,14 @@ export function Navbar() {
           <div className="flex items-center justify-center relative w-10 h-10 overflow-hidden">
             <Image 
               src="/kiko.png" 
-              alt="Blacksmith Knight Logo" 
+              alt="Kiko's BlackSmith Heaven Logo" 
               fill
               className="object-contain"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex items-center gap-2">
             <span className="font-extrabold tracking-tight text-sm sm:text-base leading-tight">
-              Blacksmith Knight
-            </span>
-            <span className="text-[10px] tracking-widest uppercase text-neutral-400">
-              Forging Heaven
+              Kiko's BlackSmith Heaven
             </span>
           </div>
         </Link>

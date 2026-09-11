@@ -9,9 +9,9 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 text-white font-bold text-base mb-2">
               <div className="relative w-8 h-8">
-                <Image src="/kiko.png" alt="Blacksmith Knight Logo" fill className="object-contain" />
+                <Image src="/kiko.png" alt="Kiko's BlackSmith Heaven Logo" fill className="object-contain" />
               </div>
-              <span>Blacksmith Knight &mdash; Forging Heaven</span>
+              <span>Kiko's BlackSmith Heaven</span>
             </div>
             <p className="text-sm text-neutral-400 max-w-md leading-relaxed mb-4">
               A digital blacksmith&apos;s workshop, knowledge vault, and technical reference for
@@ -86,7 +86,7 @@ export function Footer() {
 
         <div className="border-t border-neutral-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
           <p>
-            &copy; {new Date().getFullYear()} Blacksmith Knight. Knowledge shared for the love of the craft.
+            &copy; {new Date().getFullYear()} Kiko's BlackSmith Heaven. Knowledge shared for the love of the craft.
           </p>
           <div className="flex items-center gap-2 text-neutral-400 text-xs">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>

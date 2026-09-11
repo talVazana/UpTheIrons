@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   try {
     const project = await getProject(params.slug);
     return {
-      title: `${project.title} ?" Blacksmith Knight`,
+      title: `${project.title} ?" Kiko's BlackSmith Heaven`,
       description: project.summary,
     };
   } catch {

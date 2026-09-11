@@ -143,7 +143,7 @@ export default function SourcesPage() {
       <div className="rounded-xl border border-neutral-800 bg-[#161616] p-4 mb-8 flex items-start gap-3">
         <div className="text-[#FF5722] text-lg font-bold">&#x26A0;</div>
         <div className="text-xs text-neutral-400 leading-relaxed">
-          <strong className="text-white">Strict No-Crawling Policy:</strong> Blacksmith Knight does not perform open-web crawling or autonomous source discovery. External data is acquired deterministically only from the sources explicitly enabled below.
+          <strong className="text-white">Strict No-Crawling Policy:</strong> Kiko's BlackSmith Heaven does not perform open-web crawling or autonomous source discovery. External data is acquired deterministically only from the sources explicitly enabled below.
         </div>
       </div>
 

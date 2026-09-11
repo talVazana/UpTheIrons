@@ -24,7 +24,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
   const meta = guide.metadata || {
     reading_time_minutes: 5,
     trust_label: "craft_practice",
-    author: "Blacksmith Knight Guild",
+    author: "Kiko's BlackSmith Heaven Guild",
     version: "1.0",
     content_markdown: "",
     source_references: [],

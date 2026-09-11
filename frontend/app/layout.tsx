@@ -4,7 +4,7 @@ import { Navbar } from "@/components/navigation/Navbar";
 import { Footer } from "@/components/navigation/Footer";
 
 export const metadata: Metadata = {
-  title: "Blacksmith Knight — Forging Heaven",
+  title: "Kiko's BlackSmith Heaven",
   description:
     "A personal, amateur-friendly digital home for blacksmithing, bladesmithing, metallurgy, heat treatment, and practical workshop knowledge.",
 };

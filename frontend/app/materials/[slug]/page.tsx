@@ -15,12 +15,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const mat = await fetchMaterialBySlug(slug);
     return {
-      title: `${mat.title} — Metallurgy Vault — Blacksmith Knight`,
+      title: `${mat.title} — Metallurgy Vault — Kiko's BlackSmith Heaven`,
       description: mat.summary,
     };
   } catch {
     return {
-      title: `${slug.toUpperCase()} Steel Spec — Blacksmith Knight`,
+      title: `${slug.toUpperCase()} Steel Spec — Kiko's BlackSmith Heaven`,
       description: "Technical metallurgy and heat treatment reference.",
     };
   }

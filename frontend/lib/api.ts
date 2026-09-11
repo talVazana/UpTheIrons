@@ -1,5 +1,5 @@
 /**
- * API client for Blacksmith Knight backend.
+ * API client for Kiko's BlackSmith Heaven backend.
  */
 
 import type {

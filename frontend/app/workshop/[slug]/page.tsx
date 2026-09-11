@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const tool = await fetchToolBySlug(slug);
     return {
-      title: `${tool.title} — Workshop Guide — Blacksmith Knight`,
+      title: `${tool.title} — Workshop Guide — Kiko's BlackSmith Heaven`,
       description: tool.summary,
     };
   } catch {
     return {
-      title: "Workshop Tool Guide — Blacksmith Knight",
+      title: "Workshop Tool Guide — Kiko's BlackSmith Heaven",
       description: "Technical tool specifications and safety guide.",
     };
   }
@@ -233,7 +233,7 @@ export default async function ToolDetailPage({ params }: PageProps) {
             <p className="text-neutral-300 mt-0.5 font-medium">
               {meta.source_references?.[0]?.title
                 ? `${meta.source_references[0].title} — ${meta.source_references[0].author || "Guild Master"}`
-                : "Blacksmith Knight Workshop Standard & Tooling Reference"}
+                : "Kiko's BlackSmith Heaven Workshop Standard & Tooling Reference"}
             </p>
           </div>
           <Link

@@ -49,7 +49,7 @@ export default function SafetySection({ precautions }: SafetySectionProps) {
               Mandatory Workshop Safety Protocol
             </h2>
             <p className="text-xs text-neutral-400 mt-0.5">
-              Strict craft guardrails per Blacksmith Knight Safety Standards (ANSI Z87.1 / NRR 28+).
+              Strict craft guardrails per Kiko's BlackSmith Heaven Safety Standards (ANSI Z87.1 / NRR 28+).
             </p>
           </div>
         </div>
