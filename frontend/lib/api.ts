@@ -246,13 +246,13 @@ export async function fetchYouTubeChannels(params?: {
   if (params?.enabled !== undefined) query.set("enabled", String(params.enabled));
   if (params?.category) query.set("category", params.category);
   const qs = query.toString() ? `?${query.toString()}` : "";
-  return fetchApi<YouTubeChannelListResponse>(`/api/youtube/channels${qs}`, {
+  return fetchApi<YouTubeChannelListResponse>(`/api/v1/youtube/channels${qs}`, {
     cache: "no-store",
   });
 }
 
 export async function resolveYouTubeChannel(query: string): Promise<ResolveChannelResult> {
-  return fetchApi<ResolveChannelResult>("/api/youtube/resolve", {
+  return fetchApi<ResolveChannelResult>("/api/v1/youtube/resolve", {
     method: "POST",
     body: JSON.stringify({ query }),
   });
@@ -261,7 +261,7 @@ export async function resolveYouTubeChannel(query: string): Promise<ResolveChann
 export async function createYouTubeChannel(
   input: CreateYouTubeChannelInput
 ): Promise<YouTubeChannelItem> {
-  return fetchApi<YouTubeChannelItem>("/api/youtube/channels", {
+  return fetchApi<YouTubeChannelItem>("/api/v1/youtube/channels", {
     method: "POST",
     body: JSON.stringify(input),
   });
@@ -271,14 +271,14 @@ export async function updateYouTubeChannel(
   id: string,
   input: Partial<CreateYouTubeChannelInput> & { enabled?: boolean; status?: string }
 ): Promise<YouTubeChannelItem> {
-  return fetchApi<YouTubeChannelItem>(`/api/youtube/channels/${id}`, {
+  return fetchApi<YouTubeChannelItem>(`/api/v1/youtube/channels/${id}`, {
     method: "PATCH",
     body: JSON.stringify(input),
   });
 }
 
 export async function deleteYouTubeChannel(id: string): Promise<boolean> {
-  await fetchApi<{ deleted: boolean }>(`/api/youtube/channels/${id}`, {
+  await fetchApi<{ deleted: boolean }>(`/api/v1/youtube/channels/${id}`, {
     method: "DELETE",
   });
   return true;
@@ -345,13 +345,13 @@ export interface ApiKeysStatus {
 }
 
 export async function syncYouTubeChannel(id: string): Promise<SyncSummaryItem> {
-  return fetchApi<SyncSummaryItem>(`/api/youtube/channels/${id}/sync`, {
+  return fetchApi<SyncSummaryItem>(`/api/v1/youtube/channels/${id}/sync`, {
     method: "POST",
   });
 }
 
 export async function syncAllYouTubeChannels(): Promise<SyncSummaryItem[]> {
-  return fetchApi<SyncSummaryItem[]>("/api/youtube/sync", {
+  return fetchApi<SyncSummaryItem[]>("/api/v1/youtube/sync", {
     method: "POST",
   });
 }
@@ -398,7 +398,7 @@ export async function updateApiKeys(keys: {
 }
 
 export async function fetchSyncLogs(): Promise<{ logs: SyncSummaryItem[]; total: number }> {
-  return fetchApi<{ logs: SyncSummaryItem[]; total: number }>("/api/youtube/sync-logs", {
+  return fetchApi<{ logs: SyncSummaryItem[]; total: number }>("/api/v1/youtube/sync-logs", {
     cache: "no-store",
   });
 }
@@ -1043,4 +1043,27 @@ export async function getProject(slugOrId: string): Promise<ProjectItem> {
   return fetchApi<ProjectItem>(`/api/v1/projects/${encodeURIComponent(slugOrId)}`, {
     cache: "no-store",
   });
+}
+
+export async function addDirectVideo(req: { url_or_id: string; title?: string; summary?: string }, token: string): Promise<VideoItem> {
+  const url = new URL("/api/v1/videos/direct", BACKEND_URL);
+  const res = await fetch(url.toString(), {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+    body: JSON.stringify(req)
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.detail || "Failed to add direct video");
+  }
+  return res.json();
+}
+
+export async function deleteVideo(videoId: string, token: string): Promise<void> {
+  const url = new URL(`/api/v1/videos/${encodeURIComponent(videoId)}`, BACKEND_URL);
+  const res = await fetch(url.toString(), {
+    method: "DELETE",
+    headers: { "Authorization": `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to delete video");
 }

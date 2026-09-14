@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { fetchApiKeysStatus, updateApiKeys, ApiKeysStatus } from "@/lib/api";
 
 export default function AdminPage() {
   const [username, setUsername] = useState("Kiko");
@@ -12,6 +13,34 @@ export default function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState("");
   const [mode, setMode] = useState<"login" | "changePassword">("login");
+
+  const [keysStatus, setKeysStatus] = useState<ApiKeysStatus | null>(null);
+  const [apiKeyInput, setApiKeyInput] = useState("");
+  const [isSavingKey, setIsSavingKey] = useState(false);
+  const [keyFeedback, setKeyFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchApiKeysStatus().then(setKeysStatus).catch(() => {});
+    }
+  }, [isLoggedIn]);
+
+  const handleSaveKey = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!apiKeyInput.trim()) return;
+    setIsSavingKey(true);
+    setKeyFeedback(null);
+    try {
+      const res = await updateApiKeys({ youtube_api_key: apiKeyInput.trim() });
+      setKeysStatus(res);
+      setKeyFeedback("YouTube API Key saved successfully to Firestore & runtime cache!");
+      setApiKeyInput("");
+    } catch (err: any) {
+      setKeyFeedback(`Error: ${err.message}`);
+    } finally {
+      setIsSavingKey(false);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
@@ -160,6 +189,27 @@ export default function AdminPage() {
             <button onClick={handleLogout} className="text-sm text-neutral-400 hover:text-white underline text-center mt-2">
               Log out
             </button>
+          </div>
+          
+          <div className="border border-[var(--border-muted)] p-4">
+            <h3 className="text-white font-bold mb-2">YouTube API Key</h3>
+            <form onSubmit={handleSaveKey} className="flex flex-col gap-2">
+              <input
+                type="password"
+                value={apiKeyInput}
+                onChange={(e) => setApiKeyInput(e.target.value)}
+                placeholder={keysStatus?.youtube_api_key_masked || "AIzaSy..."}
+                className="w-full bg-[var(--bg-card)] border border-[var(--border-focus)] p-2 text-white"
+              />
+              <button type="submit" disabled={isSavingKey} className="border border-[var(--border-focus)] text-white p-2 font-bold hover:bg-[var(--bg-card)] disabled:opacity-50">
+                {isSavingKey ? "Saving..." : "Save Key"}
+              </button>
+            </form>
+            {keyFeedback && (
+              <p className={`mt-2 text-xs font-bold ${keyFeedback.startsWith("Error") ? "text-red-500" : "text-green-500"}`}>
+                {keyFeedback}
+              </p>
+            )}
           </div>
         </div>
       )}

@@ -657,3 +657,14 @@ Implemented Admin Material Form and Delete abilities:
 - **25.01 Add Material Form**: Created UI at rontend/app/admin/materials/new/page.tsx. Fields are optional. Added an interactive help guide.
 - **25.02 Materials API Update**: Added DELETE /materials route. Removed strict source_reference lengths to allow flexible inputs.
 - **25.03 Admin-Only Actions**: "Add Material" and "Remove" options render on the materials page and cards exclusively for logged-in admins.
+
+---
+
+## Milestone 26 - Videos Gallery & Direct Links
+
+Implemented a complete structural overhaul of the Videos section:
+
+- **26.01 Video Galleries UI**: Redesigned /videos to display grouped Gallery Cards instead of a flat list. "Direct Links" is prominently featured first, followed by individual cards representing each registered channel.
+- **26.02 Admin Controls Migration**: Migrated YouTube API Key setup to /admin. Added "+ Add Direct Link" and "Remove" features to the Videos page, accessible exclusively by logged-in admins.
+- **26.03 Auto-Syncing**: Engineered the Videos page to execute silent background syncs automatically upon user visit, alongside an Admin manual override.
+- **26.04 API Extensions**: Developed POST /videos/direct and DELETE /videos/{video_id} routes to facilitate manual link curation.

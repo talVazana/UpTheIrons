@@ -3540,3 +3540,16 @@ And above all:
 - Added a DELETE /api/v1/materials/{slug_or_id} endpoint.
 - Updated MaterialsPage and MaterialCard to display "Add Material" and "Remove" options exclusively for authenticated admins.
 - Added a toggleable Help Guide to the new material form.
+
+### WORK-026 - Videos Page Gallery Redesign
+
+**Date:** 2026-09-14
+**Status:** COMPLETE
+
+**Implemented:**
+- Relocated YouTube API Key configuration to the authenticated Admin Portal.
+- Updated VideosPage to automatically execute background syncs on mount.
+- Added POST /api/v1/videos/direct to insert direct standalone video links.
+- Added DELETE /api/v1/videos/{video_id} to allow removal of specific videos.
+- Redesigned VideosPage UI into a curated Gallery layout: First card dedicated to "Direct Links", followed by dynamic cards for each synced YouTube channel.
+- Protected direct link additions, removals, and manual sync buttons behind admin authentication.
