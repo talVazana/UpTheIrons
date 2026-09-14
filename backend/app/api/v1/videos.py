@@ -78,16 +78,6 @@ async def list_videos(
     )
 
 
-@router.get("/{video_id}", response_model=ContentEnvelope)
-async def get_video(video_id: str):
-    """Retrieves a single video by ID (e.g. yt_abc123 or abc123)."""
-    clean_id = video_id if video_id.startswith("yt_") else f"yt_{video_id}"
-    doc = await firestore_repository.get(CONTENT_COLLECTION, clean_id)
-    if not doc:
-        raise NotFoundError(f"Video with ID '{video_id}' not found in knowledge vault.")
-    return ContentEnvelope.model_validate(doc)
-
-
 class AddDirectVideoRequest(BaseModel):
     url_or_id: str = Field(..., description="YouTube URL or Video ID")
     title: Optional[str] = None
@@ -109,25 +99,36 @@ async def add_direct_video(req: AddDirectVideoRequest):
     existing = await firestore_repository.get(CONTENT_COLLECTION, clean_id)
     if existing:
         raise BadRequestError("This video is already in the vault.")
+
+    # Try fetching details from YouTube API
+    from app.services.youtube_client import youtube_client
+    yt_details = await youtube_client.fetch_video_details(video_id)
+    
+    final_title = req.title or (yt_details["title"] if yt_details else f"Direct Video: {video_id}")
+    final_summary = req.summary or (yt_details["description"] if yt_details else "Added directly by Admin.")
+    if len(final_title) < 2: final_title = final_title + " video"
+    if len(final_summary) < 5: final_summary = final_summary + " no description provided."
         
     envelope = ContentEnvelope(
         id=clean_id,
         type=ContentType.VIDEO,
-        title=req.title or f"Direct Video: {video_id}",
+        title=final_title[:200], # ensure length constraint
         slug=clean_id,
-        summary=req.summary or "Added directly by Admin.",
+        summary=final_summary[:1000], # ensure length constraint
         category="forging",
         tags=["direct"],
         difficulty=DifficultyLevel.INTERMEDIATE,
         status=ContentStatus.PUBLISHED,
         source=SourceProvenance(
-            source_type=SourceType.YOUTUBE,
+            source_type=SourceType.MANUAL,
             source_id="direct",
             source_name="Direct Links",
             source_url=f"https://www.youtube.com/watch?v={video_id}",
         ),
+        image_url=f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
         metadata={
             "youtube_video_id": video_id,
+            "embed_url": f"https://www.youtube.com/embed/{video_id}",
             "channel_id": "direct",
             "channel_name": "Direct Links",
             "duration_seconds": 60,
@@ -138,6 +139,16 @@ async def add_direct_video(req: AddDirectVideoRequest):
     
     await firestore_repository.create(CONTENT_COLLECTION, clean_id, envelope.model_dump())
     return envelope
+
+
+@router.get("/{video_id}", response_model=ContentEnvelope)
+async def get_video(video_id: str):
+    """Retrieves a single video by ID (e.g. yt_abc123 or abc123)."""
+    clean_id = video_id if video_id.startswith("yt_") else f"yt_{video_id}"
+    doc = await firestore_repository.get(CONTENT_COLLECTION, clean_id)
+    if not doc:
+        raise NotFoundError(f"Video with ID '{video_id}' not found in knowledge vault.")
+    return ContentEnvelope.model_validate(doc)
 
 
 @router.delete("/{video_id}", status_code=status.HTTP_204_NO_CONTENT)

@@ -47,7 +47,7 @@ export default function VideosPage() {
     setLoading(true);
     try {
       const [vidRes, chanRes] = await Promise.all([
-        fetchVideos({ limit: 1000 }),
+        fetchVideos({ limit: 100 }),
         fetchYouTubeChannels()
       ]);
       setVideos(vidRes.videos || []);
@@ -187,12 +187,32 @@ export default function VideosPage() {
           </div>
         )}
         
+        {/* Video Player Modal */}
         {activeVideo && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
-            <div className="w-full max-w-4xl relative">
-              <button onClick={() => setActiveVideo(null)} className="absolute -top-10 right-0 text-white font-bold text-xl">&times; Close</button>
-              <div className="aspect-video w-full bg-black">
-                <iframe src={`https://www.youtube.com/embed/${activeVideo.metadata?.youtube_video_id || activeVideo.id.replace("yt_", "")}?autoplay=1`} className="w-full h-full border-0" allowFullScreen></iframe>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm overflow-y-auto py-10" onClick={() => setActiveVideo(null)}>
+            <div className="w-full max-w-5xl bg-[#141414] rounded-xl overflow-hidden shadow-2xl relative flex flex-col" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setActiveVideo(null)} className="absolute top-4 right-4 z-10 text-white/70 hover:text-white bg-black/50 rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md">✕</button>
+              <div className="w-full aspect-video bg-black relative">
+                {activeVideo.metadata?.embed_url ? (
+                  <iframe src={`${activeVideo.metadata.embed_url}?autoplay=1`} className="w-full h-full border-0" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen></iframe>
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-white">
+                    <p>No video source available.</p>
+                    {activeVideo.source?.source_url && (
+                      <a href={activeVideo.source.source_url} target="_blank" rel="noopener noreferrer" className="mt-4 text-[#FF5722] hover:underline">Watch on YouTube &rarr;</a>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="p-6 border-t border-neutral-800">
+                <h2 className="text-xl font-bold text-white mb-2">{activeVideo.title}</h2>
+                <p className="text-sm text-neutral-400 mb-4">{activeVideo.summary}</p>
+                <div className="flex gap-4 text-xs font-mono text-neutral-500">
+                  <span>ID: {activeVideo.id}</span>
+                  {activeVideo.source?.source_url && (
+                    <a href={activeVideo.source.source_url} target="_blank" rel="noopener noreferrer" className="text-[#FF5722] hover:underline">Open Original Link</a>
+                  )}
+                </div>
               </div>
             </div>
           </div>

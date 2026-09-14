@@ -1,5 +1,22 @@
 import subprocess
 import os
+import re
+
+def kill_port(port):
+    print(f"Killing any processes listening on port {port}...")
+    try:
+        output = subprocess.check_output(f"netstat -ano | findstr :{port}", shell=True, text=True)
+        lines = output.strip().split('\n')
+        pids = set()
+        for line in lines:
+            parts = line.strip().split()
+            if len(parts) >= 5 and "LISTENING" in parts:
+                pids.add(parts[-1])
+        for pid in pids:
+            if pid != "0":
+                subprocess.run(f"taskkill /F /PID {pid} /T", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
 
 def launch_service(name, cmd, cwd):
     print(f"Starting {name}...")
@@ -40,11 +57,16 @@ def main():
         print("Installing backend dependencies...")
         run_sync("pip install", f"{venv_python} -m pip install -r requirements.txt", backend_dir)
 
+    # Kill old processes before starting
+    kill_port(8080)
+    kill_port(8001)
+    kill_port(3000)
+
     # 1. Firebase Emulator
     launch_service("Firebase", "cmd /k firebase emulators:start --only firestore", root_dir)
 
     # 2. Backend
-    launch_service("Backend", "cmd /k .\\.venv\\Scripts\\uvicorn app.main:app --reload --port 8000", backend_dir)
+    launch_service("Backend", "cmd /k .\\.venv\\Scripts\\uvicorn app.main:app --reload --port 8001", backend_dir)
 
     # 3. Frontend
     launch_service("Frontend", "cmd /k npm run dev", frontend_dir)

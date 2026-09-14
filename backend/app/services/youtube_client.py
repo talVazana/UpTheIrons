@@ -112,6 +112,45 @@ class YouTubeClient:
             logger.warning("Error querying YouTube API for channel %s (%s). Falling back to offline batch.", channel_id, str(ex))
             return self._generate_offline_mock_videos(channel_id, channel_name)
 
+    async def fetch_video_details(self, video_id: str) -> Optional[Dict[str, Any]]:
+        """Fetches metadata for a single YouTube video by ID."""
+        api_key = await get_effective_youtube_api_key()
+        if api_key:
+            params = {
+                "key": api_key,
+                "id": video_id,
+                "part": "snippet,contentDetails",
+            }
+            try:
+                async with httpx.AsyncClient(timeout=5.0) as client:
+                    resp = await client.get(f"{self.BASE_URL}/videos", params=params)
+                    if resp.status_code == 200:
+                        items = resp.json().get("items", [])
+                        if items:
+                            snippet = items[0].get("snippet", {})
+                            return {
+                                "title": snippet.get("title", f"Direct Video: {video_id}"),
+                                "description": snippet.get("description", "Added directly by Admin."),
+                            }
+            except Exception as ex:
+                logger.debug("Failed fetching API details for video %s: %s", video_id, str(ex))
+
+        # Fallback to oEmbed if no API key or API fails
+        try:
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={video_id}&format=json"
+                resp = await client.get(url)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    return {
+                        "title": data.get("title", f"Direct Video: {video_id}"),
+                        "description": f"Video by {data.get('author_name', 'YouTube Creator')}.",
+                    }
+        except Exception as ex:
+            logger.debug("Failed oEmbed fallback for video %s: %s", video_id, str(ex))
+
+        return None
+
     async def _resolve_uploads_playlist(self, channel_identifier: str, api_key: str) -> Optional[str]:
         """Resolves the uploads playlist ID by querying the channels resource."""
         params = {"key": api_key, "part": "contentDetails"}

@@ -668,3 +668,4 @@ Implemented a complete structural overhaul of the Videos section:
 - **26.02 Admin Controls Migration**: Migrated YouTube API Key setup to /admin. Added "+ Add Direct Link" and "Remove" features to the Videos page, accessible exclusively by logged-in admins.
 - **26.03 Auto-Syncing**: Engineered the Videos page to execute silent background syncs automatically upon user visit, alongside an Admin manual override.
 - **26.04 API Extensions**: Developed POST /videos/direct and DELETE /videos/{video_id} routes to facilitate manual link curation.
+- **26.05 Admin Guide**: Added an in-page, toggleable documentation modal on the Videos page explaining curation mechanics for admins.
