@@ -37,6 +37,9 @@ export default function VideosPage() {
   const [linkUrl, setLinkUrl] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 
+  // Guide state
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+
   // Embed player state
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
 
@@ -222,6 +225,9 @@ export default function VideosPage() {
         </div>
         {isAdmin && (
           <div className="flex gap-3">
+             <button onClick={() => setIsGuideOpen(true)} className="rounded border border-neutral-700 bg-neutral-800 px-3 py-2 text-xs font-semibold text-white hover:bg-neutral-700">
+               Page Guide
+             </button>
              <Link href="/videos/channels" className="rounded border border-neutral-700 bg-neutral-800 px-3 py-2 text-xs font-semibold text-white hover:bg-neutral-700">
                Manage Channels
              </Link>
@@ -231,6 +237,35 @@ export default function VideosPage() {
           </div>
         )}
       </div>
+
+      {isGuideOpen && isAdmin && (
+        <div className="mb-8 p-6 bg-[#161616] border border-neutral-700 text-sm leading-relaxed space-y-4 rounded-lg shadow-inner relative">
+          <button type="button" onClick={() => setIsGuideOpen(false)} className="absolute top-4 right-4 text-neutral-500 hover:text-white text-lg leading-none">✕</button>
+          <h2 className="text-xl font-bold text-[#FF5722] mb-4">Videos Page Guide (Admin Only)</h2>
+          
+          <div className="space-y-4 text-neutral-300">
+            <div>
+              <h3 className="text-white font-bold text-base mb-1">1. How Things Are Organized (Galleries)</h3>
+              <p>The videos are grouped into <strong>Gallery Cards</strong>. The first card is always <strong>Direct Links</strong>, containing individual videos manually added by an admin. The rest of the cards are <strong>YouTube Channels</strong> you have approved. Clicking on any card opens its specific gallery containing all associated videos.</p>
+            </div>
+            
+            <div>
+              <h3 className="text-white font-bold text-base mb-1">2. How to Add or Remove a YouTube Channel</h3>
+              <p>Click the <strong>Manage Channels</strong> button above to go to the Channels configuration page. There, you can click <strong>+ Add Approved Channel</strong>, enter a YouTube URL or @handle (like <code>@BlackBearForge</code>), and the server will fetch its details and add it. To remove one, click <strong>Delete</strong> on the channel's card on that same management page. Once added, the channel automatically gets its own Gallery Card on this page.</p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold text-base mb-1">3. How to Add or Remove a Specific Video (Direct Links)</h3>
+              <p>Click the <strong>Direct Links</strong> gallery card. In the top right of that gallery, click <strong>+ Add Direct Link</strong> and paste the YouTube video URL. It will instantly be added to the Direct Links gallery. To remove <strong>any video</strong> (direct or from a channel), simply open its gallery and click the red <strong>Remove</strong> button under the video card.</p>
+            </div>
+
+            <div>
+              <h3 className="text-white font-bold text-base mb-1">4. Synchronization & API Keys</h3>
+              <p>Every time you load this page, it silently asks YouTube for new videos for all approved channels. You can also force it using the <strong>Manual Sync All</strong> button. <strong>Important:</strong> This requires a valid YouTube API Key. The API Key must be entered and saved in the main <strong>Admin Portal</strong> (where you change your password).</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {syncFeedback && <div className="mb-6 bg-neutral-800 p-3 text-xs text-white rounded">{syncFeedback}</div>}
 

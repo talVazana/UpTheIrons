@@ -3553,3 +3553,12 @@ And above all:
 - Added DELETE /api/v1/videos/{video_id} to allow removal of specific videos.
 - Redesigned VideosPage UI into a curated Gallery layout: First card dedicated to "Direct Links", followed by dynamic cards for each synced YouTube channel.
 - Protected direct link additions, removals, and manual sync buttons behind admin authentication.
+
+### WORK-027 - Videos Page Admin Guide
+
+**Date:** 2026-09-14
+**Status:** COMPLETE
+
+**Implemented:**
+- Added a detailed "Page Guide" modal to VideosPage exclusively for admins.
+- Guide clearly explains the Gallery structure, Channel management, Direct Link management, and Synchronization workflow.
