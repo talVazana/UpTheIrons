@@ -48,9 +48,9 @@ class MaterialComparisonResponse(BaseModel):
 
 
 class CreateMaterialRequest(BaseModel):
-    title: str = Field(min_length=2, max_length=200)
+    title: str = Field(default="", max_length=200)
     slug: Optional[str] = None
-    summary: str = Field(min_length=5, max_length=1000)
+    summary: str = Field(default="", max_length=1000)
     category: str = Field(default="materials")
     tags: List[str] = Field(default_factory=list)
     difficulty: DifficultyLevel = Field(default=DifficultyLevel.BEGINNER)
@@ -250,9 +250,9 @@ async def create_material(req: CreateMaterialRequest):
     if existing:
         raise BadRequestError(f"Material with slug '{clean_slug}' already exists.")
 
-    # Metallurgical precision check: must cite verifiable handbook/manufacturer source
-    if not req.metadata.source_reference or len(req.metadata.source_reference.strip()) < 5:
-        raise ValidationError("Mandatory source reference required per Metallurgical Standard (Section 15.06).")
+    # Validation removed as requested by user
+    # if not req.metadata.source_reference or len(req.metadata.source_reference.strip()) < 5:
+    #     raise ValidationError("Mandatory source reference required per Metallurgical Standard (Section 15.06).")
 
     envelope = ContentEnvelope(
         id=material_id,
@@ -275,3 +275,25 @@ async def create_material(req: CreateMaterialRequest):
 
     await firestore_repository.create(CONTENT_COLLECTION, material_id, envelope.model_dump())
     return envelope
+
+@router.delete("/{slug_or_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_material(slug_or_id: str):
+    """Deletes a material record by slug or ID."""
+    direct_id = slug_or_id if slug_or_id.startswith("mat-") else f"mat-{slug_or_id}"
+    doc = await firestore_repository.get(CONTENT_COLLECTION, direct_id)
+    
+    if not doc:
+        all_content = await firestore_repository.list(CONTENT_COLLECTION, limit=200)
+        for item in all_content:
+            if item.get("type") in [ContentType.MATERIAL.value, ContentType.MATERIAL]:
+                if item.get("slug") == slug_or_id or item.get("id") == slug_or_id:
+                    direct_id = item.get("id")
+                    doc = item
+                    break
+
+    if not doc:
+        raise NotFoundError(f"Material '{slug_or_id}' not found.")
+        
+    await firestore_repository.delete(CONTENT_COLLECTION, direct_id)
+    return None
+

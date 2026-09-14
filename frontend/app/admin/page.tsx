@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function AdminPage() {
   const [username, setUsername] = useState("Kiko");
@@ -10,6 +11,7 @@ export default function AdminPage() {
   const [oldPassword, setOldPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState("");
+  const [mode, setMode] = useState<"login" | "changePassword">("login");
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
@@ -41,6 +43,7 @@ export default function AdminPage() {
         localStorage.setItem("admin_token", data.token);
         setIsLoggedIn(true);
         setMessage("Logged in successfully.");
+        setMode("login");
       } else {
         setMessage(data.detail || "Login failed");
       }
@@ -62,6 +65,7 @@ export default function AdminPage() {
         setMessage("Password changed successfully.");
         setOldPassword("");
         setNewPassword("");
+        setMode("login");
       } else {
         setMessage(data.detail || "Change failed");
       }
@@ -74,6 +78,7 @@ export default function AdminPage() {
     localStorage.removeItem("admin_token");
     setIsLoggedIn(false);
     setMessage("Logged out.");
+    setMode("login");
   };
 
   return (
@@ -85,7 +90,7 @@ export default function AdminPage() {
       
       {message && <div className="mb-4 text-center text-[var(--accent-forge)] font-bold">{message}</div>}
 
-      {!isLoggedIn ? (
+      {!isLoggedIn && mode === "login" && (
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-bold mb-1">Username</label>
@@ -108,39 +113,54 @@ export default function AdminPage() {
           <button type="submit" className="mt-4 bg-[var(--accent-forge)] text-white p-2 font-bold hover:brightness-110">
             ENTER FORGE
           </button>
+          <button type="button" onClick={() => setMode("changePassword")} className="text-sm text-neutral-400 hover:text-white underline text-center mt-2">
+            Change Password
+          </button>
         </form>
-      ) : (
+      )}
+
+      {mode === "changePassword" && (
+        <form onSubmit={handleChangePassword} className="flex flex-col gap-4">
+          <h2 className="font-bold text-lg text-center">Change Password</h2>
+          <div>
+            <label className="block text-sm font-bold mb-1">Old Password</label>
+            <input 
+              type="password" 
+              value={oldPassword} 
+              onChange={e => setOldPassword(e.target.value)}
+              className="w-full bg-[var(--bg-card)] border border-[var(--border-focus)] p-2 text-white"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-1">New Password</label>
+            <input 
+              type="password" 
+              value={newPassword} 
+              onChange={e => setNewPassword(e.target.value)}
+              className="w-full bg-[var(--bg-card)] border border-[var(--border-focus)] p-2 text-white"
+            />
+          </div>
+          <button type="submit" className="mt-4 border border-[var(--border-focus)] text-white p-2 font-bold hover:bg-[var(--bg-card)]">
+            UPDATE PASSWORD
+          </button>
+          <button type="button" onClick={() => setMode("login")} className="text-sm text-neutral-400 hover:text-white underline text-center mt-2">
+            Back to Login
+          </button>
+        </form>
+      )}
+
+      {isLoggedIn && mode === "login" && (
         <div className="flex flex-col gap-8">
           <p className="text-center font-bold text-green-500">You are in the Forge.</p>
           
-          <form onSubmit={handleChangePassword} className="flex flex-col gap-4 border-t border-[var(--border-muted)] pt-6">
-            <h2 className="font-bold text-lg">Change Password</h2>
-            <div>
-              <label className="block text-sm font-bold mb-1">Old Password</label>
-              <input 
-                type="password" 
-                value={oldPassword} 
-                onChange={e => setOldPassword(e.target.value)}
-                className="w-full bg-[var(--bg-card)] border border-[var(--border-focus)] p-2 text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold mb-1">New Password</label>
-              <input 
-                type="password" 
-                value={newPassword} 
-                onChange={e => setNewPassword(e.target.value)}
-                className="w-full bg-[var(--bg-card)] border border-[var(--border-focus)] p-2 text-white"
-              />
-            </div>
-            <button type="submit" className="mt-4 border border-[var(--border-focus)] text-white p-2 font-bold hover:bg-[var(--bg-card)]">
-              UPDATE PASSWORD
+          <div className="flex flex-col gap-4">
+            <button onClick={() => setMode("changePassword")} className="border border-[var(--border-focus)] text-white p-2 font-bold hover:bg-[var(--bg-card)]">
+              CHANGE PASSWORD
             </button>
-          </form>
-
-          <button onClick={handleLogout} className="text-sm text-neutral-400 hover:text-white underline text-center">
-            Log out
-          </button>
+            <button onClick={handleLogout} className="text-sm text-neutral-400 hover:text-white underline text-center mt-2">
+              Log out
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Link from "next/link";
 import { fetchMaterials } from "@/lib/api";
 import { MaterialItem } from "@/lib/types";
 import MaterialCard from "@/components/materials/MaterialCard";
@@ -21,10 +22,17 @@ export default function MaterialsPage() {
   const [selectedForCompare, setSelectedForCompare] = useState<string[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
     setError(null);
+
+    const token = localStorage.getItem("admin_token");
+    if (token) {
+      setIsAdmin(true);
+    }
 
     fetchMaterials({ limit: 100 })
       .then((res) => {
@@ -108,6 +116,24 @@ export default function MaterialsPage() {
     setSelectedForCompare((prev) => prev.filter((s) => s !== slug));
   };
 
+  const handleDeleteMaterial = async (slug: string) => {
+    if (!confirm("Are you sure you want to delete this material?")) return;
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000"}/api/v1/materials/${slug}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("admin_token")}` }
+      });
+      if (res.ok) {
+        setMaterials(prev => prev.filter(m => m.slug !== slug));
+        setSelectedForCompare(prev => prev.filter(s => s !== slug));
+      } else {
+        alert("Failed to delete material.");
+      }
+    } catch (err) {
+      alert("Network error while deleting material.");
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       {/* Header Banner */}
@@ -127,6 +153,15 @@ export default function MaterialsPage() {
 
           {/* Quick Stats or Actions */}
           <div className="flex items-center gap-3">
+            {isAdmin && (
+              <Link
+                href="/admin/materials/new"
+                className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-mono font-bold transition-all shadow-lg border border-[var(--accent-forge)] text-[var(--accent-forge)] hover:bg-[var(--accent-forge)] hover:text-white shadow-[#FF5722]/20"
+              >
+                <span>➕</span>
+                <span>Add Material</span>
+              </Link>
+            )}
             {selectedForCompare.length > 0 && (
               <button
                 type="button"
@@ -364,6 +399,8 @@ export default function MaterialsPage() {
               isSelectedForCompare={selectedForCompare.includes(mat.slug)}
               onToggleCompare={handleToggleCompare}
               canSelectMore={selectedForCompare.length < 4}
+              isAdmin={isAdmin}
+              onDelete={handleDeleteMaterial}
             />
           ))}
         </div>

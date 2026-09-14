@@ -3528,3 +3528,15 @@ And above all:
 [x] Build POST /api/v1/auth/login and /change-password endpoints.
 [x] Build frontend /admin login page and change password form.
 [x] Add Kiko logo floating button to the home page for admin access.
+
+### WORK-025 - Admin Material Management UI
+
+**Date:** 2026-09-14
+**Status:** COMPLETE
+
+**Implemented:**
+- Built rontend/app/admin/materials/new/page.tsx to add new materials via UI.
+- Removed strict mandatory validations in backend (ackend/app/api/v1/materials.py).
+- Added a DELETE /api/v1/materials/{slug_or_id} endpoint.
+- Updated MaterialsPage and MaterialCard to display "Add Material" and "Remove" options exclusively for authenticated admins.
+- Added a toggleable Help Guide to the new material form.

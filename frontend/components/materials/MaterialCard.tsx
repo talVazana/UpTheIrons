@@ -8,6 +8,8 @@ interface MaterialCardProps {
   isSelectedForCompare?: boolean;
   onToggleCompare?: (slug: string) => void;
   canSelectMore?: boolean;
+  isAdmin?: boolean;
+  onDelete?: (slug: string) => void;
 }
 
 export default function MaterialCard({
@@ -15,6 +17,8 @@ export default function MaterialCard({
   isSelectedForCompare = false,
   onToggleCompare,
   canSelectMore = true,
+  isAdmin = false,
+  onDelete,
 }: MaterialCardProps) {
   const meta = material.metadata;
   const carbonPct = meta.carbon_pct ?? 0;
@@ -192,20 +196,30 @@ export default function MaterialCard({
 
       {/* Card Footer: Quench & Handbook Citation */}
       <div className="border-t border-neutral-800/80 pt-3 mt-2 flex items-center justify-between text-xs">
-        <div className="text-[11px] font-mono text-neutral-400 truncate max-w-[70%]">
+        <div className="text-[11px] font-mono text-neutral-400 truncate max-w-[50%]">
           <span className="text-neutral-500">Quench: </span>
           <span className="text-neutral-300 font-medium">
             {ht?.quench_medium ? ht.quench_medium.split("(")[0].trim() : "Oil Quench"}
           </span>
         </div>
 
-        <Link
-          href={`/materials/${material.slug}`}
-          className="font-mono text-xs font-semibold text-[#FF5722] hover:text-[#FF8A65] inline-flex items-center gap-1 transition-colors"
-        >
-          <span>Dossier</span>
-          <span>→</span>
-        </Link>
+        <div className="flex items-center gap-3">
+          {isAdmin && onDelete && (
+            <button
+              onClick={() => onDelete(material.slug)}
+              className="font-mono text-xs font-semibold text-red-500 hover:text-red-400 transition-colors"
+            >
+              Remove
+            </button>
+          )}
+          <Link
+            href={`/materials/${material.slug}`}
+            className="font-mono text-xs font-semibold text-[#FF5722] hover:text-[#FF8A65] inline-flex items-center gap-1 transition-colors"
+          >
+            <span>Dossier</span>
+            <span>→</span>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -647,3 +647,13 @@ Implemented the initial Admin settings portal and visual branding updates:
 - **18.03 Admin Portal UI**:
   - Created rontend/app/admin/page.tsx for login and password management.
   - Added a floating kiko.png logo button to the main page to access the admin portal.
+
+---
+
+## Milestone 25 - Admin Material Management
+
+Implemented Admin Material Form and Delete abilities:
+
+- **25.01 Add Material Form**: Created UI at rontend/app/admin/materials/new/page.tsx. Fields are optional. Added an interactive help guide.
+- **25.02 Materials API Update**: Added DELETE /materials route. Removed strict source_reference lengths to allow flexible inputs.
+- **25.03 Admin-Only Actions**: "Add Material" and "Remove" options render on the materials page and cards exclusively for logged-in admins.
